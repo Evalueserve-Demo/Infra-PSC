@@ -1,0 +1,1519 @@
+﻿digraph {
+	compound = "true"
+	newrank = "true"
+	subgraph "root" {
+		"[root] aws_acm_certificate.psc (expand)" [label = "aws_acm_certificate.psc", shape = "box"]
+		"[root] aws_acm_certificate_validation.psc (expand)" [label = "aws_acm_certificate_validation.psc", shape = "box"]
+		"[root] aws_api_gateway_account.human_review_logging_530 (expand)" [label = "aws_api_gateway_account.human_review_logging_530", shape = "box"]
+		"[root] aws_api_gateway_authorizer.human_review_cognito_530 (expand)" [label = "aws_api_gateway_authorizer.human_review_cognito_530", shape = "box"]
+		"[root] aws_api_gateway_base_path_mapping.human_review_530 (expand)" [label = "aws_api_gateway_base_path_mapping.human_review_530", shape = "box"]
+		"[root] aws_api_gateway_deployment.human_review_530 (expand)" [label = "aws_api_gateway_deployment.human_review_530", shape = "box"]
+		"[root] aws_api_gateway_domain_name.human_review_530 (expand)" [label = "aws_api_gateway_domain_name.human_review_530", shape = "box"]
+		"[root] aws_api_gateway_integration.approve_530 (expand)" [label = "aws_api_gateway_integration.approve_530", shape = "box"]
+		"[root] aws_api_gateway_integration.cors_options_530 (expand)" [label = "aws_api_gateway_integration.cors_options_530", shape = "box"]
+		"[root] aws_api_gateway_integration.get_case_530 (expand)" [label = "aws_api_gateway_integration.get_case_530", shape = "box"]
+		"[root] aws_api_gateway_integration.get_pending_review_cases_530 (expand)" [label = "aws_api_gateway_integration.get_pending_review_cases_530", shape = "box"]
+		"[root] aws_api_gateway_integration.reject_530 (expand)" [label = "aws_api_gateway_integration.reject_530", shape = "box"]
+		"[root] aws_api_gateway_integration_response.cors_options_530 (expand)" [label = "aws_api_gateway_integration_response.cors_options_530", shape = "box"]
+		"[root] aws_api_gateway_method.get_case_530 (expand)" [label = "aws_api_gateway_method.get_case_530", shape = "box"]
+		"[root] aws_api_gateway_method.get_pending_review_cases_530 (expand)" [label = "aws_api_gateway_method.get_pending_review_cases_530", shape = "box"]
+		"[root] aws_api_gateway_method.reject_530 (expand)" [label = "aws_api_gateway_method.reject_530", shape = "box"]
+		"[root] aws_api_gateway_method_response.cors_options_530 (expand)" [label = "aws_api_gateway_method_response.cors_options_530", shape = "box"]
+		"[root] aws_api_gateway_resource.approve_530 (expand)" [label = "aws_api_gateway_resource.approve_530", shape = "box"]
+		"[root] aws_api_gateway_resource.case_id_530 (expand)" [label = "aws_api_gateway_resource.case_id_530", shape = "box"]
+		"[root] aws_api_gateway_resource.cases_530 (expand)" [label = "aws_api_gateway_resource.cases_530", shape = "box"]
+		"[root] aws_api_gateway_resource.pending_review_cases_530 (expand)" [label = "aws_api_gateway_resource.pending_review_cases_530", shape = "box"]
+		"[root] aws_api_gateway_resource.reject_530 (expand)" [label = "aws_api_gateway_resource.reject_530", shape = "box"]
+		"[root] aws_api_gateway_rest_api.human_review_530 (expand)" [label = "aws_api_gateway_rest_api.human_review_530", shape = "box"]
+		"[root] aws_api_gateway_stage.human_review_530 (expand)" [label = "aws_api_gateway_stage.human_review_530", shape = "box"]
+		"[root] aws_bedrock_guardrail.classification (expand)" [label = "aws_bedrock_guardrail.classification", shape = "box"]
+		"[root] aws_bedrock_guardrail_version.classification (expand)" [label = "aws_bedrock_guardrail_version.classification", shape = "box"]
+		"[root] aws_bedrockagentcore_agent_runtime.classification (expand)" [label = "aws_bedrockagentcore_agent_runtime.classification", shape = "box"]
+		"[root] aws_bedrockagentcore_agent_runtime.investigation (expand)" [label = "aws_bedrockagentcore_agent_runtime.investigation", shape = "box"]
+		"[root] aws_bedrockagentcore_gateway.investigation (expand)" [label = "aws_bedrockagentcore_gateway.investigation", shape = "box"]
+		"[root] aws_bedrockagentcore_gateway_target.s4hana (expand)" [label = "aws_bedrockagentcore_gateway_target.s4hana", shape = "box"]
+		"[root] aws_bedrockagentcore_memory.investigation (expand)" [label = "aws_bedrockagentcore_memory.investigation", shape = "box"]
+		"[root] aws_bedrockagentcore_policy_engine.investigation (expand)" [label = "aws_bedrockagentcore_policy_engine.investigation", shape = "box"]
+		"[root] aws_cloudwatch_dashboard.psc_540 (expand)" [label = "aws_cloudwatch_dashboard.psc_540", shape = "box"]
+		"[root] aws_cloudwatch_event_rule.attachment_malware_scan (expand)" [label = "aws_cloudwatch_event_rule.attachment_malware_scan", shape = "box"]
+		"[root] aws_cloudwatch_event_rule.human_review_outbox (expand)" [label = "aws_cloudwatch_event_rule.human_review_outbox", shape = "box"]
+		"[root] aws_cloudwatch_event_target.attachment_malware_scan (expand)" [label = "aws_cloudwatch_event_target.attachment_malware_scan", shape = "box"]
+		"[root] aws_cloudwatch_event_target.human_review_outbox (expand)" [label = "aws_cloudwatch_event_target.human_review_outbox", shape = "box"]
+		"[root] aws_cloudwatch_log_group.attachment_processing (expand)" [label = "aws_cloudwatch_log_group.attachment_processing", shape = "box"]
+		"[root] aws_cloudwatch_log_group.email_ingestion (expand)" [label = "aws_cloudwatch_log_group.email_ingestion", shape = "box"]
+		"[root] aws_cloudwatch_log_group.email_processing (expand)" [label = "aws_cloudwatch_log_group.email_processing", shape = "box"]
+		"[root] aws_cloudwatch_log_group.human_review_api_access_530 (expand)" [label = "aws_cloudwatch_log_group.human_review_api_access_530", shape = "box"]
+		"[root] aws_cloudwatch_log_group.human_review_backend (expand)" [label = "aws_cloudwatch_log_group.human_review_backend", shape = "box"]
+		"[root] aws_cloudwatch_log_group.human_review_ecs (expand)" [label = "aws_cloudwatch_log_group.human_review_ecs", shape = "box"]
+		"[root] aws_cloudwatch_log_group.human_review_outbox (expand)" [label = "aws_cloudwatch_log_group.human_review_outbox", shape = "box"]
+		"[root] aws_cloudwatch_log_group.identifier_validation (expand)" [label = "aws_cloudwatch_log_group.identifier_validation", shape = "box"]
+		"[root] aws_cloudwatch_log_group.investigation_invocation (expand)" [label = "aws_cloudwatch_log_group.investigation_invocation", shape = "box"]
+		"[root] aws_cloudwatch_log_group.invoice_scope (expand)" [label = "aws_cloudwatch_log_group.invoice_scope", shape = "box"]
+		"[root] aws_cloudwatch_log_group.mail_preprocessing (expand)" [label = "aws_cloudwatch_log_group.mail_preprocessing", shape = "box"]
+		"[root] aws_cloudwatch_log_group.malware_scan_handler (expand)" [label = "aws_cloudwatch_log_group.malware_scan_handler", shape = "box"]
+		"[root] aws_cloudwatch_log_group.pipe1_540 (expand)" [label = "aws_cloudwatch_log_group.pipe1_540", shape = "box"]
+		"[root] aws_cloudwatch_log_group.pipe2_540 (expand)" [label = "aws_cloudwatch_log_group.pipe2_540", shape = "box"]
+		"[root] aws_cloudwatch_log_group.reply_processing_510 (expand)" [label = "aws_cloudwatch_log_group.reply_processing_510", shape = "box"]
+		"[root] aws_cloudwatch_log_group.s4hana_tool (expand)" [label = "aws_cloudwatch_log_group.s4hana_tool", shape = "box"]
+		"[root] aws_cloudwatch_log_group.workflow_dispatcher (expand)" [label = "aws_cloudwatch_log_group.workflow_dispatcher", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.alb_5xx_540 (expand)" [label = "aws_cloudwatch_metric_alarm.alb_5xx_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.alb_response_time_540 (expand)" [label = "aws_cloudwatch_metric_alarm.alb_response_time_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.alb_unhealthy_540 (expand)" [label = "aws_cloudwatch_metric_alarm.alb_unhealthy_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.api_errors_540 (expand)" [label = "aws_cloudwatch_metric_alarm.api_errors_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.api_latency_540 (expand)" [label = "aws_cloudwatch_metric_alarm.api_latency_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.aurora_connections_540 (expand)" [label = "aws_cloudwatch_metric_alarm.aurora_connections_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.aurora_cpu_540 (expand)" [label = "aws_cloudwatch_metric_alarm.aurora_cpu_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.aurora_deadlocks_540 (expand)" [label = "aws_cloudwatch_metric_alarm.aurora_deadlocks_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.aurora_freeable_memory_540 (expand)" [label = "aws_cloudwatch_metric_alarm.aurora_freeable_memory_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.aurora_replica_lag_540 (expand)" [label = "aws_cloudwatch_metric_alarm.aurora_replica_lag_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.lambda_duration_540 (expand)" [label = "aws_cloudwatch_metric_alarm.lambda_duration_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.lambda_errors_540 (expand)" [label = "aws_cloudwatch_metric_alarm.lambda_errors_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.lambda_throttles_540 (expand)" [label = "aws_cloudwatch_metric_alarm.lambda_throttles_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.pipe_execution_failures_540 (expand)" [label = "aws_cloudwatch_metric_alarm.pipe_execution_failures_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.pipe_target_failures_540 (expand)" [label = "aws_cloudwatch_metric_alarm.pipe_target_failures_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_borrow_latency_540 (expand)" [label = "aws_cloudwatch_metric_alarm.rds_proxy_borrow_latency_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_connection_setup_failures_540 (expand)" [label = "aws_cloudwatch_metric_alarm.rds_proxy_connection_setup_failures_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_connections_540 (expand)" [label = "aws_cloudwatch_metric_alarm.rds_proxy_connections_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_database_connections_540 (expand)" [label = "aws_cloudwatch_metric_alarm.rds_proxy_database_connections_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_pool_utilization_540 (expand)" [label = "aws_cloudwatch_metric_alarm.rds_proxy_pool_utilization_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.sfn_aborted_540 (expand)" [label = "aws_cloudwatch_metric_alarm.sfn_aborted_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.sfn_failed_540 (expand)" [label = "aws_cloudwatch_metric_alarm.sfn_failed_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.sfn_timeout_540 (expand)" [label = "aws_cloudwatch_metric_alarm.sfn_timeout_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.sqs_backlog_540 (expand)" [label = "aws_cloudwatch_metric_alarm.sqs_backlog_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.sqs_dlq_540 (expand)" [label = "aws_cloudwatch_metric_alarm.sqs_dlq_540", shape = "box"]
+		"[root] aws_cloudwatch_metric_alarm.sqs_message_age_540 (expand)" [label = "aws_cloudwatch_metric_alarm.sqs_message_age_540", shape = "box"]
+		"[root] aws_cognito_user_pool.human_review (expand)" [label = "aws_cognito_user_pool.human_review", shape = "box"]
+		"[root] aws_cognito_user_pool_client.human_review (expand)" [label = "aws_cognito_user_pool_client.human_review", shape = "box"]
+		"[root] aws_cognito_user_pool_domain.human_review (expand)" [label = "aws_cognito_user_pool_domain.human_review", shape = "box"]
+		"[root] aws_db_proxy.psc (expand)" [label = "aws_db_proxy.psc", shape = "box"]
+		"[root] aws_db_proxy_default_target_group.psc (expand)" [label = "aws_db_proxy_default_target_group.psc", shape = "box"]
+		"[root] aws_db_proxy_endpoint.reader (expand)" [label = "aws_db_proxy_endpoint.reader", shape = "box"]
+		"[root] aws_db_proxy_target.psc (expand)" [label = "aws_db_proxy_target.psc", shape = "box"]
+		"[root] aws_db_subnet_group.psc (expand)" [label = "aws_db_subnet_group.psc", shape = "box"]
+		"[root] aws_ecr_lifecycle_policy.human_review_ui (expand)" [label = "aws_ecr_lifecycle_policy.human_review_ui", shape = "box"]
+		"[root] aws_ecr_repository.human_review_ui (expand)" [label = "aws_ecr_repository.human_review_ui", shape = "box"]
+		"[root] aws_ecs_cluster.human_review_ui (expand)" [label = "aws_ecs_cluster.human_review_ui", shape = "box"]
+		"[root] aws_eip.nat (expand)" [label = "aws_eip.nat", shape = "box"]
+		"[root] aws_guardduty_malware_protection_plan.attachments (expand)" [label = "aws_guardduty_malware_protection_plan.attachments", shape = "box"]
+		"[root] aws_iam_policy.lambda_baseline (expand)" [label = "aws_iam_policy.lambda_baseline", shape = "box"]
+		"[root] aws_iam_role.ariba_tool (expand)" [label = "aws_iam_role.ariba_tool", shape = "box"]
+		"[root] aws_iam_role.attachment_processing (expand)" [label = "aws_iam_role.attachment_processing", shape = "box"]
+		"[root] aws_iam_role.classification_agentcore (expand)" [label = "aws_iam_role.classification_agentcore", shape = "box"]
+		"[root] aws_iam_role.email_ingestion (expand)" [label = "aws_iam_role.email_ingestion", shape = "box"]
+		"[root] aws_iam_role.email_processing (expand)" [label = "aws_iam_role.email_processing", shape = "box"]
+		"[root] aws_iam_role.email_scheduler (expand)" [label = "aws_iam_role.email_scheduler", shape = "box"]
+		"[root] aws_iam_role.guardduty_s3 (expand)" [label = "aws_iam_role.guardduty_s3", shape = "box"]
+		"[root] aws_iam_role.human_review_api_logging_530 (expand)" [label = "aws_iam_role.human_review_api_logging_530", shape = "box"]
+		"[root] aws_iam_role.human_review_backend (expand)" [label = "aws_iam_role.human_review_backend", shape = "box"]
+		"[root] aws_iam_role.human_review_ecs_execution (expand)" [label = "aws_iam_role.human_review_ecs_execution", shape = "box"]
+		"[root] aws_iam_role.human_review_ecs_task (expand)" [label = "aws_iam_role.human_review_ecs_task", shape = "box"]
+		"[root] aws_iam_role.human_review_outbox (expand)" [label = "aws_iam_role.human_review_outbox", shape = "box"]
+		"[root] aws_iam_role.identifier_validation (expand)" [label = "aws_iam_role.identifier_validation", shape = "box"]
+		"[root] aws_iam_role.investigation_agentcore (expand)" [label = "aws_iam_role.investigation_agentcore", shape = "box"]
+		"[root] aws_iam_role.investigation_gateway (expand)" [label = "aws_iam_role.investigation_gateway", shape = "box"]
+		"[root] aws_iam_role.investigation_invocation (expand)" [label = "aws_iam_role.investigation_invocation", shape = "box"]
+		"[root] aws_iam_role.invoice_scope (expand)" [label = "aws_iam_role.invoice_scope", shape = "box"]
+		"[root] aws_iam_role.mail_preprocessing (expand)" [label = "aws_iam_role.mail_preprocessing", shape = "box"]
+		"[root] aws_iam_role.malware_scan_handler (expand)" [label = "aws_iam_role.malware_scan_handler", shape = "box"]
+		"[root] aws_iam_role.pipe1 (expand)" [label = "aws_iam_role.pipe1", shape = "box"]
+		"[root] aws_iam_role.pipe2 (expand)" [label = "aws_iam_role.pipe2", shape = "box"]
+		"[root] aws_iam_role.pr_itar_tool (expand)" [label = "aws_iam_role.pr_itar_tool", shape = "box"]
+		"[root] aws_iam_role.rds_proxy (expand)" [label = "aws_iam_role.rds_proxy", shape = "box"]
+		"[root] aws_iam_role.reply_processing (expand)" [label = "aws_iam_role.reply_processing", shape = "box"]
+		"[root] aws_iam_role.s4hana_tool (expand)" [label = "aws_iam_role.s4hana_tool", shape = "box"]
+		"[root] aws_iam_role.sf1 (expand)" [label = "aws_iam_role.sf1", shape = "box"]
+		"[root] aws_iam_role.sf2 (expand)" [label = "aws_iam_role.sf2", shape = "box"]
+		"[root] aws_iam_role.workflow_dispatcher (expand)" [label = "aws_iam_role.workflow_dispatcher", shape = "box"]
+		"[root] aws_iam_role.workflow_dispatcher_scheduler (expand)" [label = "aws_iam_role.workflow_dispatcher_scheduler", shape = "box"]
+		"[root] aws_iam_role_policy.attachment_processing_access (expand)" [label = "aws_iam_role_policy.attachment_processing_access", shape = "box"]
+		"[root] aws_iam_role_policy.classification_agentcore (expand)" [label = "aws_iam_role_policy.classification_agentcore", shape = "box"]
+		"[root] aws_iam_role_policy.email_ingestion_access (expand)" [label = "aws_iam_role_policy.email_ingestion_access", shape = "box"]
+		"[root] aws_iam_role_policy.email_processing_access (expand)" [label = "aws_iam_role_policy.email_processing_access", shape = "box"]
+		"[root] aws_iam_role_policy.email_scheduler_invoke (expand)" [label = "aws_iam_role_policy.email_scheduler_invoke", shape = "box"]
+		"[root] aws_iam_role_policy.guardduty_s3 (expand)" [label = "aws_iam_role_policy.guardduty_s3", shape = "box"]
+		"[root] aws_iam_role_policy.human_review_backend_db (expand)" [label = "aws_iam_role_policy.human_review_backend_db", shape = "box"]
+		"[root] aws_iam_role_policy.human_review_outbox (expand)" [label = "aws_iam_role_policy.human_review_outbox", shape = "box"]
+		"[root] aws_iam_role_policy.investigation_agentcore (expand)" [label = "aws_iam_role_policy.investigation_agentcore", shape = "box"]
+		"[root] aws_iam_role_policy.investigation_gateway (expand)" [label = "aws_iam_role_policy.investigation_gateway", shape = "box"]
+		"[root] aws_iam_role_policy.investigation_invocation_access (expand)" [label = "aws_iam_role_policy.investigation_invocation_access", shape = "box"]
+		"[root] aws_iam_role_policy.malware_scan_handler (expand)" [label = "aws_iam_role_policy.malware_scan_handler", shape = "box"]
+		"[root] aws_iam_role_policy.pipe1 (expand)" [label = "aws_iam_role_policy.pipe1", shape = "box"]
+		"[root] aws_iam_role_policy.pipe1_logging_540 (expand)" [label = "aws_iam_role_policy.pipe1_logging_540", shape = "box"]
+		"[root] aws_iam_role_policy.pipe2 (expand)" [label = "aws_iam_role_policy.pipe2", shape = "box"]
+		"[root] aws_iam_role_policy.pipe2_logging_540 (expand)" [label = "aws_iam_role_policy.pipe2_logging_540", shape = "box"]
+		"[root] aws_iam_role_policy.rds_proxy (expand)" [label = "aws_iam_role_policy.rds_proxy", shape = "box"]
+		"[root] aws_iam_role_policy.reply_processing_510 (expand)" [label = "aws_iam_role_policy.reply_processing_510", shape = "box"]
+		"[root] aws_iam_role_policy.sf1 (expand)" [label = "aws_iam_role_policy.sf1", shape = "box"]
+		"[root] aws_iam_role_policy.sf2 (expand)" [label = "aws_iam_role_policy.sf2", shape = "box"]
+		"[root] aws_iam_role_policy.workflow_dispatcher (expand)" [label = "aws_iam_role_policy.workflow_dispatcher", shape = "box"]
+		"[root] aws_iam_role_policy.workflow_dispatcher_scheduler (expand)" [label = "aws_iam_role_policy.workflow_dispatcher_scheduler", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.ariba_tool_baseline (expand)" [label = "aws_iam_role_policy_attachment.ariba_tool_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.attachment_processing_baseline (expand)" [label = "aws_iam_role_policy_attachment.attachment_processing_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.email_ingestion_baseline (expand)" [label = "aws_iam_role_policy_attachment.email_ingestion_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.email_processing_baseline (expand)" [label = "aws_iam_role_policy_attachment.email_processing_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.human_review_api_logging_530 (expand)" [label = "aws_iam_role_policy_attachment.human_review_api_logging_530", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.human_review_backend_baseline (expand)" [label = "aws_iam_role_policy_attachment.human_review_backend_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.human_review_ecs_execution (expand)" [label = "aws_iam_role_policy_attachment.human_review_ecs_execution", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.human_review_outbox_baseline (expand)" [label = "aws_iam_role_policy_attachment.human_review_outbox_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.identifier_validation_baseline (expand)" [label = "aws_iam_role_policy_attachment.identifier_validation_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.investigation_invocation_baseline (expand)" [label = "aws_iam_role_policy_attachment.investigation_invocation_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.invoice_scope_baseline (expand)" [label = "aws_iam_role_policy_attachment.invoice_scope_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.mail_preprocessing_baseline (expand)" [label = "aws_iam_role_policy_attachment.mail_preprocessing_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.malware_scan_handler_baseline (expand)" [label = "aws_iam_role_policy_attachment.malware_scan_handler_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.pr_itar_tool_baseline (expand)" [label = "aws_iam_role_policy_attachment.pr_itar_tool_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.reply_processing_baseline (expand)" [label = "aws_iam_role_policy_attachment.reply_processing_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.s4hana_tool_baseline (expand)" [label = "aws_iam_role_policy_attachment.s4hana_tool_baseline", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.workflow_dispatcher_baseline (expand)" [label = "aws_iam_role_policy_attachment.workflow_dispatcher_baseline", shape = "box"]
+		"[root] aws_internet_gateway.psc (expand)" [label = "aws_internet_gateway.psc", shape = "box"]
+		"[root] aws_kms_alias.psc (expand)" [label = "aws_kms_alias.psc", shape = "box"]
+		"[root] aws_kms_key.psc (expand)" [label = "aws_kms_key.psc", shape = "box"]
+		"[root] aws_lambda_event_source_mapping.reply_processing_520 (expand)" [label = "aws_lambda_event_source_mapping.reply_processing_520", shape = "box"]
+		"[root] aws_lambda_function.attachment_processing (expand)" [label = "aws_lambda_function.attachment_processing", shape = "box"]
+		"[root] aws_lambda_function.email_ingestion (expand)" [label = "aws_lambda_function.email_ingestion", shape = "box"]
+		"[root] aws_lambda_function.email_processing (expand)" [label = "aws_lambda_function.email_processing", shape = "box"]
+		"[root] aws_lambda_function.human_review_backend (expand)" [label = "aws_lambda_function.human_review_backend", shape = "box"]
+		"[root] aws_lambda_function.human_review_outbox (expand)" [label = "aws_lambda_function.human_review_outbox", shape = "box"]
+		"[root] aws_lambda_function.identifier_validation (expand)" [label = "aws_lambda_function.identifier_validation", shape = "box"]
+		"[root] aws_lambda_function.investigation_invocation (expand)" [label = "aws_lambda_function.investigation_invocation", shape = "box"]
+		"[root] aws_lambda_function.invoice_scope (expand)" [label = "aws_lambda_function.invoice_scope", shape = "box"]
+		"[root] aws_lambda_function.mail_preprocessing (expand)" [label = "aws_lambda_function.mail_preprocessing", shape = "box"]
+		"[root] aws_lambda_function.malware_scan_handler (expand)" [label = "aws_lambda_function.malware_scan_handler", shape = "box"]
+		"[root] aws_lambda_function.reply_processing_510 (expand)" [label = "aws_lambda_function.reply_processing_510", shape = "box"]
+		"[root] aws_lambda_function.s4hana_tool (expand)" [label = "aws_lambda_function.s4hana_tool", shape = "box"]
+		"[root] aws_lambda_function.workflow_dispatcher (expand)" [label = "aws_lambda_function.workflow_dispatcher", shape = "box"]
+		"[root] aws_lambda_function_event_invoke_config.malware_scan_handler (expand)" [label = "aws_lambda_function_event_invoke_config.malware_scan_handler", shape = "box"]
+		"[root] aws_lambda_permission.human_review_api_530 (expand)" [label = "aws_lambda_permission.human_review_api_530", shape = "box"]
+		"[root] aws_lambda_permission.human_review_outbox_eventbridge (expand)" [label = "aws_lambda_permission.human_review_outbox_eventbridge", shape = "box"]
+		"[root] aws_lambda_permission.malware_scan_from_eventbridge (expand)" [label = "aws_lambda_permission.malware_scan_from_eventbridge", shape = "box"]
+		"[root] aws_lb.human_review (expand)" [label = "aws_lb.human_review", shape = "box"]
+		"[root] aws_lb_listener.human_review_https (expand)" [label = "aws_lb_listener.human_review_https", shape = "box"]
+		"[root] aws_lb_target_group.human_review (expand)" [label = "aws_lb_target_group.human_review", shape = "box"]
+		"[root] aws_nat_gateway.psc (expand)" [label = "aws_nat_gateway.psc", shape = "box"]
+		"[root] aws_pipes_pipe.pipe1 (expand)" [label = "aws_pipes_pipe.pipe1", shape = "box"]
+		"[root] aws_pipes_pipe.pipe2 (expand)" [label = "aws_pipes_pipe.pipe2", shape = "box"]
+		"[root] aws_rds_cluster.psc (expand)" [label = "aws_rds_cluster.psc", shape = "box"]
+		"[root] aws_rds_cluster_instance.reader (expand)" [label = "aws_rds_cluster_instance.reader", shape = "box"]
+		"[root] aws_rds_cluster_instance.writer (expand)" [label = "aws_rds_cluster_instance.writer", shape = "box"]
+		"[root] aws_rds_cluster_parameter_group.psc (expand)" [label = "aws_rds_cluster_parameter_group.psc", shape = "box"]
+		"[root] aws_route.private_a_internet (expand)" [label = "aws_route.private_a_internet", shape = "box"]
+		"[root] aws_route.private_b_internet (expand)" [label = "aws_route.private_b_internet", shape = "box"]
+		"[root] aws_route.public_internet (expand)" [label = "aws_route.public_internet", shape = "box"]
+		"[root] aws_route53_record.human_review_api_530 (expand)" [label = "aws_route53_record.human_review_api_530", shape = "box"]
+		"[root] aws_route53_record.human_review_ui (expand)" [label = "aws_route53_record.human_review_ui", shape = "box"]
+		"[root] aws_route53_record.psc_acm_validation (expand)" [label = "aws_route53_record.psc_acm_validation", shape = "box"]
+		"[root] aws_route53_zone.psc (expand)" [label = "aws_route53_zone.psc", shape = "box"]
+		"[root] aws_route_table.database (expand)" [label = "aws_route_table.database", shape = "box"]
+		"[root] aws_route_table.private_a (expand)" [label = "aws_route_table.private_a", shape = "box"]
+		"[root] aws_route_table.private_b (expand)" [label = "aws_route_table.private_b", shape = "box"]
+		"[root] aws_route_table.public (expand)" [label = "aws_route_table.public", shape = "box"]
+		"[root] aws_route_table_association.database_a (expand)" [label = "aws_route_table_association.database_a", shape = "box"]
+		"[root] aws_route_table_association.database_b (expand)" [label = "aws_route_table_association.database_b", shape = "box"]
+		"[root] aws_route_table_association.private_a (expand)" [label = "aws_route_table_association.private_a", shape = "box"]
+		"[root] aws_route_table_association.private_b (expand)" [label = "aws_route_table_association.private_b", shape = "box"]
+		"[root] aws_route_table_association.public_a (expand)" [label = "aws_route_table_association.public_a", shape = "box"]
+		"[root] aws_route_table_association.public_b (expand)" [label = "aws_route_table_association.public_b", shape = "box"]
+		"[root] aws_s3_bucket.attachments (expand)" [label = "aws_s3_bucket.attachments", shape = "box"]
+		"[root] aws_s3_bucket.classification_agent_artifacts (expand)" [label = "aws_s3_bucket.classification_agent_artifacts", shape = "box"]
+		"[root] aws_s3_bucket.investigation_agent_artifacts (expand)" [label = "aws_s3_bucket.investigation_agent_artifacts", shape = "box"]
+		"[root] aws_s3_bucket_lifecycle_configuration.attachments (expand)" [label = "aws_s3_bucket_lifecycle_configuration.attachments", shape = "box"]
+		"[root] aws_s3_bucket_ownership_controls.attachments (expand)" [label = "aws_s3_bucket_ownership_controls.attachments", shape = "box"]
+		"[root] aws_s3_bucket_policy.attachments (expand)" [label = "aws_s3_bucket_policy.attachments", shape = "box"]
+		"[root] aws_s3_bucket_public_access_block.attachments (expand)" [label = "aws_s3_bucket_public_access_block.attachments", shape = "box"]
+		"[root] aws_s3_bucket_public_access_block.classification_agent_artifacts (expand)" [label = "aws_s3_bucket_public_access_block.classification_agent_artifacts", shape = "box"]
+		"[root] aws_s3_bucket_public_access_block.investigation_agent_artifacts (expand)" [label = "aws_s3_bucket_public_access_block.investigation_agent_artifacts", shape = "box"]
+		"[root] aws_s3_bucket_server_side_encryption_configuration.attachments (expand)" [label = "aws_s3_bucket_server_side_encryption_configuration.attachments", shape = "box"]
+		"[root] aws_s3_bucket_server_side_encryption_configuration.classification_agent_artifacts (expand)" [label = "aws_s3_bucket_server_side_encryption_configuration.classification_agent_artifacts", shape = "box"]
+		"[root] aws_s3_bucket_server_side_encryption_configuration.investigation_agent_artifacts (expand)" [label = "aws_s3_bucket_server_side_encryption_configuration.investigation_agent_artifacts", shape = "box"]
+		"[root] aws_s3_bucket_versioning.attachments (expand)" [label = "aws_s3_bucket_versioning.attachments", shape = "box"]
+		"[root] aws_s3_object.classification_agent_zip (expand)" [label = "aws_s3_object.classification_agent_zip", shape = "box"]
+		"[root] aws_s3_object.investigation_agent_zip (expand)" [label = "aws_s3_object.investigation_agent_zip", shape = "box"]
+		"[root] aws_scheduler_schedule.email_ingestion (expand)" [label = "aws_scheduler_schedule.email_ingestion", shape = "box"]
+		"[root] aws_scheduler_schedule.workflow_dispatcher (expand)" [label = "aws_scheduler_schedule.workflow_dispatcher", shape = "box"]
+		"[root] aws_secretsmanager_secret.microsoft_graph (expand)" [label = "aws_secretsmanager_secret.microsoft_graph", shape = "box"]
+		"[root] aws_secretsmanager_secret.psc_app_db (expand)" [label = "aws_secretsmanager_secret.psc_app_db", shape = "box"]
+		"[root] aws_security_group.aurora (expand)" [label = "aws_security_group.aurora", shape = "box"]
+		"[root] aws_security_group.human_review_alb (expand)" [label = "aws_security_group.human_review_alb", shape = "box"]
+		"[root] aws_security_group.human_review_ecs (expand)" [label = "aws_security_group.human_review_ecs", shape = "box"]
+		"[root] aws_security_group.lambda (expand)" [label = "aws_security_group.lambda", shape = "box"]
+		"[root] aws_security_group.rds_proxy (expand)" [label = "aws_security_group.rds_proxy", shape = "box"]
+		"[root] aws_security_group.vpc_endpoints (expand)" [label = "aws_security_group.vpc_endpoints", shape = "box"]
+		"[root] aws_sfn_state_machine.sf1 (expand)" [label = "aws_sfn_state_machine.sf1", shape = "box"]
+		"[root] aws_sfn_state_machine.sf2 (expand)" [label = "aws_sfn_state_machine.sf2", shape = "box"]
+		"[root] aws_sns_topic.psc_monitoring_540 (expand)" [label = "aws_sns_topic.psc_monitoring_540", shape = "box"]
+		"[root] aws_sns_topic_subscription.psc_monitoring_email_540 (expand)" [label = "aws_sns_topic_subscription.psc_monitoring_email_540", shape = "box"]
+		"[root] aws_sqs_queue.malware_scan_event_dlq (expand)" [label = "aws_sqs_queue.malware_scan_event_dlq", shape = "box"]
+		"[root] aws_sqs_queue.reply (expand)" [label = "aws_sqs_queue.reply", shape = "box"]
+		"[root] aws_sqs_queue.reply_dlq (expand)" [label = "aws_sqs_queue.reply_dlq", shape = "box"]
+		"[root] aws_sqs_queue.sqs1 (expand)" [label = "aws_sqs_queue.sqs1", shape = "box"]
+		"[root] aws_sqs_queue.sqs1_dlq (expand)" [label = "aws_sqs_queue.sqs1_dlq", shape = "box"]
+		"[root] aws_sqs_queue.sqs2 (expand)" [label = "aws_sqs_queue.sqs2", shape = "box"]
+		"[root] aws_sqs_queue.sqs2_dlq (expand)" [label = "aws_sqs_queue.sqs2_dlq", shape = "box"]
+		"[root] aws_sqs_queue.workflow_dispatcher_scheduler_dlq (expand)" [label = "aws_sqs_queue.workflow_dispatcher_scheduler_dlq", shape = "box"]
+		"[root] aws_sqs_queue_policy.malware_scan_event_dlq (expand)" [label = "aws_sqs_queue_policy.malware_scan_event_dlq", shape = "box"]
+		"[root] aws_sqs_queue_redrive_allow_policy.reply_dlq (expand)" [label = "aws_sqs_queue_redrive_allow_policy.reply_dlq", shape = "box"]
+		"[root] aws_sqs_queue_redrive_allow_policy.sqs1_dlq (expand)" [label = "aws_sqs_queue_redrive_allow_policy.sqs1_dlq", shape = "box"]
+		"[root] aws_sqs_queue_redrive_allow_policy.sqs2_dlq (expand)" [label = "aws_sqs_queue_redrive_allow_policy.sqs2_dlq", shape = "box"]
+		"[root] aws_subnet.database_a (expand)" [label = "aws_subnet.database_a", shape = "box"]
+		"[root] aws_subnet.database_b (expand)" [label = "aws_subnet.database_b", shape = "box"]
+		"[root] aws_subnet.private_a (expand)" [label = "aws_subnet.private_a", shape = "box"]
+		"[root] aws_subnet.private_b (expand)" [label = "aws_subnet.private_b", shape = "box"]
+		"[root] aws_subnet.public_a (expand)" [label = "aws_subnet.public_a", shape = "box"]
+		"[root] aws_subnet.public_b (expand)" [label = "aws_subnet.public_b", shape = "box"]
+		"[root] aws_vpc.psc (expand)" [label = "aws_vpc.psc", shape = "box"]
+		"[root] aws_vpc_endpoint.kms (expand)" [label = "aws_vpc_endpoint.kms", shape = "box"]
+		"[root] aws_vpc_endpoint.s3 (expand)" [label = "aws_vpc_endpoint.s3", shape = "box"]
+		"[root] aws_vpc_endpoint.secrets_manager (expand)" [label = "aws_vpc_endpoint.secrets_manager", shape = "box"]
+		"[root] aws_vpc_endpoint.step_functions (expand)" [label = "aws_vpc_endpoint.step_functions", shape = "box"]
+		"[root] aws_vpc_security_group_egress_rule.human_review_alb_to_ecs (expand)" [label = "aws_vpc_security_group_egress_rule.human_review_alb_to_ecs", shape = "box"]
+		"[root] aws_vpc_security_group_egress_rule.human_review_ecs_https (expand)" [label = "aws_vpc_security_group_egress_rule.human_review_ecs_https", shape = "box"]
+		"[root] aws_vpc_security_group_egress_rule.lambda_https (expand)" [label = "aws_vpc_security_group_egress_rule.lambda_https", shape = "box"]
+		"[root] aws_vpc_security_group_egress_rule.lambda_postgres (expand)" [label = "aws_vpc_security_group_egress_rule.lambda_postgres", shape = "box"]
+		"[root] aws_vpc_security_group_egress_rule.rds_proxy_to_aurora (expand)" [label = "aws_vpc_security_group_egress_rule.rds_proxy_to_aurora", shape = "box"]
+		"[root] aws_vpc_security_group_ingress_rule.aurora_from_rds_proxy (expand)" [label = "aws_vpc_security_group_ingress_rule.aurora_from_rds_proxy", shape = "box"]
+		"[root] aws_vpc_security_group_ingress_rule.human_review_alb_https (expand)" [label = "aws_vpc_security_group_ingress_rule.human_review_alb_https", shape = "box"]
+		"[root] aws_vpc_security_group_ingress_rule.human_review_ecs_from_alb (expand)" [label = "aws_vpc_security_group_ingress_rule.human_review_ecs_from_alb", shape = "box"]
+		"[root] aws_vpc_security_group_ingress_rule.rds_proxy_from_lambda (expand)" [label = "aws_vpc_security_group_ingress_rule.rds_proxy_from_lambda", shape = "box"]
+		"[root] aws_vpc_security_group_ingress_rule.vpce_from_lambda (expand)" [label = "aws_vpc_security_group_ingress_rule.vpce_from_lambda", shape = "box"]
+		"[root] data.archive_file.attachment_processing (expand)" [label = "data.archive_file.attachment_processing", shape = "box"]
+		"[root] data.archive_file.classification_agent (expand)" [label = "data.archive_file.classification_agent", shape = "box"]
+		"[root] data.archive_file.email_ingestion (expand)" [label = "data.archive_file.email_ingestion", shape = "box"]
+		"[root] data.archive_file.email_processing (expand)" [label = "data.archive_file.email_processing", shape = "box"]
+		"[root] data.archive_file.human_review_backend (expand)" [label = "data.archive_file.human_review_backend", shape = "box"]
+		"[root] data.archive_file.human_review_outbox (expand)" [label = "data.archive_file.human_review_outbox", shape = "box"]
+		"[root] data.archive_file.identifier_validation (expand)" [label = "data.archive_file.identifier_validation", shape = "box"]
+		"[root] data.archive_file.investigation_agent (expand)" [label = "data.archive_file.investigation_agent", shape = "box"]
+		"[root] data.archive_file.investigation_invocation (expand)" [label = "data.archive_file.investigation_invocation", shape = "box"]
+		"[root] data.archive_file.invoice_scope (expand)" [label = "data.archive_file.invoice_scope", shape = "box"]
+		"[root] data.archive_file.mail_preprocessing (expand)" [label = "data.archive_file.mail_preprocessing", shape = "box"]
+		"[root] data.archive_file.malware_scan_handler (expand)" [label = "data.archive_file.malware_scan_handler", shape = "box"]
+		"[root] data.archive_file.reply_processing_510 (expand)" [label = "data.archive_file.reply_processing_510", shape = "box"]
+		"[root] data.archive_file.s4hana_tool (expand)" [label = "data.archive_file.s4hana_tool", shape = "box"]
+		"[root] data.archive_file.workflow_dispatcher (expand)" [label = "data.archive_file.workflow_dispatcher", shape = "box"]
+		"[root] data.aws_caller_identity.current (expand)" [label = "data.aws_caller_identity.current", shape = "box"]
+		"[root] data.aws_iam_policy_document.attachments_https (expand)" [label = "data.aws_iam_policy_document.attachments_https", shape = "box"]
+		"[root] data.aws_iam_policy_document.guardduty_s3 (expand)" [label = "data.aws_iam_policy_document.guardduty_s3", shape = "box"]
+		"[root] data.aws_iam_policy_document.guardduty_s3_assume_role (expand)" [label = "data.aws_iam_policy_document.guardduty_s3_assume_role", shape = "box"]
+		"[root] data.aws_iam_policy_document.human_review_ecs_assume_role (expand)" [label = "data.aws_iam_policy_document.human_review_ecs_assume_role", shape = "box"]
+		"[root] data.aws_iam_policy_document.investigation_gateway_assume (expand)" [label = "data.aws_iam_policy_document.investigation_gateway_assume", shape = "box"]
+		"[root] data.aws_iam_policy_document.lambda_assume_role (expand)" [label = "data.aws_iam_policy_document.lambda_assume_role", shape = "box"]
+		"[root] data.aws_iam_policy_document.lambda_baseline (expand)" [label = "data.aws_iam_policy_document.lambda_baseline", shape = "box"]
+		"[root] data.aws_iam_policy_document.malware_scan_event_dlq (expand)" [label = "data.aws_iam_policy_document.malware_scan_event_dlq", shape = "box"]
+		"[root] data.aws_iam_policy_document.scheduler_assume_role (expand)" [label = "data.aws_iam_policy_document.scheduler_assume_role", shape = "box"]
+		"[root] data.aws_iam_policy_document.step_functions_assume_role (expand)" [label = "data.aws_iam_policy_document.step_functions_assume_role", shape = "box"]
+		"[root] data.aws_partition.current (expand)" [label = "data.aws_partition.current", shape = "box"]
+		"[root] data.aws_partition.human_review (expand)" [label = "data.aws_partition.human_review", shape = "box"]
+		"[root] data.aws_region.current (expand)" [label = "data.aws_region.current", shape = "box"]
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"]" [label = "provider[\"registry.terraform.io/hashicorp/archive\"]", shape = "diamond"]
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"]" [label = "provider[\"registry.terraform.io/hashicorp/aws\"]", shape = "diamond"]
+		"[root] var.agentcore_runtime_arn_classification" [label = "var.agentcore_runtime_arn_classification", shape = "note"]
+		"[root] var.agentcore_runtime_arn_investigation" [label = "var.agentcore_runtime_arn_investigation", shape = "note"]
+		"[root] var.attachment_processing_log_retention_days" [label = "var.attachment_processing_log_retention_days", shape = "note"]
+		"[root] var.attachment_processing_max_bytes" [label = "var.attachment_processing_max_bytes", shape = "note"]
+		"[root] var.attachment_processing_memory" [label = "var.attachment_processing_memory", shape = "note"]
+		"[root] var.attachment_processing_name_suffix" [label = "var.attachment_processing_name_suffix", shape = "note"]
+		"[root] var.attachment_processing_runtime" [label = "var.attachment_processing_runtime", shape = "note"]
+		"[root] var.attachment_processing_s3_prefix" [label = "var.attachment_processing_s3_prefix", shape = "note"]
+		"[root] var.attachment_processing_timeout" [label = "var.attachment_processing_timeout", shape = "note"]
+		"[root] var.attachments_abort_multipart_days" [label = "var.attachments_abort_multipart_days", shape = "note"]
+		"[root] var.attachments_malware_object_tagging_status" [label = "var.attachments_malware_object_tagging_status", shape = "note"]
+		"[root] var.attachments_versioning_status" [label = "var.attachments_versioning_status", shape = "note"]
+		"[root] var.aurora_auto_minor_version_upgrade" [label = "var.aurora_auto_minor_version_upgrade", shape = "note"]
+		"[root] var.aurora_backup_retention_days" [label = "var.aurora_backup_retention_days", shape = "note"]
+		"[root] var.aurora_backup_window" [label = "var.aurora_backup_window", shape = "note"]
+		"[root] var.aurora_deletion_protection" [label = "var.aurora_deletion_protection", shape = "note"]
+		"[root] var.aurora_engine_version" [label = "var.aurora_engine_version", shape = "note"]
+		"[root] var.aurora_final_snapshot_identifier" [label = "var.aurora_final_snapshot_identifier", shape = "note"]
+		"[root] var.aurora_maintenance_window" [label = "var.aurora_maintenance_window", shape = "note"]
+		"[root] var.aurora_parameter_group_family" [label = "var.aurora_parameter_group_family", shape = "note"]
+		"[root] var.aurora_performance_insights_enabled" [label = "var.aurora_performance_insights_enabled", shape = "note"]
+		"[root] var.aurora_serverless_max_acu" [label = "var.aurora_serverless_max_acu", shape = "note"]
+		"[root] var.aurora_serverless_min_acu" [label = "var.aurora_serverless_min_acu", shape = "note"]
+		"[root] var.aurora_skip_final_snapshot" [label = "var.aurora_skip_final_snapshot", shape = "note"]
+		"[root] var.availability_zone_a" [label = "var.availability_zone_a", shape = "note"]
+		"[root] var.availability_zone_b" [label = "var.availability_zone_b", shape = "note"]
+		"[root] var.aws_account_id" [label = "var.aws_account_id", shape = "note"]
+		"[root] var.aws_region" [label = "var.aws_region", shape = "note"]
+		"[root] var.bedrock_model_id" [label = "var.bedrock_model_id", shape = "note"]
+		"[root] var.classification_agent_artifact_key" [label = "var.classification_agent_artifact_key", shape = "note"]
+		"[root] var.classification_agent_role_suffix" [label = "var.classification_agent_role_suffix", shape = "note"]
+		"[root] var.classification_agent_runtime_name" [label = "var.classification_agent_runtime_name", shape = "note"]
+		"[root] var.classification_artifact_bucket_suffix" [label = "var.classification_artifact_bucket_suffix", shape = "note"]
+		"[root] var.classification_guardrail_blocked_input_message" [label = "var.classification_guardrail_blocked_input_message", shape = "note"]
+		"[root] var.classification_guardrail_blocked_output_message" [label = "var.classification_guardrail_blocked_output_message", shape = "note"]
+		"[root] var.classification_guardrail_content_filters" [label = "var.classification_guardrail_content_filters", shape = "note"]
+		"[root] var.classification_guardrail_name_suffix" [label = "var.classification_guardrail_name_suffix", shape = "note"]
+		"[root] var.classification_guardrail_pii_entities" [label = "var.classification_guardrail_pii_entities", shape = "note"]
+		"[root] var.classification_model_id" [label = "var.classification_model_id", shape = "note"]
+		"[root] var.classification_model_max_output_tokens" [label = "var.classification_model_max_output_tokens", shape = "note"]
+		"[root] var.classification_model_temperature" [label = "var.classification_model_temperature", shape = "note"]
+		"[root] var.classification_model_top_p" [label = "var.classification_model_top_p", shape = "note"]
+		"[root] var.cloudwatch_alarm_email" [label = "var.cloudwatch_alarm_email", shape = "note"]
+		"[root] var.database_name" [label = "var.database_name", shape = "note"]
+		"[root] var.database_subnet_a_cidr" [label = "var.database_subnet_a_cidr", shape = "note"]
+		"[root] var.database_subnet_b_cidr" [label = "var.database_subnet_b_cidr", shape = "note"]
+		"[root] var.database_username" [label = "var.database_username", shape = "note"]
+		"[root] var.domain_name" [label = "var.domain_name", shape = "note"]
+		"[root] var.email_ingestion_db_name" [label = "var.email_ingestion_db_name", shape = "note"]
+		"[root] var.email_ingestion_db_user" [label = "var.email_ingestion_db_user", shape = "note"]
+		"[root] var.email_ingestion_log_retention_days" [label = "var.email_ingestion_log_retention_days", shape = "note"]
+		"[root] var.email_ingestion_memory" [label = "var.email_ingestion_memory", shape = "note"]
+		"[root] var.email_ingestion_timeout" [label = "var.email_ingestion_timeout", shape = "note"]
+		"[root] var.email_processing_log_retention_days" [label = "var.email_processing_log_retention_days", shape = "note"]
+		"[root] var.email_processing_memory" [label = "var.email_processing_memory", shape = "note"]
+		"[root] var.email_processing_name_suffix" [label = "var.email_processing_name_suffix", shape = "note"]
+		"[root] var.email_processing_runtime" [label = "var.email_processing_runtime", shape = "note"]
+		"[root] var.email_processing_timeout" [label = "var.email_processing_timeout", shape = "note"]
+		"[root] var.email_scheduler_expression" [label = "var.email_scheduler_expression", shape = "note"]
+		"[root] var.email_scheduler_timezone" [label = "var.email_scheduler_timezone", shape = "note"]
+		"[root] var.enable_investigation_invocation" [label = "var.enable_investigation_invocation", shape = "note"]
+		"[root] var.enable_scheduler" [label = "var.enable_scheduler", shape = "note"]
+		"[root] var.environment" [label = "var.environment", shape = "note"]
+		"[root] var.external_api_token_secret_arn" [label = "var.external_api_token_secret_arn", shape = "note"]
+		"[root] var.human_review_alb_allowed_cidr" [label = "var.human_review_alb_allowed_cidr", shape = "note"]
+		"[root] var.human_review_backend_memory" [label = "var.human_review_backend_memory", shape = "note"]
+		"[root] var.human_review_backend_timeout" [label = "var.human_review_backend_timeout", shape = "note"]
+		"[root] var.human_review_container_port" [label = "var.human_review_container_port", shape = "note"]
+		"[root] var.human_review_ecr_image_retention_count" [label = "var.human_review_ecr_image_retention_count", shape = "note"]
+		"[root] var.human_review_ecr_suffix" [label = "var.human_review_ecr_suffix", shape = "note"]
+		"[root] var.human_review_ecs_cluster_suffix" [label = "var.human_review_ecs_cluster_suffix", shape = "note"]
+		"[root] var.human_review_ecs_execution_role_suffix" [label = "var.human_review_ecs_execution_role_suffix", shape = "note"]
+		"[root] var.human_review_ecs_log_retention_days" [label = "var.human_review_ecs_log_retention_days", shape = "note"]
+		"[root] var.human_review_ecs_task_role_suffix" [label = "var.human_review_ecs_task_role_suffix", shape = "note"]
+		"[root] var.human_review_jwt_audience" [label = "var.human_review_jwt_audience", shape = "note"]
+		"[root] var.human_review_jwt_issuer" [label = "var.human_review_jwt_issuer", shape = "note"]
+		"[root] var.human_review_lambda_log_retention_days" [label = "var.human_review_lambda_log_retention_days", shape = "note"]
+		"[root] var.human_review_outbox_batch_size" [label = "var.human_review_outbox_batch_size", shape = "note"]
+		"[root] var.human_review_outbox_max_attempts" [label = "var.human_review_outbox_max_attempts", shape = "note"]
+		"[root] var.human_review_outbox_memory" [label = "var.human_review_outbox_memory", shape = "note"]
+		"[root] var.human_review_outbox_schedule_enabled" [label = "var.human_review_outbox_schedule_enabled", shape = "note"]
+		"[root] var.human_review_outbox_timeout" [label = "var.human_review_outbox_timeout", shape = "note"]
+		"[root] var.identifier_validation_lambda_suffix" [label = "var.identifier_validation_lambda_suffix", shape = "note"]
+		"[root] var.identifier_validation_log_retention_days" [label = "var.identifier_validation_log_retention_days", shape = "note"]
+		"[root] var.identifier_validation_max_identifier_length" [label = "var.identifier_validation_max_identifier_length", shape = "note"]
+		"[root] var.identifier_validation_max_invoices" [label = "var.identifier_validation_max_invoices", shape = "note"]
+		"[root] var.identifier_validation_memory_size" [label = "var.identifier_validation_memory_size", shape = "note"]
+		"[root] var.identifier_validation_timeout" [label = "var.identifier_validation_timeout", shape = "note"]
+		"[root] var.investigation_agent_artifact_key" [label = "var.investigation_agent_artifact_key", shape = "note"]
+		"[root] var.investigation_agent_role_suffix" [label = "var.investigation_agent_role_suffix", shape = "note"]
+		"[root] var.investigation_agent_runtime_name" [label = "var.investigation_agent_runtime_name", shape = "note"]
+		"[root] var.investigation_artifact_bucket_suffix" [label = "var.investigation_artifact_bucket_suffix", shape = "note"]
+		"[root] var.investigation_gateway_name" [label = "var.investigation_gateway_name", shape = "note"]
+		"[root] var.investigation_gateway_policy_mode" [label = "var.investigation_gateway_policy_mode", shape = "note"]
+		"[root] var.investigation_invocation_lambda_suffix" [label = "var.investigation_invocation_lambda_suffix", shape = "note"]
+		"[root] var.investigation_invocation_log_retention_days" [label = "var.investigation_invocation_log_retention_days", shape = "note"]
+		"[root] var.investigation_invocation_memory_size" [label = "var.investigation_invocation_memory_size", shape = "note"]
+		"[root] var.investigation_invocation_timeout" [label = "var.investigation_invocation_timeout", shape = "note"]
+		"[root] var.investigation_memory_name" [label = "var.investigation_memory_name", shape = "note"]
+		"[root] var.investigation_memory_retention_days" [label = "var.investigation_memory_retention_days", shape = "note"]
+		"[root] var.investigation_policy_engine_name" [label = "var.investigation_policy_engine_name", shape = "note"]
+		"[root] var.invoice_scope_lambda_suffix" [label = "var.invoice_scope_lambda_suffix", shape = "note"]
+		"[root] var.invoice_scope_log_retention_days" [label = "var.invoice_scope_log_retention_days", shape = "note"]
+		"[root] var.invoice_scope_max_invoices" [label = "var.invoice_scope_max_invoices", shape = "note"]
+		"[root] var.invoice_scope_memory_size" [label = "var.invoice_scope_memory_size", shape = "note"]
+		"[root] var.invoice_scope_mode" [label = "var.invoice_scope_mode", shape = "note"]
+		"[root] var.invoice_scope_timeout" [label = "var.invoice_scope_timeout", shape = "note"]
+		"[root] var.kms_deletion_window_days" [label = "var.kms_deletion_window_days", shape = "note"]
+		"[root] var.kms_enable_key_rotation" [label = "var.kms_enable_key_rotation", shape = "note"]
+		"[root] var.mail_preprocessing_log_retention_days" [label = "var.mail_preprocessing_log_retention_days", shape = "note"]
+		"[root] var.mail_preprocessing_memory" [label = "var.mail_preprocessing_memory", shape = "note"]
+		"[root] var.mail_preprocessing_name_suffix" [label = "var.mail_preprocessing_name_suffix", shape = "note"]
+		"[root] var.mail_preprocessing_runtime" [label = "var.mail_preprocessing_runtime", shape = "note"]
+		"[root] var.mail_preprocessing_timeout" [label = "var.mail_preprocessing_timeout", shape = "note"]
+		"[root] var.mailbox_user" [label = "var.mailbox_user", shape = "note"]
+		"[root] var.pipe1_batch_size" [label = "var.pipe1_batch_size", shape = "note"]
+		"[root] var.pipe1_batching_window_seconds" [label = "var.pipe1_batching_window_seconds", shape = "note"]
+		"[root] var.pipe1_desired_state" [label = "var.pipe1_desired_state", shape = "note"]
+		"[root] var.pipe1_name_suffix" [label = "var.pipe1_name_suffix", shape = "note"]
+		"[root] var.pipe1_role_name_suffix" [label = "var.pipe1_role_name_suffix", shape = "note"]
+		"[root] var.pipe2_batch_size" [label = "var.pipe2_batch_size", shape = "note"]
+		"[root] var.pipe2_desired_state" [label = "var.pipe2_desired_state", shape = "note"]
+		"[root] var.pipe2_name_suffix" [label = "var.pipe2_name_suffix", shape = "note"]
+		"[root] var.pipe2_role_suffix" [label = "var.pipe2_role_suffix", shape = "note"]
+		"[root] var.pr_itar_api_url" [label = "var.pr_itar_api_url", shape = "note"]
+		"[root] var.private_subnet_a_cidr" [label = "var.private_subnet_a_cidr", shape = "note"]
+		"[root] var.private_subnet_b_cidr" [label = "var.private_subnet_b_cidr", shape = "note"]
+		"[root] var.project_name" [label = "var.project_name", shape = "note"]
+		"[root] var.public_subnet_a_cidr" [label = "var.public_subnet_a_cidr", shape = "note"]
+		"[root] var.public_subnet_b_cidr" [label = "var.public_subnet_b_cidr", shape = "note"]
+		"[root] var.rds_proxy_connection_borrow_timeout" [label = "var.rds_proxy_connection_borrow_timeout", shape = "note"]
+		"[root] var.rds_proxy_debug_logging" [label = "var.rds_proxy_debug_logging", shape = "note"]
+		"[root] var.rds_proxy_idle_client_timeout" [label = "var.rds_proxy_idle_client_timeout", shape = "note"]
+		"[root] var.rds_proxy_max_connections_percent" [label = "var.rds_proxy_max_connections_percent", shape = "note"]
+		"[root] var.rds_proxy_max_idle_connections_percent" [label = "var.rds_proxy_max_idle_connections_percent", shape = "note"]
+		"[root] var.reply_dlq_retention_seconds" [label = "var.reply_dlq_retention_seconds", shape = "note"]
+		"[root] var.reply_dlq_suffix" [label = "var.reply_dlq_suffix", shape = "note"]
+		"[root] var.reply_graph_mailbox" [label = "var.reply_graph_mailbox", shape = "note"]
+		"[root] var.reply_graph_secret_arn" [label = "var.reply_graph_secret_arn", shape = "note"]
+		"[root] var.reply_max_receive_count" [label = "var.reply_max_receive_count", shape = "note"]
+		"[root] var.reply_message_retention_seconds" [label = "var.reply_message_retention_seconds", shape = "note"]
+		"[root] var.reply_queue_suffix" [label = "var.reply_queue_suffix", shape = "note"]
+		"[root] var.reply_receive_wait_time_seconds" [label = "var.reply_receive_wait_time_seconds", shape = "note"]
+		"[root] var.reply_send_enabled" [label = "var.reply_send_enabled", shape = "note"]
+		"[root] var.reply_visibility_timeout_seconds" [label = "var.reply_visibility_timeout_seconds", shape = "note"]
+		"[root] var.s4hana_gateway_target_name" [label = "var.s4hana_gateway_target_name", shape = "note"]
+		"[root] var.s4hana_integration_mode" [label = "var.s4hana_integration_mode", shape = "note"]
+		"[root] var.s4hana_tool_log_retention_days" [label = "var.s4hana_tool_log_retention_days", shape = "note"]
+		"[root] var.s4hana_tool_memory_size" [label = "var.s4hana_tool_memory_size", shape = "note"]
+		"[root] var.s4hana_tool_timeout" [label = "var.s4hana_tool_timeout", shape = "note"]
+		"[root] var.sap_ariba_api_url" [label = "var.sap_ariba_api_url", shape = "note"]
+		"[root] var.sap_s4_api_url" [label = "var.sap_s4_api_url", shape = "note"]
+		"[root] var.secrets_recovery_window_days" [label = "var.secrets_recovery_window_days", shape = "note"]
+		"[root] var.sf1_attachment_lambda_suffix" [label = "var.sf1_attachment_lambda_suffix", shape = "note"]
+		"[root] var.sf1_max_retry_attempts" [label = "var.sf1_max_retry_attempts", shape = "note"]
+		"[root] var.sf1_name_suffix" [label = "var.sf1_name_suffix", shape = "note"]
+		"[root] var.sf1_retry_backoff_rate" [label = "var.sf1_retry_backoff_rate", shape = "note"]
+		"[root] var.sf1_retry_interval_seconds" [label = "var.sf1_retry_interval_seconds", shape = "note"]
+		"[root] var.sf1_type" [label = "var.sf1_type", shape = "note"]
+		"[root] var.sf2_max_retry_attempts" [label = "var.sf2_max_retry_attempts", shape = "note"]
+		"[root] var.sf2_name_suffix" [label = "var.sf2_name_suffix", shape = "note"]
+		"[root] var.sf2_retry_backoff_rate" [label = "var.sf2_retry_backoff_rate", shape = "note"]
+		"[root] var.sf2_retry_interval_seconds" [label = "var.sf2_retry_interval_seconds", shape = "note"]
+		"[root] var.sf2_type" [label = "var.sf2_type", shape = "note"]
+		"[root] var.sqs1_dlq_name_suffix" [label = "var.sqs1_dlq_name_suffix", shape = "note"]
+		"[root] var.sqs1_dlq_retention_seconds" [label = "var.sqs1_dlq_retention_seconds", shape = "note"]
+		"[root] var.sqs1_kms_data_key_reuse_seconds" [label = "var.sqs1_kms_data_key_reuse_seconds", shape = "note"]
+		"[root] var.sqs1_max_receive_count" [label = "var.sqs1_max_receive_count", shape = "note"]
+		"[root] var.sqs1_name_suffix" [label = "var.sqs1_name_suffix", shape = "note"]
+		"[root] var.sqs1_receive_wait_time_seconds" [label = "var.sqs1_receive_wait_time_seconds", shape = "note"]
+		"[root] var.sqs1_retention_seconds" [label = "var.sqs1_retention_seconds", shape = "note"]
+		"[root] var.sqs1_visibility_timeout_seconds" [label = "var.sqs1_visibility_timeout_seconds", shape = "note"]
+		"[root] var.sqs2_delay_seconds" [label = "var.sqs2_delay_seconds", shape = "note"]
+		"[root] var.sqs2_dlq_retention_seconds" [label = "var.sqs2_dlq_retention_seconds", shape = "note"]
+		"[root] var.sqs2_dlq_suffix" [label = "var.sqs2_dlq_suffix", shape = "note"]
+		"[root] var.sqs2_kms_data_key_reuse_seconds" [label = "var.sqs2_kms_data_key_reuse_seconds", shape = "note"]
+		"[root] var.sqs2_max_message_size" [label = "var.sqs2_max_message_size", shape = "note"]
+		"[root] var.sqs2_max_receive_count" [label = "var.sqs2_max_receive_count", shape = "note"]
+		"[root] var.sqs2_queue_suffix" [label = "var.sqs2_queue_suffix", shape = "note"]
+		"[root] var.sqs2_receive_wait_time_seconds" [label = "var.sqs2_receive_wait_time_seconds", shape = "note"]
+		"[root] var.sqs2_retention_seconds" [label = "var.sqs2_retention_seconds", shape = "note"]
+		"[root] var.sqs2_visibility_timeout_seconds" [label = "var.sqs2_visibility_timeout_seconds", shape = "note"]
+		"[root] var.vpc_cidr" [label = "var.vpc_cidr", shape = "note"]
+		"[root] aws_acm_certificate.psc (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_acm_certificate.psc (expand)" -> "[root] var.domain_name"
+		"[root] aws_acm_certificate_validation.psc (expand)" -> "[root] aws_route53_record.psc_acm_validation (expand)"
+		"[root] aws_api_gateway_account.human_review_logging_530 (expand)" -> "[root] aws_iam_role_policy_attachment.human_review_api_logging_530 (expand)"
+		"[root] aws_api_gateway_authorizer.human_review_cognito_530 (expand)" -> "[root] aws_api_gateway_rest_api.human_review_530 (expand)"
+		"[root] aws_api_gateway_authorizer.human_review_cognito_530 (expand)" -> "[root] aws_cognito_user_pool.human_review (expand)"
+		"[root] aws_api_gateway_base_path_mapping.human_review_530 (expand)" -> "[root] aws_api_gateway_domain_name.human_review_530 (expand)"
+		"[root] aws_api_gateway_base_path_mapping.human_review_530 (expand)" -> "[root] aws_api_gateway_stage.human_review_530 (expand)"
+		"[root] aws_api_gateway_deployment.human_review_530 (expand)" -> "[root] aws_api_gateway_integration.approve_530 (expand)"
+		"[root] aws_api_gateway_deployment.human_review_530 (expand)" -> "[root] aws_api_gateway_integration.get_case_530 (expand)"
+		"[root] aws_api_gateway_deployment.human_review_530 (expand)" -> "[root] aws_api_gateway_integration.get_pending_review_cases_530 (expand)"
+		"[root] aws_api_gateway_deployment.human_review_530 (expand)" -> "[root] aws_api_gateway_integration.reject_530 (expand)"
+		"[root] aws_api_gateway_deployment.human_review_530 (expand)" -> "[root] aws_api_gateway_integration_response.cors_options_530 (expand)"
+		"[root] aws_api_gateway_domain_name.human_review_530 (expand)" -> "[root] aws_acm_certificate_validation.psc (expand)"
+		"[root] aws_api_gateway_integration.approve_530 (expand)" -> "[root] aws_api_gateway_method.approve_530 (expand)"
+		"[root] aws_api_gateway_integration.approve_530 (expand)" -> "[root] aws_lambda_function.human_review_backend (expand)"
+		"[root] aws_api_gateway_integration.cors_options_530 (expand)" -> "[root] aws_api_gateway_method.cors_options_530 (expand)"
+		"[root] aws_api_gateway_integration.get_case_530 (expand)" -> "[root] aws_api_gateway_method.get_case_530 (expand)"
+		"[root] aws_api_gateway_integration.get_case_530 (expand)" -> "[root] aws_lambda_function.human_review_backend (expand)"
+		"[root] aws_api_gateway_integration.get_pending_review_cases_530 (expand)" -> "[root] aws_api_gateway_method.get_pending_review_cases_530 (expand)"
+		"[root] aws_api_gateway_integration.get_pending_review_cases_530 (expand)" -> "[root] aws_lambda_function.human_review_backend (expand)"
+		"[root] aws_api_gateway_integration.reject_530 (expand)" -> "[root] aws_api_gateway_method.reject_530 (expand)"
+		"[root] aws_api_gateway_integration.reject_530 (expand)" -> "[root] aws_lambda_function.human_review_backend (expand)"
+		"[root] aws_api_gateway_integration_response.cors_options_530 (expand)" -> "[root] aws_api_gateway_integration.cors_options_530 (expand)"
+		"[root] aws_api_gateway_integration_response.cors_options_530 (expand)" -> "[root] aws_api_gateway_method_response.cors_options_530 (expand)"
+		"[root] aws_api_gateway_integration_response.cors_options_530 (expand)" -> "[root] var.domain_name"
+		"[root] aws_api_gateway_method.approve_530 (expand)" -> "[root] aws_api_gateway_authorizer.human_review_cognito_530 (expand)"
+		"[root] aws_api_gateway_method.approve_530 (expand)" -> "[root] aws_api_gateway_resource.approve_530 (expand)"
+		"[root] aws_api_gateway_method.cors_options_530 (expand)" -> "[root] local.human_review_cors_resources_530 (expand)"
+		"[root] aws_api_gateway_method.get_case_530 (expand)" -> "[root] aws_api_gateway_authorizer.human_review_cognito_530 (expand)"
+		"[root] aws_api_gateway_method.get_case_530 (expand)" -> "[root] aws_api_gateway_resource.case_id_530 (expand)"
+		"[root] aws_api_gateway_method.get_pending_review_cases_530 (expand)" -> "[root] aws_api_gateway_authorizer.human_review_cognito_530 (expand)"
+		"[root] aws_api_gateway_method.get_pending_review_cases_530 (expand)" -> "[root] aws_api_gateway_resource.pending_review_cases_530 (expand)"
+		"[root] aws_api_gateway_method.reject_530 (expand)" -> "[root] aws_api_gateway_authorizer.human_review_cognito_530 (expand)"
+		"[root] aws_api_gateway_method.reject_530 (expand)" -> "[root] aws_api_gateway_resource.reject_530 (expand)"
+		"[root] aws_api_gateway_method_response.cors_options_530 (expand)" -> "[root] aws_api_gateway_method.cors_options_530 (expand)"
+		"[root] aws_api_gateway_resource.approve_530 (expand)" -> "[root] aws_api_gateway_resource.case_id_530 (expand)"
+		"[root] aws_api_gateway_resource.case_id_530 (expand)" -> "[root] aws_api_gateway_resource.cases_530 (expand)"
+		"[root] aws_api_gateway_resource.cases_530 (expand)" -> "[root] aws_api_gateway_rest_api.human_review_530 (expand)"
+		"[root] aws_api_gateway_resource.pending_review_cases_530 (expand)" -> "[root] aws_api_gateway_rest_api.human_review_530 (expand)"
+		"[root] aws_api_gateway_resource.reject_530 (expand)" -> "[root] aws_api_gateway_resource.case_id_530 (expand)"
+		"[root] aws_api_gateway_rest_api.human_review_530 (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_api_gateway_stage.human_review_530 (expand)" -> "[root] aws_api_gateway_account.human_review_logging_530 (expand)"
+		"[root] aws_api_gateway_stage.human_review_530 (expand)" -> "[root] aws_api_gateway_deployment.human_review_530 (expand)"
+		"[root] aws_api_gateway_stage.human_review_530 (expand)" -> "[root] aws_cloudwatch_log_group.human_review_api_access_530 (expand)"
+		"[root] aws_bedrock_guardrail.classification (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_bedrock_guardrail.classification (expand)" -> "[root] var.classification_guardrail_blocked_input_message"
+		"[root] aws_bedrock_guardrail.classification (expand)" -> "[root] var.classification_guardrail_blocked_output_message"
+		"[root] aws_bedrock_guardrail.classification (expand)" -> "[root] var.classification_guardrail_content_filters"
+		"[root] aws_bedrock_guardrail.classification (expand)" -> "[root] var.classification_guardrail_name_suffix"
+		"[root] aws_bedrock_guardrail.classification (expand)" -> "[root] var.classification_guardrail_pii_entities"
+		"[root] aws_bedrock_guardrail_version.classification (expand)" -> "[root] aws_bedrock_guardrail.classification (expand)"
+		"[root] aws_bedrockagentcore_agent_runtime.classification (expand)" -> "[root] aws_bedrock_guardrail_version.classification (expand)"
+		"[root] aws_bedrockagentcore_agent_runtime.classification (expand)" -> "[root] aws_iam_role_policy.classification_agentcore (expand)"
+		"[root] aws_bedrockagentcore_agent_runtime.classification (expand)" -> "[root] aws_s3_object.classification_agent_zip (expand)"
+		"[root] aws_bedrockagentcore_agent_runtime.classification (expand)" -> "[root] var.classification_agent_runtime_name"
+		"[root] aws_bedrockagentcore_agent_runtime.investigation (expand)" -> "[root] aws_iam_role_policy.investigation_agentcore (expand)"
+		"[root] aws_bedrockagentcore_agent_runtime.investigation (expand)" -> "[root] aws_s3_object.investigation_agent_zip (expand)"
+		"[root] aws_bedrockagentcore_agent_runtime.investigation (expand)" -> "[root] var.investigation_agent_runtime_name"
+		"[root] aws_bedrockagentcore_gateway.investigation (expand)" -> "[root] aws_iam_role_policy.investigation_gateway (expand)"
+		"[root] aws_bedrockagentcore_gateway.investigation (expand)" -> "[root] var.investigation_gateway_name"
+		"[root] aws_bedrockagentcore_gateway.investigation (expand)" -> "[root] var.investigation_gateway_policy_mode (validation)"
+		"[root] aws_bedrockagentcore_gateway_target.s4hana (expand)" -> "[root] aws_bedrockagentcore_gateway.investigation (expand)"
+		"[root] aws_bedrockagentcore_gateway_target.s4hana (expand)" -> "[root] var.s4hana_gateway_target_name"
+		"[root] aws_bedrockagentcore_memory.investigation (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_bedrockagentcore_memory.investigation (expand)" -> "[root] var.investigation_memory_name (validation)"
+		"[root] aws_bedrockagentcore_memory.investigation (expand)" -> "[root] var.investigation_memory_retention_days (validation)"
+		"[root] aws_bedrockagentcore_policy_engine.investigation (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_bedrockagentcore_policy_engine.investigation (expand)" -> "[root] var.investigation_policy_engine_name (validation)"
+		"[root] aws_cloudwatch_dashboard.psc_540 (expand)" -> "[root] aws_api_gateway_stage.human_review_530 (expand)"
+		"[root] aws_cloudwatch_dashboard.psc_540 (expand)" -> "[root] aws_bedrockagentcore_agent_runtime.classification (expand)"
+		"[root] aws_cloudwatch_dashboard.psc_540 (expand)" -> "[root] local.psc_aurora_instances_540 (expand)"
+		"[root] aws_cloudwatch_dashboard.psc_540 (expand)" -> "[root] local.psc_lambdas_540 (expand)"
+		"[root] aws_cloudwatch_dashboard.psc_540 (expand)" -> "[root] local.psc_monitoring_prefix_540 (expand)"
+		"[root] aws_cloudwatch_dashboard.psc_540 (expand)" -> "[root] local.psc_queues_540 (expand)"
+		"[root] aws_cloudwatch_dashboard.psc_540 (expand)" -> "[root] local.psc_state_machines_540 (expand)"
+		"[root] aws_cloudwatch_event_rule.attachment_malware_scan (expand)" -> "[root] aws_s3_bucket.attachments (expand)"
+		"[root] aws_cloudwatch_event_rule.human_review_outbox (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_event_rule.human_review_outbox (expand)" -> "[root] var.human_review_outbox_schedule_enabled"
+		"[root] aws_cloudwatch_event_target.attachment_malware_scan (expand)" -> "[root] aws_lambda_function.malware_scan_handler (expand)"
+		"[root] aws_cloudwatch_event_target.attachment_malware_scan (expand)" -> "[root] aws_sqs_queue_policy.malware_scan_event_dlq (expand)"
+		"[root] aws_cloudwatch_event_target.human_review_outbox (expand)" -> "[root] aws_cloudwatch_event_rule.human_review_outbox (expand)"
+		"[root] aws_cloudwatch_event_target.human_review_outbox (expand)" -> "[root] aws_lambda_function.human_review_outbox (expand)"
+		"[root] aws_cloudwatch_log_group.attachment_processing (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.attachment_processing (expand)" -> "[root] var.attachment_processing_log_retention_days"
+		"[root] aws_cloudwatch_log_group.attachment_processing (expand)" -> "[root] var.attachment_processing_name_suffix"
+		"[root] aws_cloudwatch_log_group.email_ingestion (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.email_ingestion (expand)" -> "[root] var.email_ingestion_log_retention_days"
+		"[root] aws_cloudwatch_log_group.email_processing (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.email_processing (expand)" -> "[root] var.email_processing_log_retention_days"
+		"[root] aws_cloudwatch_log_group.email_processing (expand)" -> "[root] var.email_processing_name_suffix"
+		"[root] aws_cloudwatch_log_group.human_review_api_access_530 (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.human_review_backend (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.human_review_backend (expand)" -> "[root] var.human_review_lambda_log_retention_days"
+		"[root] aws_cloudwatch_log_group.human_review_ecs (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.human_review_ecs (expand)" -> "[root] var.human_review_ecs_log_retention_days (validation)"
+		"[root] aws_cloudwatch_log_group.human_review_outbox (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.human_review_outbox (expand)" -> "[root] var.human_review_lambda_log_retention_days"
+		"[root] aws_cloudwatch_log_group.identifier_validation (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.identifier_validation (expand)" -> "[root] var.identifier_validation_lambda_suffix"
+		"[root] aws_cloudwatch_log_group.identifier_validation (expand)" -> "[root] var.identifier_validation_log_retention_days"
+		"[root] aws_cloudwatch_log_group.investigation_invocation (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.investigation_invocation (expand)" -> "[root] var.investigation_invocation_lambda_suffix"
+		"[root] aws_cloudwatch_log_group.investigation_invocation (expand)" -> "[root] var.investigation_invocation_log_retention_days"
+		"[root] aws_cloudwatch_log_group.invoice_scope (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.invoice_scope (expand)" -> "[root] var.invoice_scope_lambda_suffix"
+		"[root] aws_cloudwatch_log_group.invoice_scope (expand)" -> "[root] var.invoice_scope_log_retention_days"
+		"[root] aws_cloudwatch_log_group.mail_preprocessing (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.mail_preprocessing (expand)" -> "[root] var.mail_preprocessing_log_retention_days"
+		"[root] aws_cloudwatch_log_group.mail_preprocessing (expand)" -> "[root] var.mail_preprocessing_name_suffix"
+		"[root] aws_cloudwatch_log_group.malware_scan_handler (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.pipe1_540 (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.pipe1_540 (expand)" -> "[root] var.pipe1_name_suffix"
+		"[root] aws_cloudwatch_log_group.pipe2_540 (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.pipe2_540 (expand)" -> "[root] var.pipe2_name_suffix"
+		"[root] aws_cloudwatch_log_group.reply_processing_510 (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.s4hana_tool (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.s4hana_tool (expand)" -> "[root] var.s4hana_tool_log_retention_days"
+		"[root] aws_cloudwatch_log_group.workflow_dispatcher (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_metric_alarm.alb_5xx_540 (expand)" -> "[root] aws_lb.human_review (expand)"
+		"[root] aws_cloudwatch_metric_alarm.alb_5xx_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.alb_response_time_540 (expand)" -> "[root] aws_lb.human_review (expand)"
+		"[root] aws_cloudwatch_metric_alarm.alb_response_time_540 (expand)" -> "[root] aws_lb_target_group.human_review (expand)"
+		"[root] aws_cloudwatch_metric_alarm.alb_response_time_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.alb_unhealthy_540 (expand)" -> "[root] aws_lb.human_review (expand)"
+		"[root] aws_cloudwatch_metric_alarm.alb_unhealthy_540 (expand)" -> "[root] aws_lb_target_group.human_review (expand)"
+		"[root] aws_cloudwatch_metric_alarm.alb_unhealthy_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.api_errors_540 (expand)" -> "[root] aws_api_gateway_stage.human_review_530 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.api_errors_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.api_latency_540 (expand)" -> "[root] aws_api_gateway_stage.human_review_530 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.api_latency_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.aurora_connections_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.aurora_connections_540 (expand)" -> "[root] local.psc_aurora_instances_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.aurora_cpu_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.aurora_cpu_540 (expand)" -> "[root] local.psc_aurora_instances_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.aurora_deadlocks_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.aurora_deadlocks_540 (expand)" -> "[root] local.psc_aurora_instances_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.aurora_freeable_memory_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.aurora_freeable_memory_540 (expand)" -> "[root] local.psc_aurora_instances_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.aurora_replica_lag_540 (expand)" -> "[root] aws_rds_cluster_instance.reader (expand)"
+		"[root] aws_cloudwatch_metric_alarm.aurora_replica_lag_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.lambda_duration_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.lambda_duration_540 (expand)" -> "[root] local.psc_lambdas_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.lambda_errors_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.lambda_errors_540 (expand)" -> "[root] local.psc_lambdas_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.lambda_throttles_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.lambda_throttles_540 (expand)" -> "[root] local.psc_lambdas_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.pipe_execution_failures_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.pipe_execution_failures_540 (expand)" -> "[root] local.psc_pipes_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.pipe_target_failures_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.pipe_target_failures_540 (expand)" -> "[root] local.psc_pipes_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_borrow_latency_540 (expand)" -> "[root] aws_db_proxy.psc (expand)"
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_borrow_latency_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_connection_setup_failures_540 (expand)" -> "[root] aws_db_proxy.psc (expand)"
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_connection_setup_failures_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_connections_540 (expand)" -> "[root] aws_db_proxy.psc (expand)"
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_connections_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_database_connections_540 (expand)" -> "[root] aws_db_proxy.psc (expand)"
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_database_connections_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_pool_utilization_540 (expand)" -> "[root] aws_db_proxy.psc (expand)"
+		"[root] aws_cloudwatch_metric_alarm.rds_proxy_pool_utilization_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.sfn_aborted_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.sfn_aborted_540 (expand)" -> "[root] local.psc_state_machines_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.sfn_failed_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.sfn_failed_540 (expand)" -> "[root] local.psc_state_machines_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.sfn_timeout_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.sfn_timeout_540 (expand)" -> "[root] local.psc_state_machines_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.sqs_backlog_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.sqs_backlog_540 (expand)" -> "[root] local.psc_main_queues_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.sqs_dlq_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.sqs_dlq_540 (expand)" -> "[root] local.psc_dlqs_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.sqs_message_age_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_cloudwatch_metric_alarm.sqs_message_age_540 (expand)" -> "[root] local.psc_main_queues_540 (expand)"
+		"[root] aws_cognito_user_pool.human_review (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cognito_user_pool_client.human_review (expand)" -> "[root] aws_cognito_user_pool.human_review (expand)"
+		"[root] aws_cognito_user_pool_client.human_review (expand)" -> "[root] var.domain_name"
+		"[root] aws_cognito_user_pool_domain.human_review (expand)" -> "[root] aws_cognito_user_pool.human_review (expand)"
+		"[root] aws_db_proxy.psc (expand)" -> "[root] aws_iam_role_policy.rds_proxy (expand)"
+		"[root] aws_db_proxy.psc (expand)" -> "[root] aws_security_group.rds_proxy (expand)"
+		"[root] aws_db_proxy.psc (expand)" -> "[root] aws_subnet.private_a (expand)"
+		"[root] aws_db_proxy.psc (expand)" -> "[root] aws_subnet.private_b (expand)"
+		"[root] aws_db_proxy.psc (expand)" -> "[root] var.rds_proxy_debug_logging"
+		"[root] aws_db_proxy.psc (expand)" -> "[root] var.rds_proxy_idle_client_timeout"
+		"[root] aws_db_proxy_default_target_group.psc (expand)" -> "[root] aws_db_proxy.psc (expand)"
+		"[root] aws_db_proxy_default_target_group.psc (expand)" -> "[root] var.rds_proxy_connection_borrow_timeout"
+		"[root] aws_db_proxy_default_target_group.psc (expand)" -> "[root] var.rds_proxy_max_connections_percent"
+		"[root] aws_db_proxy_default_target_group.psc (expand)" -> "[root] var.rds_proxy_max_idle_connections_percent"
+		"[root] aws_db_proxy_endpoint.reader (expand)" -> "[root] aws_db_proxy.psc (expand)"
+		"[root] aws_db_proxy_target.psc (expand)" -> "[root] aws_db_proxy_default_target_group.psc (expand)"
+		"[root] aws_db_proxy_target.psc (expand)" -> "[root] aws_rds_cluster_instance.reader (expand)"
+		"[root] aws_db_subnet_group.psc (expand)" -> "[root] aws_subnet.database_a (expand)"
+		"[root] aws_db_subnet_group.psc (expand)" -> "[root] aws_subnet.database_b (expand)"
+		"[root] aws_ecr_lifecycle_policy.human_review_ui (expand)" -> "[root] aws_ecr_repository.human_review_ui (expand)"
+		"[root] aws_ecr_lifecycle_policy.human_review_ui (expand)" -> "[root] var.human_review_ecr_image_retention_count (validation)"
+		"[root] aws_ecr_repository.human_review_ui (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_ecr_repository.human_review_ui (expand)" -> "[root] var.human_review_ecr_suffix"
+		"[root] aws_ecs_cluster.human_review_ui (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_ecs_cluster.human_review_ui (expand)" -> "[root] var.human_review_ecs_cluster_suffix"
+		"[root] aws_eip.nat (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_guardduty_malware_protection_plan.attachments (expand)" -> "[root] aws_iam_role_policy.guardduty_s3 (expand)"
+		"[root] aws_guardduty_malware_protection_plan.attachments (expand)" -> "[root] var.attachments_malware_object_tagging_status (validation)"
+		"[root] aws_iam_policy.lambda_baseline (expand)" -> "[root] data.aws_iam_policy_document.lambda_baseline (expand)"
+		"[root] aws_iam_role.ariba_tool (expand)" -> "[root] data.aws_iam_policy_document.lambda_assume_role (expand)"
+		"[root] aws_iam_role.attachment_processing (expand)" -> "[root] data.aws_iam_policy_document.lambda_assume_role (expand)"
+		"[root] aws_iam_role.classification_agentcore (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_iam_role.classification_agentcore (expand)" -> "[root] var.classification_agent_role_suffix"
+		"[root] aws_iam_role.email_ingestion (expand)" -> "[root] data.aws_iam_policy_document.lambda_assume_role (expand)"
+		"[root] aws_iam_role.email_processing (expand)" -> "[root] data.aws_iam_policy_document.lambda_assume_role (expand)"
+		"[root] aws_iam_role.email_scheduler (expand)" -> "[root] data.aws_iam_policy_document.scheduler_assume_role (expand)"
+		"[root] aws_iam_role.guardduty_s3 (expand)" -> "[root] data.aws_iam_policy_document.guardduty_s3_assume_role (expand)"
+		"[root] aws_iam_role.human_review_api_logging_530 (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_iam_role.human_review_backend (expand)" -> "[root] data.aws_iam_policy_document.lambda_assume_role (expand)"
+		"[root] aws_iam_role.human_review_ecs_execution (expand)" -> "[root] data.aws_iam_policy_document.human_review_ecs_assume_role (expand)"
+		"[root] aws_iam_role.human_review_ecs_execution (expand)" -> "[root] var.human_review_ecs_execution_role_suffix"
+		"[root] aws_iam_role.human_review_ecs_task (expand)" -> "[root] data.aws_iam_policy_document.human_review_ecs_assume_role (expand)"
+		"[root] aws_iam_role.human_review_ecs_task (expand)" -> "[root] var.human_review_ecs_task_role_suffix"
+		"[root] aws_iam_role.human_review_outbox (expand)" -> "[root] data.aws_iam_policy_document.lambda_assume_role (expand)"
+		"[root] aws_iam_role.identifier_validation (expand)" -> "[root] data.aws_iam_policy_document.lambda_assume_role (expand)"
+		"[root] aws_iam_role.investigation_agentcore (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_iam_role.investigation_agentcore (expand)" -> "[root] var.investigation_agent_role_suffix"
+		"[root] aws_iam_role.investigation_gateway (expand)" -> "[root] data.aws_iam_policy_document.investigation_gateway_assume (expand)"
+		"[root] aws_iam_role.investigation_invocation (expand)" -> "[root] data.aws_iam_policy_document.lambda_assume_role (expand)"
+		"[root] aws_iam_role.invoice_scope (expand)" -> "[root] data.aws_iam_policy_document.lambda_assume_role (expand)"
+		"[root] aws_iam_role.mail_preprocessing (expand)" -> "[root] data.aws_iam_policy_document.lambda_assume_role (expand)"
+		"[root] aws_iam_role.malware_scan_handler (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_iam_role.pipe1 (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_iam_role.pipe1 (expand)" -> "[root] var.pipe1_role_name_suffix"
+		"[root] aws_iam_role.pipe2 (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_iam_role.pipe2 (expand)" -> "[root] var.pipe2_role_suffix"
+		"[root] aws_iam_role.pr_itar_tool (expand)" -> "[root] data.aws_iam_policy_document.lambda_assume_role (expand)"
+		"[root] aws_iam_role.rds_proxy (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_iam_role.reply_processing (expand)" -> "[root] data.aws_iam_policy_document.lambda_assume_role (expand)"
+		"[root] aws_iam_role.s4hana_tool (expand)" -> "[root] data.aws_iam_policy_document.lambda_assume_role (expand)"
+		"[root] aws_iam_role.sf1 (expand)" -> "[root] data.aws_iam_policy_document.step_functions_assume_role (expand)"
+		"[root] aws_iam_role.sf2 (expand)" -> "[root] data.aws_iam_policy_document.step_functions_assume_role (expand)"
+		"[root] aws_iam_role.workflow_dispatcher (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_iam_role.workflow_dispatcher_scheduler (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_iam_role_policy.attachment_processing_access (expand)" -> "[root] aws_db_proxy.psc (expand)"
+		"[root] aws_iam_role_policy.attachment_processing_access (expand)" -> "[root] aws_iam_role.attachment_processing (expand)"
+		"[root] aws_iam_role_policy.attachment_processing_access (expand)" -> "[root] aws_s3_bucket.attachments (expand)"
+		"[root] aws_iam_role_policy.attachment_processing_access (expand)" -> "[root] aws_secretsmanager_secret.microsoft_graph (expand)"
+		"[root] aws_iam_role_policy.attachment_processing_access (expand)" -> "[root] var.email_ingestion_db_user"
+		"[root] aws_iam_role_policy.classification_agentcore (expand)" -> "[root] aws_bedrock_guardrail.classification (expand)"
+		"[root] aws_iam_role_policy.classification_agentcore (expand)" -> "[root] aws_iam_role.classification_agentcore (expand)"
+		"[root] aws_iam_role_policy.classification_agentcore (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_iam_role_policy.classification_agentcore (expand)" -> "[root] aws_s3_bucket.classification_agent_artifacts (expand)"
+		"[root] aws_iam_role_policy.classification_agentcore (expand)" -> "[root] local.classification_model_config (expand)"
+		"[root] aws_iam_role_policy.classification_agentcore (expand)" -> "[root] var.classification_agent_artifact_key"
+		"[root] aws_iam_role_policy.email_ingestion_access (expand)" -> "[root] aws_iam_role.email_ingestion (expand)"
+		"[root] aws_iam_role_policy.email_ingestion_access (expand)" -> "[root] aws_sfn_state_machine.sf1 (expand)"
+		"[root] aws_iam_role_policy.email_processing_access (expand)" -> "[root] aws_iam_role.email_processing (expand)"
+		"[root] aws_iam_role_policy.email_processing_access (expand)" -> "[root] aws_sqs_queue.sqs1 (expand)"
+		"[root] aws_iam_role_policy.email_scheduler_invoke (expand)" -> "[root] aws_iam_role.email_scheduler (expand)"
+		"[root] aws_iam_role_policy.email_scheduler_invoke (expand)" -> "[root] aws_lambda_function.email_ingestion (expand)"
+		"[root] aws_iam_role_policy.guardduty_s3 (expand)" -> "[root] aws_iam_role.guardduty_s3 (expand)"
+		"[root] aws_iam_role_policy.guardduty_s3 (expand)" -> "[root] data.aws_iam_policy_document.guardduty_s3 (expand)"
+		"[root] aws_iam_role_policy.human_review_backend_db (expand)" -> "[root] aws_iam_role.human_review_backend (expand)"
+		"[root] aws_iam_role_policy.human_review_backend_db (expand)" -> "[root] local.human_review_db_user_arn (expand)"
+		"[root] aws_iam_role_policy.human_review_outbox (expand)" -> "[root] aws_iam_role.human_review_outbox (expand)"
+		"[root] aws_iam_role_policy.human_review_outbox (expand)" -> "[root] aws_sqs_queue.reply (expand)"
+		"[root] aws_iam_role_policy.human_review_outbox (expand)" -> "[root] local.human_review_db_user_arn (expand)"
+		"[root] aws_iam_role_policy.investigation_agentcore (expand)" -> "[root] aws_iam_role.investigation_agentcore (expand)"
+		"[root] aws_iam_role_policy.investigation_agentcore (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_iam_role_policy.investigation_agentcore (expand)" -> "[root] aws_s3_bucket.investigation_agent_artifacts (expand)"
+		"[root] aws_iam_role_policy.investigation_gateway (expand)" -> "[root] aws_bedrockagentcore_policy_engine.investigation (expand)"
+		"[root] aws_iam_role_policy.investigation_gateway (expand)" -> "[root] aws_iam_role.investigation_gateway (expand)"
+		"[root] aws_iam_role_policy.investigation_gateway (expand)" -> "[root] aws_lambda_function.s4hana_tool (expand)"
+		"[root] aws_iam_role_policy.investigation_invocation_access (expand)" -> "[root] aws_bedrockagentcore_agent_runtime.investigation (expand)"
+		"[root] aws_iam_role_policy.investigation_invocation_access (expand)" -> "[root] aws_iam_role.investigation_invocation (expand)"
+		"[root] aws_iam_role_policy.malware_scan_handler (expand)" -> "[root] aws_db_proxy.psc (expand)"
+		"[root] aws_iam_role_policy.malware_scan_handler (expand)" -> "[root] aws_iam_role.malware_scan_handler (expand)"
+		"[root] aws_iam_role_policy.malware_scan_handler (expand)" -> "[root] aws_sqs_queue.malware_scan_event_dlq (expand)"
+		"[root] aws_iam_role_policy.malware_scan_handler (expand)" -> "[root] var.email_ingestion_db_user"
+		"[root] aws_iam_role_policy.pipe1 (expand)" -> "[root] aws_iam_role.pipe1 (expand)"
+		"[root] aws_iam_role_policy.pipe1 (expand)" -> "[root] aws_sfn_state_machine.sf2 (expand)"
+		"[root] aws_iam_role_policy.pipe1 (expand)" -> "[root] aws_sqs_queue.sqs1 (expand)"
+		"[root] aws_iam_role_policy.pipe1_logging_540 (expand)" -> "[root] aws_cloudwatch_log_group.pipe1_540 (expand)"
+		"[root] aws_iam_role_policy.pipe1_logging_540 (expand)" -> "[root] aws_iam_role.pipe1 (expand)"
+		"[root] aws_iam_role_policy.pipe2 (expand)" -> "[root] aws_iam_role.pipe2 (expand)"
+		"[root] aws_iam_role_policy.pipe2 (expand)" -> "[root] aws_lambda_function.investigation_invocation (expand)"
+		"[root] aws_iam_role_policy.pipe2 (expand)" -> "[root] aws_sqs_queue.sqs2 (expand)"
+		"[root] aws_iam_role_policy.pipe2_logging_540 (expand)" -> "[root] aws_cloudwatch_log_group.pipe2_540 (expand)"
+		"[root] aws_iam_role_policy.pipe2_logging_540 (expand)" -> "[root] aws_iam_role.pipe2 (expand)"
+		"[root] aws_iam_role_policy.rds_proxy (expand)" -> "[root] aws_iam_role.rds_proxy (expand)"
+		"[root] aws_iam_role_policy.rds_proxy (expand)" -> "[root] aws_secretsmanager_secret.psc_app_db (expand)"
+		"[root] aws_iam_role_policy.reply_processing_510 (expand)" -> "[root] aws_iam_role.reply_processing (expand)"
+		"[root] aws_iam_role_policy.reply_processing_510 (expand)" -> "[root] aws_sqs_queue.reply (expand)"
+		"[root] aws_iam_role_policy.reply_processing_510 (expand)" -> "[root] data.aws_partition.human_review (expand)"
+		"[root] aws_iam_role_policy.reply_processing_510 (expand)" -> "[root] local.human_review_proxy_resource_id (expand)"
+		"[root] aws_iam_role_policy.reply_processing_510 (expand)" -> "[root] var.database_username"
+		"[root] aws_iam_role_policy.reply_processing_510 (expand)" -> "[root] var.reply_graph_secret_arn"
+		"[root] aws_iam_role_policy.sf1 (expand)" -> "[root] aws_iam_role.sf1 (expand)"
+		"[root] aws_iam_role_policy.sf1 (expand)" -> "[root] local.sf1_attachment_lambda_arn (expand)"
+		"[root] aws_iam_role_policy.sf2 (expand)" -> "[root] aws_iam_role.sf2 (expand)"
+		"[root] aws_iam_role_policy.sf2 (expand)" -> "[root] aws_lambda_function.mail_preprocessing (expand)"
+		"[root] aws_iam_role_policy.workflow_dispatcher (expand)" -> "[root] aws_iam_role.workflow_dispatcher (expand)"
+		"[root] aws_iam_role_policy.workflow_dispatcher (expand)" -> "[root] aws_sfn_state_machine.sf1 (expand)"
+		"[root] aws_iam_role_policy.workflow_dispatcher_scheduler (expand)" -> "[root] aws_iam_role.workflow_dispatcher_scheduler (expand)"
+		"[root] aws_iam_role_policy.workflow_dispatcher_scheduler (expand)" -> "[root] aws_lambda_function.workflow_dispatcher (expand)"
+		"[root] aws_iam_role_policy.workflow_dispatcher_scheduler (expand)" -> "[root] aws_sqs_queue.workflow_dispatcher_scheduler_dlq (expand)"
+		"[root] aws_iam_role_policy_attachment.ariba_tool_baseline (expand)" -> "[root] aws_iam_policy.lambda_baseline (expand)"
+		"[root] aws_iam_role_policy_attachment.ariba_tool_baseline (expand)" -> "[root] aws_iam_role.ariba_tool (expand)"
+		"[root] aws_iam_role_policy_attachment.attachment_processing_baseline (expand)" -> "[root] aws_iam_policy.lambda_baseline (expand)"
+		"[root] aws_iam_role_policy_attachment.attachment_processing_baseline (expand)" -> "[root] aws_iam_role.attachment_processing (expand)"
+		"[root] aws_iam_role_policy_attachment.email_ingestion_baseline (expand)" -> "[root] aws_iam_policy.lambda_baseline (expand)"
+		"[root] aws_iam_role_policy_attachment.email_ingestion_baseline (expand)" -> "[root] aws_iam_role.email_ingestion (expand)"
+		"[root] aws_iam_role_policy_attachment.email_processing_baseline (expand)" -> "[root] aws_iam_policy.lambda_baseline (expand)"
+		"[root] aws_iam_role_policy_attachment.email_processing_baseline (expand)" -> "[root] aws_iam_role.email_processing (expand)"
+		"[root] aws_iam_role_policy_attachment.human_review_api_logging_530 (expand)" -> "[root] aws_iam_role.human_review_api_logging_530 (expand)"
+		"[root] aws_iam_role_policy_attachment.human_review_api_logging_530 (expand)" -> "[root] data.aws_partition.current (expand)"
+		"[root] aws_iam_role_policy_attachment.human_review_backend_baseline (expand)" -> "[root] aws_iam_policy.lambda_baseline (expand)"
+		"[root] aws_iam_role_policy_attachment.human_review_backend_baseline (expand)" -> "[root] aws_iam_role.human_review_backend (expand)"
+		"[root] aws_iam_role_policy_attachment.human_review_ecs_execution (expand)" -> "[root] aws_iam_role.human_review_ecs_execution (expand)"
+		"[root] aws_iam_role_policy_attachment.human_review_ecs_execution (expand)" -> "[root] data.aws_partition.current (expand)"
+		"[root] aws_iam_role_policy_attachment.human_review_outbox_baseline (expand)" -> "[root] aws_iam_policy.lambda_baseline (expand)"
+		"[root] aws_iam_role_policy_attachment.human_review_outbox_baseline (expand)" -> "[root] aws_iam_role.human_review_outbox (expand)"
+		"[root] aws_iam_role_policy_attachment.identifier_validation_baseline (expand)" -> "[root] aws_iam_policy.lambda_baseline (expand)"
+		"[root] aws_iam_role_policy_attachment.identifier_validation_baseline (expand)" -> "[root] aws_iam_role.identifier_validation (expand)"
+		"[root] aws_iam_role_policy_attachment.investigation_invocation_baseline (expand)" -> "[root] aws_iam_policy.lambda_baseline (expand)"
+		"[root] aws_iam_role_policy_attachment.investigation_invocation_baseline (expand)" -> "[root] aws_iam_role.investigation_invocation (expand)"
+		"[root] aws_iam_role_policy_attachment.invoice_scope_baseline (expand)" -> "[root] aws_iam_policy.lambda_baseline (expand)"
+		"[root] aws_iam_role_policy_attachment.invoice_scope_baseline (expand)" -> "[root] aws_iam_role.invoice_scope (expand)"
+		"[root] aws_iam_role_policy_attachment.mail_preprocessing_baseline (expand)" -> "[root] aws_iam_policy.lambda_baseline (expand)"
+		"[root] aws_iam_role_policy_attachment.mail_preprocessing_baseline (expand)" -> "[root] aws_iam_role.mail_preprocessing (expand)"
+		"[root] aws_iam_role_policy_attachment.malware_scan_handler_baseline (expand)" -> "[root] aws_iam_role.malware_scan_handler (expand)"
+		"[root] aws_iam_role_policy_attachment.malware_scan_handler_baseline (expand)" -> "[root] data.aws_partition.current (expand)"
+		"[root] aws_iam_role_policy_attachment.pr_itar_tool_baseline (expand)" -> "[root] aws_iam_policy.lambda_baseline (expand)"
+		"[root] aws_iam_role_policy_attachment.pr_itar_tool_baseline (expand)" -> "[root] aws_iam_role.pr_itar_tool (expand)"
+		"[root] aws_iam_role_policy_attachment.reply_processing_baseline (expand)" -> "[root] aws_iam_policy.lambda_baseline (expand)"
+		"[root] aws_iam_role_policy_attachment.reply_processing_baseline (expand)" -> "[root] aws_iam_role.reply_processing (expand)"
+		"[root] aws_iam_role_policy_attachment.s4hana_tool_baseline (expand)" -> "[root] aws_iam_policy.lambda_baseline (expand)"
+		"[root] aws_iam_role_policy_attachment.s4hana_tool_baseline (expand)" -> "[root] aws_iam_role.s4hana_tool (expand)"
+		"[root] aws_iam_role_policy_attachment.workflow_dispatcher_baseline (expand)" -> "[root] aws_iam_role.workflow_dispatcher (expand)"
+		"[root] aws_iam_role_policy_attachment.workflow_dispatcher_baseline (expand)" -> "[root] data.aws_partition.current (expand)"
+		"[root] aws_internet_gateway.psc (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_kms_alias.psc (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_kms_key.psc (expand)" -> "[root] data.aws_caller_identity.current (expand)"
+		"[root] aws_kms_key.psc (expand)" -> "[root] data.aws_partition.current (expand)"
+		"[root] aws_kms_key.psc (expand)" -> "[root] var.kms_deletion_window_days (validation)"
+		"[root] aws_kms_key.psc (expand)" -> "[root] var.kms_enable_key_rotation"
+		"[root] aws_lambda_event_source_mapping.reply_processing_520 (expand)" -> "[root] aws_lambda_function.reply_processing_510 (expand)"
+		"[root] aws_lambda_function.attachment_processing (expand)" -> "[root] aws_cloudwatch_log_group.attachment_processing (expand)"
+		"[root] aws_lambda_function.attachment_processing (expand)" -> "[root] aws_iam_role_policy.attachment_processing_access (expand)"
+		"[root] aws_lambda_function.attachment_processing (expand)" -> "[root] aws_iam_role_policy_attachment.attachment_processing_baseline (expand)"
+		"[root] aws_lambda_function.attachment_processing (expand)" -> "[root] aws_security_group.lambda (expand)"
+		"[root] aws_lambda_function.attachment_processing (expand)" -> "[root] data.archive_file.attachment_processing (expand)"
+		"[root] aws_lambda_function.attachment_processing (expand)" -> "[root] var.attachment_processing_max_bytes"
+		"[root] aws_lambda_function.attachment_processing (expand)" -> "[root] var.attachment_processing_memory"
+		"[root] aws_lambda_function.attachment_processing (expand)" -> "[root] var.attachment_processing_runtime"
+		"[root] aws_lambda_function.attachment_processing (expand)" -> "[root] var.attachment_processing_s3_prefix"
+		"[root] aws_lambda_function.attachment_processing (expand)" -> "[root] var.attachment_processing_timeout"
+		"[root] aws_lambda_function.attachment_processing (expand)" -> "[root] var.email_ingestion_db_name"
+		"[root] aws_lambda_function.attachment_processing (expand)" -> "[root] var.mailbox_user"
+		"[root] aws_lambda_function.email_ingestion (expand)" -> "[root] aws_cloudwatch_log_group.email_ingestion (expand)"
+		"[root] aws_lambda_function.email_ingestion (expand)" -> "[root] aws_iam_role_policy.email_ingestion_access (expand)"
+		"[root] aws_lambda_function.email_ingestion (expand)" -> "[root] aws_iam_role_policy_attachment.email_ingestion_baseline (expand)"
+		"[root] aws_lambda_function.email_ingestion (expand)" -> "[root] data.archive_file.email_ingestion (expand)"
+		"[root] aws_lambda_function.email_ingestion (expand)" -> "[root] var.email_ingestion_memory"
+		"[root] aws_lambda_function.email_ingestion (expand)" -> "[root] var.email_ingestion_timeout"
+		"[root] aws_lambda_function.email_processing (expand)" -> "[root] aws_cloudwatch_log_group.email_processing (expand)"
+		"[root] aws_lambda_function.email_processing (expand)" -> "[root] aws_iam_role_policy.email_processing_access (expand)"
+		"[root] aws_lambda_function.email_processing (expand)" -> "[root] aws_iam_role_policy_attachment.email_processing_baseline (expand)"
+		"[root] aws_lambda_function.email_processing (expand)" -> "[root] aws_security_group.lambda (expand)"
+		"[root] aws_lambda_function.email_processing (expand)" -> "[root] aws_subnet.private_a (expand)"
+		"[root] aws_lambda_function.email_processing (expand)" -> "[root] aws_subnet.private_b (expand)"
+		"[root] aws_lambda_function.email_processing (expand)" -> "[root] data.archive_file.email_processing (expand)"
+		"[root] aws_lambda_function.email_processing (expand)" -> "[root] var.email_processing_memory"
+		"[root] aws_lambda_function.email_processing (expand)" -> "[root] var.email_processing_runtime"
+		"[root] aws_lambda_function.email_processing (expand)" -> "[root] var.email_processing_timeout"
+		"[root] aws_lambda_function.human_review_backend (expand)" -> "[root] aws_cloudwatch_log_group.human_review_backend (expand)"
+		"[root] aws_lambda_function.human_review_backend (expand)" -> "[root] aws_iam_role_policy.human_review_backend_db (expand)"
+		"[root] aws_lambda_function.human_review_backend (expand)" -> "[root] aws_iam_role_policy_attachment.human_review_backend_baseline (expand)"
+		"[root] aws_lambda_function.human_review_backend (expand)" -> "[root] aws_security_group.lambda (expand)"
+		"[root] aws_lambda_function.human_review_backend (expand)" -> "[root] data.archive_file.human_review_backend (expand)"
+		"[root] aws_lambda_function.human_review_backend (expand)" -> "[root] var.database_name"
+		"[root] aws_lambda_function.human_review_backend (expand)" -> "[root] var.human_review_backend_memory"
+		"[root] aws_lambda_function.human_review_backend (expand)" -> "[root] var.human_review_backend_timeout"
+		"[root] aws_lambda_function.human_review_outbox (expand)" -> "[root] aws_cloudwatch_log_group.human_review_outbox (expand)"
+		"[root] aws_lambda_function.human_review_outbox (expand)" -> "[root] aws_iam_role_policy.human_review_outbox (expand)"
+		"[root] aws_lambda_function.human_review_outbox (expand)" -> "[root] aws_iam_role_policy_attachment.human_review_outbox_baseline (expand)"
+		"[root] aws_lambda_function.human_review_outbox (expand)" -> "[root] aws_security_group.lambda (expand)"
+		"[root] aws_lambda_function.human_review_outbox (expand)" -> "[root] data.archive_file.human_review_outbox (expand)"
+		"[root] aws_lambda_function.human_review_outbox (expand)" -> "[root] var.database_name"
+		"[root] aws_lambda_function.human_review_outbox (expand)" -> "[root] var.human_review_outbox_batch_size"
+		"[root] aws_lambda_function.human_review_outbox (expand)" -> "[root] var.human_review_outbox_max_attempts"
+		"[root] aws_lambda_function.human_review_outbox (expand)" -> "[root] var.human_review_outbox_memory"
+		"[root] aws_lambda_function.human_review_outbox (expand)" -> "[root] var.human_review_outbox_timeout"
+		"[root] aws_lambda_function.identifier_validation (expand)" -> "[root] aws_cloudwatch_log_group.identifier_validation (expand)"
+		"[root] aws_lambda_function.identifier_validation (expand)" -> "[root] aws_iam_role_policy_attachment.identifier_validation_baseline (expand)"
+		"[root] aws_lambda_function.identifier_validation (expand)" -> "[root] data.archive_file.identifier_validation (expand)"
+		"[root] aws_lambda_function.identifier_validation (expand)" -> "[root] var.identifier_validation_max_identifier_length (validation)"
+		"[root] aws_lambda_function.identifier_validation (expand)" -> "[root] var.identifier_validation_max_invoices (validation)"
+		"[root] aws_lambda_function.identifier_validation (expand)" -> "[root] var.identifier_validation_memory_size"
+		"[root] aws_lambda_function.identifier_validation (expand)" -> "[root] var.identifier_validation_timeout"
+		"[root] aws_lambda_function.investigation_invocation (expand)" -> "[root] aws_cloudwatch_log_group.investigation_invocation (expand)"
+		"[root] aws_lambda_function.investigation_invocation (expand)" -> "[root] aws_iam_role_policy.investigation_invocation_access (expand)"
+		"[root] aws_lambda_function.investigation_invocation (expand)" -> "[root] aws_iam_role_policy_attachment.investigation_invocation_baseline (expand)"
+		"[root] aws_lambda_function.investigation_invocation (expand)" -> "[root] data.archive_file.investigation_invocation (expand)"
+		"[root] aws_lambda_function.investigation_invocation (expand)" -> "[root] var.enable_investigation_invocation"
+		"[root] aws_lambda_function.investigation_invocation (expand)" -> "[root] var.investigation_invocation_memory_size"
+		"[root] aws_lambda_function.investigation_invocation (expand)" -> "[root] var.investigation_invocation_timeout"
+		"[root] aws_lambda_function.invoice_scope (expand)" -> "[root] aws_cloudwatch_log_group.invoice_scope (expand)"
+		"[root] aws_lambda_function.invoice_scope (expand)" -> "[root] aws_iam_role_policy_attachment.invoice_scope_baseline (expand)"
+		"[root] aws_lambda_function.invoice_scope (expand)" -> "[root] data.archive_file.invoice_scope (expand)"
+		"[root] aws_lambda_function.invoice_scope (expand)" -> "[root] var.invoice_scope_max_invoices (validation)"
+		"[root] aws_lambda_function.invoice_scope (expand)" -> "[root] var.invoice_scope_memory_size"
+		"[root] aws_lambda_function.invoice_scope (expand)" -> "[root] var.invoice_scope_mode (validation)"
+		"[root] aws_lambda_function.invoice_scope (expand)" -> "[root] var.invoice_scope_timeout"
+		"[root] aws_lambda_function.mail_preprocessing (expand)" -> "[root] aws_cloudwatch_log_group.mail_preprocessing (expand)"
+		"[root] aws_lambda_function.mail_preprocessing (expand)" -> "[root] aws_iam_role_policy_attachment.mail_preprocessing_baseline (expand)"
+		"[root] aws_lambda_function.mail_preprocessing (expand)" -> "[root] aws_security_group.lambda (expand)"
+		"[root] aws_lambda_function.mail_preprocessing (expand)" -> "[root] aws_subnet.private_a (expand)"
+		"[root] aws_lambda_function.mail_preprocessing (expand)" -> "[root] aws_subnet.private_b (expand)"
+		"[root] aws_lambda_function.mail_preprocessing (expand)" -> "[root] data.archive_file.mail_preprocessing (expand)"
+		"[root] aws_lambda_function.mail_preprocessing (expand)" -> "[root] var.mail_preprocessing_memory"
+		"[root] aws_lambda_function.mail_preprocessing (expand)" -> "[root] var.mail_preprocessing_runtime"
+		"[root] aws_lambda_function.mail_preprocessing (expand)" -> "[root] var.mail_preprocessing_timeout"
+		"[root] aws_lambda_function.malware_scan_handler (expand)" -> "[root] aws_cloudwatch_log_group.malware_scan_handler (expand)"
+		"[root] aws_lambda_function.malware_scan_handler (expand)" -> "[root] aws_iam_role_policy.malware_scan_handler (expand)"
+		"[root] aws_lambda_function.malware_scan_handler (expand)" -> "[root] aws_iam_role_policy_attachment.malware_scan_handler_baseline (expand)"
+		"[root] aws_lambda_function.malware_scan_handler (expand)" -> "[root] aws_s3_bucket.attachments (expand)"
+		"[root] aws_lambda_function.malware_scan_handler (expand)" -> "[root] aws_security_group.lambda (expand)"
+		"[root] aws_lambda_function.malware_scan_handler (expand)" -> "[root] data.archive_file.malware_scan_handler (expand)"
+		"[root] aws_lambda_function.malware_scan_handler (expand)" -> "[root] var.email_ingestion_db_name"
+		"[root] aws_lambda_function.reply_processing_510 (expand)" -> "[root] aws_cloudwatch_log_group.reply_processing_510 (expand)"
+		"[root] aws_lambda_function.reply_processing_510 (expand)" -> "[root] aws_iam_role_policy.reply_processing_510 (expand)"
+		"[root] aws_lambda_function.reply_processing_510 (expand)" -> "[root] aws_iam_role_policy_attachment.reply_processing_baseline (expand)"
+		"[root] aws_lambda_function.reply_processing_510 (expand)" -> "[root] aws_security_group.lambda (expand)"
+		"[root] aws_lambda_function.reply_processing_510 (expand)" -> "[root] data.archive_file.reply_processing_510 (expand)"
+		"[root] aws_lambda_function.reply_processing_510 (expand)" -> "[root] var.database_name"
+		"[root] aws_lambda_function.reply_processing_510 (expand)" -> "[root] var.reply_graph_mailbox"
+		"[root] aws_lambda_function.reply_processing_510 (expand)" -> "[root] var.reply_send_enabled"
+		"[root] aws_lambda_function.s4hana_tool (expand)" -> "[root] aws_cloudwatch_log_group.s4hana_tool (expand)"
+		"[root] aws_lambda_function.s4hana_tool (expand)" -> "[root] aws_iam_role_policy_attachment.s4hana_tool_baseline (expand)"
+		"[root] aws_lambda_function.s4hana_tool (expand)" -> "[root] data.archive_file.s4hana_tool (expand)"
+		"[root] aws_lambda_function.s4hana_tool (expand)" -> "[root] var.s4hana_integration_mode (validation)"
+		"[root] aws_lambda_function.s4hana_tool (expand)" -> "[root] var.s4hana_tool_memory_size"
+		"[root] aws_lambda_function.s4hana_tool (expand)" -> "[root] var.s4hana_tool_timeout"
+		"[root] aws_lambda_function.workflow_dispatcher (expand)" -> "[root] aws_cloudwatch_log_group.workflow_dispatcher (expand)"
+		"[root] aws_lambda_function.workflow_dispatcher (expand)" -> "[root] aws_iam_role_policy.workflow_dispatcher (expand)"
+		"[root] aws_lambda_function.workflow_dispatcher (expand)" -> "[root] aws_iam_role_policy_attachment.workflow_dispatcher_baseline (expand)"
+		"[root] aws_lambda_function.workflow_dispatcher (expand)" -> "[root] data.archive_file.workflow_dispatcher (expand)"
+		"[root] aws_lambda_function_event_invoke_config.malware_scan_handler (expand)" -> "[root] aws_lambda_function.malware_scan_handler (expand)"
+		"[root] aws_lambda_permission.human_review_api_530 (expand)" -> "[root] aws_api_gateway_rest_api.human_review_530 (expand)"
+		"[root] aws_lambda_permission.human_review_api_530 (expand)" -> "[root] aws_lambda_function.human_review_backend (expand)"
+		"[root] aws_lambda_permission.human_review_outbox_eventbridge (expand)" -> "[root] aws_cloudwatch_event_rule.human_review_outbox (expand)"
+		"[root] aws_lambda_permission.human_review_outbox_eventbridge (expand)" -> "[root] aws_lambda_function.human_review_outbox (expand)"
+		"[root] aws_lambda_permission.malware_scan_from_eventbridge (expand)" -> "[root] aws_cloudwatch_event_rule.attachment_malware_scan (expand)"
+		"[root] aws_lambda_permission.malware_scan_from_eventbridge (expand)" -> "[root] aws_lambda_function.malware_scan_handler (expand)"
+		"[root] aws_lb.human_review (expand)" -> "[root] aws_security_group.human_review_alb (expand)"
+		"[root] aws_lb.human_review (expand)" -> "[root] aws_subnet.public_a (expand)"
+		"[root] aws_lb.human_review (expand)" -> "[root] aws_subnet.public_b (expand)"
+		"[root] aws_lb_listener.human_review_https (expand)" -> "[root] aws_acm_certificate_validation.psc (expand)"
+		"[root] aws_lb_listener.human_review_https (expand)" -> "[root] aws_lb.human_review (expand)"
+		"[root] aws_lb_listener.human_review_https (expand)" -> "[root] aws_lb_target_group.human_review (expand)"
+		"[root] aws_lb_target_group.human_review (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_nat_gateway.psc (expand)" -> "[root] aws_eip.nat (expand)"
+		"[root] aws_nat_gateway.psc (expand)" -> "[root] aws_internet_gateway.psc (expand)"
+		"[root] aws_nat_gateway.psc (expand)" -> "[root] aws_subnet.public_a (expand)"
+		"[root] aws_pipes_pipe.pipe1 (expand)" -> "[root] aws_iam_role_policy.pipe1 (expand)"
+		"[root] aws_pipes_pipe.pipe1 (expand)" -> "[root] aws_iam_role_policy.pipe1_logging_540 (expand)"
+		"[root] aws_pipes_pipe.pipe1 (expand)" -> "[root] var.pipe1_batch_size (validation)"
+		"[root] aws_pipes_pipe.pipe1 (expand)" -> "[root] var.pipe1_batching_window_seconds"
+		"[root] aws_pipes_pipe.pipe1 (expand)" -> "[root] var.pipe1_desired_state (validation)"
+		"[root] aws_pipes_pipe.pipe2 (expand)" -> "[root] aws_iam_role_policy.pipe2 (expand)"
+		"[root] aws_pipes_pipe.pipe2 (expand)" -> "[root] aws_iam_role_policy.pipe2_logging_540 (expand)"
+		"[root] aws_pipes_pipe.pipe2 (expand)" -> "[root] var.pipe2_batch_size (validation)"
+		"[root] aws_pipes_pipe.pipe2 (expand)" -> "[root] var.pipe2_desired_state (validation)"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] aws_db_subnet_group.psc (expand)"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] aws_rds_cluster_parameter_group.psc (expand)"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] aws_security_group.aurora (expand)"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] var.aurora_backup_retention_days"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] var.aurora_backup_window"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] var.aurora_deletion_protection"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] var.aurora_engine_version"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] var.aurora_final_snapshot_identifier"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] var.aurora_maintenance_window"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] var.aurora_serverless_max_acu (validation)"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] var.aurora_serverless_min_acu"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] var.aurora_skip_final_snapshot"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] var.database_name"
+		"[root] aws_rds_cluster.psc (expand)" -> "[root] var.database_username"
+		"[root] aws_rds_cluster_instance.reader (expand)" -> "[root] aws_rds_cluster_instance.writer (expand)"
+		"[root] aws_rds_cluster_instance.writer (expand)" -> "[root] aws_rds_cluster.psc (expand)"
+		"[root] aws_rds_cluster_instance.writer (expand)" -> "[root] var.aurora_auto_minor_version_upgrade"
+		"[root] aws_rds_cluster_instance.writer (expand)" -> "[root] var.aurora_performance_insights_enabled"
+		"[root] aws_rds_cluster_parameter_group.psc (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_rds_cluster_parameter_group.psc (expand)" -> "[root] var.aurora_parameter_group_family"
+		"[root] aws_route.private_a_internet (expand)" -> "[root] aws_nat_gateway.psc (expand)"
+		"[root] aws_route.private_a_internet (expand)" -> "[root] aws_route_table.private_a (expand)"
+		"[root] aws_route.private_b_internet (expand)" -> "[root] aws_nat_gateway.psc (expand)"
+		"[root] aws_route.private_b_internet (expand)" -> "[root] aws_route_table.private_b (expand)"
+		"[root] aws_route.public_internet (expand)" -> "[root] aws_internet_gateway.psc (expand)"
+		"[root] aws_route.public_internet (expand)" -> "[root] aws_route_table.public (expand)"
+		"[root] aws_route53_record.human_review_api_530 (expand)" -> "[root] aws_api_gateway_domain_name.human_review_530 (expand)"
+		"[root] aws_route53_record.human_review_ui (expand)" -> "[root] aws_lb.human_review (expand)"
+		"[root] aws_route53_record.human_review_ui (expand)" -> "[root] aws_route53_zone.psc (expand)"
+		"[root] aws_route53_record.psc_acm_validation (expand)" -> "[root] aws_acm_certificate.psc (expand)"
+		"[root] aws_route53_record.psc_acm_validation (expand)" -> "[root] aws_route53_zone.psc (expand)"
+		"[root] aws_route53_zone.psc (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_route53_zone.psc (expand)" -> "[root] var.domain_name"
+		"[root] aws_route_table.database (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_route_table.private_a (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_route_table.private_b (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_route_table.public (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_route_table_association.database_a (expand)" -> "[root] aws_route_table.database (expand)"
+		"[root] aws_route_table_association.database_a (expand)" -> "[root] aws_subnet.database_a (expand)"
+		"[root] aws_route_table_association.database_b (expand)" -> "[root] aws_route_table.database (expand)"
+		"[root] aws_route_table_association.database_b (expand)" -> "[root] aws_subnet.database_b (expand)"
+		"[root] aws_route_table_association.private_a (expand)" -> "[root] aws_route_table.private_a (expand)"
+		"[root] aws_route_table_association.private_a (expand)" -> "[root] aws_subnet.private_a (expand)"
+		"[root] aws_route_table_association.private_b (expand)" -> "[root] aws_route_table.private_b (expand)"
+		"[root] aws_route_table_association.private_b (expand)" -> "[root] aws_subnet.private_b (expand)"
+		"[root] aws_route_table_association.public_a (expand)" -> "[root] aws_route_table.public (expand)"
+		"[root] aws_route_table_association.public_a (expand)" -> "[root] aws_subnet.public_a (expand)"
+		"[root] aws_route_table_association.public_b (expand)" -> "[root] aws_route_table.public (expand)"
+		"[root] aws_route_table_association.public_b (expand)" -> "[root] aws_subnet.public_b (expand)"
+		"[root] aws_s3_bucket.attachments (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_s3_bucket.classification_agent_artifacts (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_s3_bucket.classification_agent_artifacts (expand)" -> "[root] var.classification_artifact_bucket_suffix"
+		"[root] aws_s3_bucket.investigation_agent_artifacts (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_s3_bucket.investigation_agent_artifacts (expand)" -> "[root] var.investigation_artifact_bucket_suffix"
+		"[root] aws_s3_bucket_lifecycle_configuration.attachments (expand)" -> "[root] aws_s3_bucket.attachments (expand)"
+		"[root] aws_s3_bucket_lifecycle_configuration.attachments (expand)" -> "[root] var.attachments_abort_multipart_days (validation)"
+		"[root] aws_s3_bucket_ownership_controls.attachments (expand)" -> "[root] aws_s3_bucket.attachments (expand)"
+		"[root] aws_s3_bucket_policy.attachments (expand)" -> "[root] aws_s3_bucket_public_access_block.attachments (expand)"
+		"[root] aws_s3_bucket_policy.attachments (expand)" -> "[root] data.aws_iam_policy_document.attachments_https (expand)"
+		"[root] aws_s3_bucket_public_access_block.attachments (expand)" -> "[root] aws_s3_bucket.attachments (expand)"
+		"[root] aws_s3_bucket_public_access_block.classification_agent_artifacts (expand)" -> "[root] aws_s3_bucket.classification_agent_artifacts (expand)"
+		"[root] aws_s3_bucket_public_access_block.investigation_agent_artifacts (expand)" -> "[root] aws_s3_bucket.investigation_agent_artifacts (expand)"
+		"[root] aws_s3_bucket_server_side_encryption_configuration.attachments (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_s3_bucket_server_side_encryption_configuration.attachments (expand)" -> "[root] aws_s3_bucket.attachments (expand)"
+		"[root] aws_s3_bucket_server_side_encryption_configuration.classification_agent_artifacts (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_s3_bucket_server_side_encryption_configuration.classification_agent_artifacts (expand)" -> "[root] aws_s3_bucket.classification_agent_artifacts (expand)"
+		"[root] aws_s3_bucket_server_side_encryption_configuration.investigation_agent_artifacts (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_s3_bucket_server_side_encryption_configuration.investigation_agent_artifacts (expand)" -> "[root] aws_s3_bucket.investigation_agent_artifacts (expand)"
+		"[root] aws_s3_bucket_versioning.attachments (expand)" -> "[root] aws_s3_bucket.attachments (expand)"
+		"[root] aws_s3_bucket_versioning.attachments (expand)" -> "[root] var.attachments_versioning_status (validation)"
+		"[root] aws_s3_object.classification_agent_zip (expand)" -> "[root] aws_s3_bucket_server_side_encryption_configuration.classification_agent_artifacts (expand)"
+		"[root] aws_s3_object.classification_agent_zip (expand)" -> "[root] data.archive_file.classification_agent (expand)"
+		"[root] aws_s3_object.classification_agent_zip (expand)" -> "[root] var.classification_agent_artifact_key"
+		"[root] aws_s3_object.investigation_agent_zip (expand)" -> "[root] aws_s3_bucket_public_access_block.investigation_agent_artifacts (expand)"
+		"[root] aws_s3_object.investigation_agent_zip (expand)" -> "[root] aws_s3_bucket_server_side_encryption_configuration.investigation_agent_artifacts (expand)"
+		"[root] aws_s3_object.investigation_agent_zip (expand)" -> "[root] data.archive_file.investigation_agent (expand)"
+		"[root] aws_s3_object.investigation_agent_zip (expand)" -> "[root] var.investigation_agent_artifact_key"
+		"[root] aws_scheduler_schedule.email_ingestion (expand)" -> "[root] aws_iam_role_policy.email_scheduler_invoke (expand)"
+		"[root] aws_scheduler_schedule.email_ingestion (expand)" -> "[root] var.email_scheduler_expression"
+		"[root] aws_scheduler_schedule.email_ingestion (expand)" -> "[root] var.email_scheduler_timezone"
+		"[root] aws_scheduler_schedule.email_ingestion (expand)" -> "[root] var.enable_scheduler"
+		"[root] aws_scheduler_schedule.workflow_dispatcher (expand)" -> "[root] aws_iam_role_policy.workflow_dispatcher_scheduler (expand)"
+		"[root] aws_secretsmanager_secret.microsoft_graph (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_secretsmanager_secret.microsoft_graph (expand)" -> "[root] var.secrets_recovery_window_days (validation)"
+		"[root] aws_secretsmanager_secret.psc_app_db (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_security_group.aurora (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_security_group.human_review_alb (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_security_group.human_review_ecs (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_security_group.lambda (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_security_group.rds_proxy (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_security_group.vpc_endpoints (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_sfn_state_machine.sf1 (expand)" -> "[root] aws_iam_role_policy.sf1 (expand)"
+		"[root] aws_sfn_state_machine.sf1 (expand)" -> "[root] var.sf1_max_retry_attempts"
+		"[root] aws_sfn_state_machine.sf1 (expand)" -> "[root] var.sf1_name_suffix"
+		"[root] aws_sfn_state_machine.sf1 (expand)" -> "[root] var.sf1_retry_backoff_rate"
+		"[root] aws_sfn_state_machine.sf1 (expand)" -> "[root] var.sf1_retry_interval_seconds"
+		"[root] aws_sfn_state_machine.sf1 (expand)" -> "[root] var.sf1_type (validation)"
+		"[root] aws_sfn_state_machine.sf2 (expand)" -> "[root] aws_iam_role_policy.sf2 (expand)"
+		"[root] aws_sfn_state_machine.sf2 (expand)" -> "[root] var.sf2_max_retry_attempts"
+		"[root] aws_sfn_state_machine.sf2 (expand)" -> "[root] var.sf2_name_suffix"
+		"[root] aws_sfn_state_machine.sf2 (expand)" -> "[root] var.sf2_retry_backoff_rate"
+		"[root] aws_sfn_state_machine.sf2 (expand)" -> "[root] var.sf2_retry_interval_seconds"
+		"[root] aws_sfn_state_machine.sf2 (expand)" -> "[root] var.sf2_type (validation)"
+		"[root] aws_sns_topic.psc_monitoring_540 (expand)" -> "[root] local.psc_monitoring_prefix_540 (expand)"
+		"[root] aws_sns_topic.psc_monitoring_540 (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_sns_topic_subscription.psc_monitoring_email_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] aws_sns_topic_subscription.psc_monitoring_email_540 (expand)" -> "[root] var.cloudwatch_alarm_email"
+		"[root] aws_sqs_queue.malware_scan_event_dlq (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_sqs_queue.reply (expand)" -> "[root] aws_sqs_queue.reply_dlq (expand)"
+		"[root] aws_sqs_queue.reply (expand)" -> "[root] var.reply_max_receive_count"
+		"[root] aws_sqs_queue.reply (expand)" -> "[root] var.reply_message_retention_seconds"
+		"[root] aws_sqs_queue.reply (expand)" -> "[root] var.reply_queue_suffix"
+		"[root] aws_sqs_queue.reply (expand)" -> "[root] var.reply_receive_wait_time_seconds"
+		"[root] aws_sqs_queue.reply_dlq (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_sqs_queue.reply_dlq (expand)" -> "[root] var.reply_dlq_retention_seconds"
+		"[root] aws_sqs_queue.reply_dlq (expand)" -> "[root] var.reply_dlq_suffix"
+		"[root] aws_sqs_queue.reply_dlq (expand)" -> "[root] var.reply_visibility_timeout_seconds (validation)"
+		"[root] aws_sqs_queue.sqs1 (expand)" -> "[root] aws_sqs_queue.sqs1_dlq (expand)"
+		"[root] aws_sqs_queue.sqs1 (expand)" -> "[root] var.sqs1_max_receive_count"
+		"[root] aws_sqs_queue.sqs1 (expand)" -> "[root] var.sqs1_name_suffix"
+		"[root] aws_sqs_queue.sqs1 (expand)" -> "[root] var.sqs1_receive_wait_time_seconds"
+		"[root] aws_sqs_queue.sqs1 (expand)" -> "[root] var.sqs1_retention_seconds"
+		"[root] aws_sqs_queue.sqs1 (expand)" -> "[root] var.sqs1_visibility_timeout_seconds"
+		"[root] aws_sqs_queue.sqs1_dlq (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_sqs_queue.sqs1_dlq (expand)" -> "[root] var.sqs1_dlq_name_suffix"
+		"[root] aws_sqs_queue.sqs1_dlq (expand)" -> "[root] var.sqs1_dlq_retention_seconds"
+		"[root] aws_sqs_queue.sqs1_dlq (expand)" -> "[root] var.sqs1_kms_data_key_reuse_seconds"
+		"[root] aws_sqs_queue.sqs2 (expand)" -> "[root] aws_sqs_queue.sqs2_dlq (expand)"
+		"[root] aws_sqs_queue.sqs2 (expand)" -> "[root] var.sqs2_delay_seconds"
+		"[root] aws_sqs_queue.sqs2 (expand)" -> "[root] var.sqs2_max_message_size"
+		"[root] aws_sqs_queue.sqs2 (expand)" -> "[root] var.sqs2_max_receive_count (validation)"
+		"[root] aws_sqs_queue.sqs2 (expand)" -> "[root] var.sqs2_queue_suffix"
+		"[root] aws_sqs_queue.sqs2 (expand)" -> "[root] var.sqs2_receive_wait_time_seconds"
+		"[root] aws_sqs_queue.sqs2 (expand)" -> "[root] var.sqs2_retention_seconds"
+		"[root] aws_sqs_queue.sqs2 (expand)" -> "[root] var.sqs2_visibility_timeout_seconds"
+		"[root] aws_sqs_queue.sqs2_dlq (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] aws_sqs_queue.sqs2_dlq (expand)" -> "[root] var.sqs2_dlq_retention_seconds"
+		"[root] aws_sqs_queue.sqs2_dlq (expand)" -> "[root] var.sqs2_dlq_suffix"
+		"[root] aws_sqs_queue.sqs2_dlq (expand)" -> "[root] var.sqs2_kms_data_key_reuse_seconds"
+		"[root] aws_sqs_queue.workflow_dispatcher_scheduler_dlq (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_sqs_queue_policy.malware_scan_event_dlq (expand)" -> "[root] data.aws_iam_policy_document.malware_scan_event_dlq (expand)"
+		"[root] aws_sqs_queue_redrive_allow_policy.reply_dlq (expand)" -> "[root] aws_sqs_queue.reply (expand)"
+		"[root] aws_sqs_queue_redrive_allow_policy.sqs1_dlq (expand)" -> "[root] aws_sqs_queue.sqs1 (expand)"
+		"[root] aws_sqs_queue_redrive_allow_policy.sqs2_dlq (expand)" -> "[root] aws_sqs_queue.sqs2 (expand)"
+		"[root] aws_subnet.database_a (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_subnet.database_a (expand)" -> "[root] var.availability_zone_a"
+		"[root] aws_subnet.database_a (expand)" -> "[root] var.database_subnet_a_cidr"
+		"[root] aws_subnet.database_b (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_subnet.database_b (expand)" -> "[root] var.availability_zone_b"
+		"[root] aws_subnet.database_b (expand)" -> "[root] var.database_subnet_b_cidr"
+		"[root] aws_subnet.private_a (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_subnet.private_a (expand)" -> "[root] var.availability_zone_a"
+		"[root] aws_subnet.private_a (expand)" -> "[root] var.private_subnet_a_cidr"
+		"[root] aws_subnet.private_b (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_subnet.private_b (expand)" -> "[root] var.availability_zone_b"
+		"[root] aws_subnet.private_b (expand)" -> "[root] var.private_subnet_b_cidr"
+		"[root] aws_subnet.public_a (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_subnet.public_a (expand)" -> "[root] var.availability_zone_a"
+		"[root] aws_subnet.public_a (expand)" -> "[root] var.public_subnet_a_cidr"
+		"[root] aws_subnet.public_b (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] aws_subnet.public_b (expand)" -> "[root] var.availability_zone_b"
+		"[root] aws_subnet.public_b (expand)" -> "[root] var.public_subnet_b_cidr"
+		"[root] aws_vpc.psc (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_vpc.psc (expand)" -> "[root] var.vpc_cidr"
+		"[root] aws_vpc_endpoint.kms (expand)" -> "[root] aws_security_group.vpc_endpoints (expand)"
+		"[root] aws_vpc_endpoint.kms (expand)" -> "[root] aws_subnet.private_a (expand)"
+		"[root] aws_vpc_endpoint.kms (expand)" -> "[root] aws_subnet.private_b (expand)"
+		"[root] aws_vpc_endpoint.kms (expand)" -> "[root] data.aws_region.current (expand)"
+		"[root] aws_vpc_endpoint.s3 (expand)" -> "[root] aws_route_table.private_a (expand)"
+		"[root] aws_vpc_endpoint.s3 (expand)" -> "[root] aws_route_table.private_b (expand)"
+		"[root] aws_vpc_endpoint.s3 (expand)" -> "[root] data.aws_region.current (expand)"
+		"[root] aws_vpc_endpoint.secrets_manager (expand)" -> "[root] aws_security_group.vpc_endpoints (expand)"
+		"[root] aws_vpc_endpoint.secrets_manager (expand)" -> "[root] aws_subnet.private_a (expand)"
+		"[root] aws_vpc_endpoint.secrets_manager (expand)" -> "[root] aws_subnet.private_b (expand)"
+		"[root] aws_vpc_endpoint.secrets_manager (expand)" -> "[root] data.aws_region.current (expand)"
+		"[root] aws_vpc_endpoint.step_functions (expand)" -> "[root] aws_security_group.vpc_endpoints (expand)"
+		"[root] aws_vpc_endpoint.step_functions (expand)" -> "[root] aws_subnet.private_a (expand)"
+		"[root] aws_vpc_endpoint.step_functions (expand)" -> "[root] aws_subnet.private_b (expand)"
+		"[root] aws_vpc_endpoint.step_functions (expand)" -> "[root] data.aws_region.current (expand)"
+		"[root] aws_vpc_security_group_egress_rule.human_review_alb_to_ecs (expand)" -> "[root] aws_security_group.human_review_alb (expand)"
+		"[root] aws_vpc_security_group_egress_rule.human_review_alb_to_ecs (expand)" -> "[root] aws_security_group.human_review_ecs (expand)"
+		"[root] aws_vpc_security_group_egress_rule.human_review_alb_to_ecs (expand)" -> "[root] var.human_review_container_port (validation)"
+		"[root] aws_vpc_security_group_egress_rule.human_review_ecs_https (expand)" -> "[root] aws_security_group.human_review_ecs (expand)"
+		"[root] aws_vpc_security_group_egress_rule.lambda_https (expand)" -> "[root] aws_security_group.lambda (expand)"
+		"[root] aws_vpc_security_group_egress_rule.lambda_postgres (expand)" -> "[root] aws_security_group.lambda (expand)"
+		"[root] aws_vpc_security_group_egress_rule.lambda_postgres (expand)" -> "[root] aws_security_group.rds_proxy (expand)"
+		"[root] aws_vpc_security_group_egress_rule.rds_proxy_to_aurora (expand)" -> "[root] aws_security_group.aurora (expand)"
+		"[root] aws_vpc_security_group_egress_rule.rds_proxy_to_aurora (expand)" -> "[root] aws_security_group.rds_proxy (expand)"
+		"[root] aws_vpc_security_group_ingress_rule.aurora_from_rds_proxy (expand)" -> "[root] aws_security_group.aurora (expand)"
+		"[root] aws_vpc_security_group_ingress_rule.aurora_from_rds_proxy (expand)" -> "[root] aws_security_group.rds_proxy (expand)"
+		"[root] aws_vpc_security_group_ingress_rule.human_review_alb_https (expand)" -> "[root] aws_security_group.human_review_alb (expand)"
+		"[root] aws_vpc_security_group_ingress_rule.human_review_alb_https (expand)" -> "[root] var.human_review_alb_allowed_cidr (validation)"
+		"[root] aws_vpc_security_group_ingress_rule.human_review_ecs_from_alb (expand)" -> "[root] aws_security_group.human_review_alb (expand)"
+		"[root] aws_vpc_security_group_ingress_rule.human_review_ecs_from_alb (expand)" -> "[root] aws_security_group.human_review_ecs (expand)"
+		"[root] aws_vpc_security_group_ingress_rule.human_review_ecs_from_alb (expand)" -> "[root] var.human_review_container_port (validation)"
+		"[root] aws_vpc_security_group_ingress_rule.rds_proxy_from_lambda (expand)" -> "[root] aws_security_group.lambda (expand)"
+		"[root] aws_vpc_security_group_ingress_rule.rds_proxy_from_lambda (expand)" -> "[root] aws_security_group.rds_proxy (expand)"
+		"[root] aws_vpc_security_group_ingress_rule.vpce_from_lambda (expand)" -> "[root] aws_security_group.lambda (expand)"
+		"[root] aws_vpc_security_group_ingress_rule.vpce_from_lambda (expand)" -> "[root] aws_security_group.vpc_endpoints (expand)"
+		"[root] data.archive_file.attachment_processing (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.classification_agent (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.email_ingestion (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.email_processing (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.human_review_backend (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.human_review_outbox (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.identifier_validation (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.investigation_agent (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.investigation_invocation (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.invoice_scope (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.mail_preprocessing (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.malware_scan_handler (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.reply_processing_510 (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.s4hana_tool (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.archive_file.workflow_dispatcher (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"]"
+		"[root] data.aws_caller_identity.current (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] data.aws_iam_policy_document.attachments_https (expand)" -> "[root] aws_s3_bucket.attachments (expand)"
+		"[root] data.aws_iam_policy_document.guardduty_s3 (expand)" -> "[root] aws_kms_key.psc (expand)"
+		"[root] data.aws_iam_policy_document.guardduty_s3 (expand)" -> "[root] aws_s3_bucket.attachments (expand)"
+		"[root] data.aws_iam_policy_document.guardduty_s3_assume_role (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] data.aws_iam_policy_document.human_review_ecs_assume_role (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] data.aws_iam_policy_document.investigation_gateway_assume (expand)" -> "[root] data.aws_caller_identity.current (expand)"
+		"[root] data.aws_iam_policy_document.lambda_assume_role (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] data.aws_iam_policy_document.lambda_baseline (expand)" -> "[root] data.aws_partition.current (expand)"
+		"[root] data.aws_iam_policy_document.malware_scan_event_dlq (expand)" -> "[root] aws_cloudwatch_event_rule.attachment_malware_scan (expand)"
+		"[root] data.aws_iam_policy_document.malware_scan_event_dlq (expand)" -> "[root] aws_sqs_queue.malware_scan_event_dlq (expand)"
+		"[root] data.aws_iam_policy_document.scheduler_assume_role (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] data.aws_iam_policy_document.step_functions_assume_role (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] data.aws_partition.current (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] data.aws_partition.human_review (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] data.aws_region.current (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] local.classification_model_config (expand)" -> "[root] var.aws_region"
+		"[root] local.classification_model_config (expand)" -> "[root] var.classification_model_id"
+		"[root] local.classification_model_config (expand)" -> "[root] var.classification_model_max_output_tokens (validation)"
+		"[root] local.classification_model_config (expand)" -> "[root] var.classification_model_temperature (validation)"
+		"[root] local.classification_model_config (expand)" -> "[root] var.classification_model_top_p (validation)"
+		"[root] local.human_review_cors_resources_530 (expand)" -> "[root] aws_api_gateway_resource.approve_530 (expand)"
+		"[root] local.human_review_cors_resources_530 (expand)" -> "[root] aws_api_gateway_resource.pending_review_cases_530 (expand)"
+		"[root] local.human_review_cors_resources_530 (expand)" -> "[root] aws_api_gateway_resource.reject_530 (expand)"
+		"[root] local.human_review_db_user_arn (expand)" -> "[root] data.aws_partition.human_review (expand)"
+		"[root] local.human_review_db_user_arn (expand)" -> "[root] local.human_review_proxy_resource_id (expand)"
+		"[root] local.human_review_db_user_arn (expand)" -> "[root] var.database_username"
+		"[root] local.human_review_proxy_resource_id (expand)" -> "[root] aws_db_proxy.psc (expand)"
+		"[root] local.psc_aurora_instances_540 (expand)" -> "[root] aws_rds_cluster_instance.reader (expand)"
+		"[root] local.psc_dlqs_540 (expand)" -> "[root] aws_sqs_queue.reply_dlq (expand)"
+		"[root] local.psc_dlqs_540 (expand)" -> "[root] aws_sqs_queue.sqs1_dlq (expand)"
+		"[root] local.psc_dlqs_540 (expand)" -> "[root] aws_sqs_queue.sqs2_dlq (expand)"
+		"[root] local.psc_lambdas_540 (expand)" -> "[root] aws_lambda_function.email_ingestion (expand)"
+		"[root] local.psc_lambdas_540 (expand)" -> "[root] aws_lambda_function.email_processing (expand)"
+		"[root] local.psc_lambdas_540 (expand)" -> "[root] aws_lambda_function.human_review_backend (expand)"
+		"[root] local.psc_lambdas_540 (expand)" -> "[root] aws_lambda_function.human_review_outbox (expand)"
+		"[root] local.psc_lambdas_540 (expand)" -> "[root] aws_lambda_function.identifier_validation (expand)"
+		"[root] local.psc_lambdas_540 (expand)" -> "[root] aws_lambda_function.investigation_invocation (expand)"
+		"[root] local.psc_lambdas_540 (expand)" -> "[root] aws_lambda_function.invoice_scope (expand)"
+		"[root] local.psc_lambdas_540 (expand)" -> "[root] aws_lambda_function.mail_preprocessing (expand)"
+		"[root] local.psc_lambdas_540 (expand)" -> "[root] aws_lambda_function.reply_processing_510 (expand)"
+		"[root] local.psc_lambdas_540 (expand)" -> "[root] aws_lambda_function.s4hana_tool (expand)"
+		"[root] local.psc_main_queues_540 (expand)" -> "[root] aws_sqs_queue.reply (expand)"
+		"[root] local.psc_main_queues_540 (expand)" -> "[root] aws_sqs_queue.sqs1 (expand)"
+		"[root] local.psc_main_queues_540 (expand)" -> "[root] aws_sqs_queue.sqs2 (expand)"
+		"[root] local.psc_monitoring_prefix_540 (expand)" -> "[root] var.environment"
+		"[root] local.psc_monitoring_prefix_540 (expand)" -> "[root] var.project_name"
+		"[root] local.psc_pipes_540 (expand)" -> "[root] aws_pipes_pipe.pipe1 (expand)"
+		"[root] local.psc_pipes_540 (expand)" -> "[root] aws_pipes_pipe.pipe2 (expand)"
+		"[root] local.psc_queues_540 (expand)" -> "[root] aws_sqs_queue.reply (expand)"
+		"[root] local.psc_queues_540 (expand)" -> "[root] aws_sqs_queue.sqs1 (expand)"
+		"[root] local.psc_queues_540 (expand)" -> "[root] aws_sqs_queue.sqs2 (expand)"
+		"[root] local.psc_state_machines_540 (expand)" -> "[root] aws_sfn_state_machine.sf1 (expand)"
+		"[root] local.psc_state_machines_540 (expand)" -> "[root] aws_sfn_state_machine.sf2 (expand)"
+		"[root] local.sf1_attachment_lambda_arn (expand)" -> "[root] aws_lambda_function.attachment_processing (expand)"
+		"[root] output.classification_agentcore_runtime_arn (expand)" -> "[root] aws_bedrockagentcore_agent_runtime.classification (expand)"
+		"[root] output.classification_agentcore_runtime_id (expand)" -> "[root] aws_bedrockagentcore_agent_runtime.classification (expand)"
+		"[root] output.classification_guardrail_arn (expand)" -> "[root] aws_bedrock_guardrail.classification (expand)"
+		"[root] output.classification_guardrail_version (expand)" -> "[root] aws_bedrock_guardrail_version.classification (expand)"
+		"[root] output.classification_model_id (expand)" -> "[root] local.classification_model_config (expand)"
+		"[root] output.human_review_530_api_url (expand)" -> "[root] var.domain_name"
+		"[root] output.human_review_530_invoke_url (expand)" -> "[root] aws_api_gateway_stage.human_review_530 (expand)"
+		"[root] output.human_review_530_rest_api_execution_arn (expand)" -> "[root] aws_api_gateway_rest_api.human_review_530 (expand)"
+		"[root] output.human_review_530_rest_api_id (expand)" -> "[root] aws_api_gateway_rest_api.human_review_530 (expand)"
+		"[root] output.human_review_alb_dns_name (expand)" -> "[root] aws_lb.human_review (expand)"
+		"[root] output.human_review_alb_security_group_id (expand)" -> "[root] aws_security_group.human_review_alb (expand)"
+		"[root] output.human_review_backend_lambda_arn (expand)" -> "[root] aws_lambda_function.human_review_backend (expand)"
+		"[root] output.human_review_backend_lambda_name (expand)" -> "[root] aws_lambda_function.human_review_backend (expand)"
+		"[root] output.human_review_cognito_app_client_id (expand)" -> "[root] aws_cognito_user_pool_client.human_review (expand)"
+		"[root] output.human_review_cognito_issuer_url (expand)" -> "[root] aws_cognito_user_pool.human_review (expand)"
+		"[root] output.human_review_cognito_login_domain (expand)" -> "[root] aws_cognito_user_pool_domain.human_review (expand)"
+		"[root] output.human_review_cognito_user_pool_id (expand)" -> "[root] aws_cognito_user_pool.human_review (expand)"
+		"[root] output.human_review_ecr_repository_arn (expand)" -> "[root] aws_ecr_repository.human_review_ui (expand)"
+		"[root] output.human_review_ecr_repository_name (expand)" -> "[root] aws_ecr_repository.human_review_ui (expand)"
+		"[root] output.human_review_ecr_repository_url (expand)" -> "[root] aws_ecr_repository.human_review_ui (expand)"
+		"[root] output.human_review_ecs_cluster_arn (expand)" -> "[root] aws_ecs_cluster.human_review_ui (expand)"
+		"[root] output.human_review_ecs_cluster_id (expand)" -> "[root] aws_ecs_cluster.human_review_ui (expand)"
+		"[root] output.human_review_ecs_cluster_name (expand)" -> "[root] aws_ecs_cluster.human_review_ui (expand)"
+		"[root] output.human_review_ecs_execution_role_arn (expand)" -> "[root] aws_iam_role.human_review_ecs_execution (expand)"
+		"[root] output.human_review_ecs_log_group_name (expand)" -> "[root] aws_cloudwatch_log_group.human_review_ecs (expand)"
+		"[root] output.human_review_ecs_security_group_id (expand)" -> "[root] aws_security_group.human_review_ecs (expand)"
+		"[root] output.human_review_ecs_task_role_arn (expand)" -> "[root] aws_iam_role.human_review_ecs_task (expand)"
+		"[root] output.human_review_outbox_lambda_arn (expand)" -> "[root] aws_lambda_function.human_review_outbox (expand)"
+		"[root] output.human_review_outbox_lambda_name (expand)" -> "[root] aws_lambda_function.human_review_outbox (expand)"
+		"[root] output.human_review_ui_url (expand)" -> "[root] var.domain_name"
+		"[root] output.identifier_validation_lambda_arn (expand)" -> "[root] aws_lambda_function.identifier_validation (expand)"
+		"[root] output.identifier_validation_lambda_name (expand)" -> "[root] aws_lambda_function.identifier_validation (expand)"
+		"[root] output.investigation_agent_runtime_arn (expand)" -> "[root] aws_bedrockagentcore_agent_runtime.investigation (expand)"
+		"[root] output.investigation_agent_runtime_id (expand)" -> "[root] aws_bedrockagentcore_agent_runtime.investigation (expand)"
+		"[root] output.investigation_gateway_id (expand)" -> "[root] aws_bedrockagentcore_gateway.investigation (expand)"
+		"[root] output.investigation_gateway_url (expand)" -> "[root] aws_bedrockagentcore_gateway.investigation (expand)"
+		"[root] output.investigation_invocation_lambda_arn (expand)" -> "[root] aws_lambda_function.investigation_invocation (expand)"
+		"[root] output.investigation_invocation_lambda_name (expand)" -> "[root] aws_lambda_function.investigation_invocation (expand)"
+		"[root] output.investigation_memory_arn (expand)" -> "[root] aws_bedrockagentcore_memory.investigation (expand)"
+		"[root] output.investigation_memory_id (expand)" -> "[root] aws_bedrockagentcore_memory.investigation (expand)"
+		"[root] output.investigation_policy_engine_arn (expand)" -> "[root] aws_bedrockagentcore_policy_engine.investigation (expand)"
+		"[root] output.investigation_policy_engine_id (expand)" -> "[root] aws_bedrockagentcore_policy_engine.investigation (expand)"
+		"[root] output.invoice_scope_lambda_arn (expand)" -> "[root] aws_lambda_function.invoice_scope (expand)"
+		"[root] output.invoice_scope_lambda_name (expand)" -> "[root] aws_lambda_function.invoice_scope (expand)"
+		"[root] output.pipe2_arn (expand)" -> "[root] aws_pipes_pipe.pipe2 (expand)"
+		"[root] output.pipe2_name (expand)" -> "[root] aws_pipes_pipe.pipe2 (expand)"
+		"[root] output.psc_acm_certificate_arn (expand)" -> "[root] aws_acm_certificate.psc (expand)"
+		"[root] output.psc_cloudwatch_dashboard_name_540 (expand)" -> "[root] aws_cloudwatch_dashboard.psc_540 (expand)"
+		"[root] output.psc_monitoring_sns_topic_arn_540 (expand)" -> "[root] aws_sns_topic.psc_monitoring_540 (expand)"
+		"[root] output.psc_route53_nameservers (expand)" -> "[root] aws_route53_zone.psc (expand)"
+		"[root] output.psc_route53_zone_id (expand)" -> "[root] aws_route53_zone.psc (expand)"
+		"[root] output.reply_dlq_arn (expand)" -> "[root] aws_sqs_queue.reply_dlq (expand)"
+		"[root] output.reply_dlq_url (expand)" -> "[root] aws_sqs_queue.reply_dlq (expand)"
+		"[root] output.reply_processing_510_lambda_arn (expand)" -> "[root] aws_lambda_function.reply_processing_510 (expand)"
+		"[root] output.reply_processing_510_lambda_name (expand)" -> "[root] aws_lambda_function.reply_processing_510 (expand)"
+		"[root] output.reply_processing_520_mapping_state (expand)" -> "[root] aws_lambda_event_source_mapping.reply_processing_520 (expand)"
+		"[root] output.reply_processing_520_mapping_uuid (expand)" -> "[root] aws_lambda_event_source_mapping.reply_processing_520 (expand)"
+		"[root] output.reply_queue_arn (expand)" -> "[root] aws_sqs_queue.reply (expand)"
+		"[root] output.reply_queue_url (expand)" -> "[root] aws_sqs_queue.reply (expand)"
+		"[root] output.s4hana_gateway_target_id (expand)" -> "[root] aws_bedrockagentcore_gateway_target.s4hana (expand)"
+		"[root] output.s4hana_tool_lambda_arn (expand)" -> "[root] aws_lambda_function.s4hana_tool (expand)"
+		"[root] output.s4hana_tool_lambda_name (expand)" -> "[root] aws_lambda_function.s4hana_tool (expand)"
+		"[root] output.sqs1_dlq_arn (expand)" -> "[root] aws_sqs_queue.sqs1_dlq (expand)"
+		"[root] output.sqs1_queue_arn (expand)" -> "[root] aws_sqs_queue.sqs1 (expand)"
+		"[root] output.sqs1_queue_url (expand)" -> "[root] aws_sqs_queue.sqs1 (expand)"
+		"[root] output.sqs2_dlq_arn (expand)" -> "[root] aws_sqs_queue.sqs2_dlq (expand)"
+		"[root] output.sqs2_dlq_url (expand)" -> "[root] aws_sqs_queue.sqs2_dlq (expand)"
+		"[root] output.sqs2_queue_arn (expand)" -> "[root] aws_sqs_queue.sqs2 (expand)"
+		"[root] output.sqs2_queue_url (expand)" -> "[root] aws_sqs_queue.sqs2 (expand)"
+		"[root] output.vpc_id (expand)" -> "[root] aws_vpc.psc (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.attachment_processing (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.classification_agent (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.email_ingestion (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.email_processing (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.human_review_backend (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.human_review_outbox (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.identifier_validation (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.investigation_agent (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.investigation_invocation (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.invoice_scope (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.mail_preprocessing (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.malware_scan_handler (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.reply_processing_510 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.s4hana_tool (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)" -> "[root] data.archive_file.workflow_dispatcher (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_api_gateway_base_path_mapping.human_review_530 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_bedrockagentcore_gateway_target.s4hana (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_bedrockagentcore_memory.investigation (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_dashboard.psc_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_event_target.attachment_malware_scan (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_event_target.human_review_outbox (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_log_group.human_review_ecs (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.alb_5xx_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.alb_response_time_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.alb_unhealthy_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.api_errors_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.api_latency_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.aurora_connections_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.aurora_cpu_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.aurora_deadlocks_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.aurora_freeable_memory_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.aurora_replica_lag_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.lambda_duration_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.lambda_errors_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.lambda_throttles_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.pipe_execution_failures_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.pipe_target_failures_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.rds_proxy_borrow_latency_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.rds_proxy_connection_setup_failures_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.rds_proxy_connections_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.rds_proxy_database_connections_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.rds_proxy_pool_utilization_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.sfn_aborted_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.sfn_failed_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.sfn_timeout_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.sqs_backlog_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.sqs_dlq_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_metric_alarm.sqs_message_age_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cognito_user_pool_client.human_review (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cognito_user_pool_domain.human_review (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_db_proxy_endpoint.reader (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_db_proxy_target.psc (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_ecr_lifecycle_policy.human_review_ui (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_ecs_cluster.human_review_ui (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_guardduty_malware_protection_plan.attachments (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_iam_role.human_review_ecs_task (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_iam_role_policy_attachment.ariba_tool_baseline (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_iam_role_policy_attachment.human_review_ecs_execution (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_iam_role_policy_attachment.pr_itar_tool_baseline (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_kms_alias.psc (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_lambda_event_source_mapping.reply_processing_520 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_lambda_function_event_invoke_config.malware_scan_handler (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_lambda_permission.human_review_api_530 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_lambda_permission.human_review_outbox_eventbridge (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_lambda_permission.malware_scan_from_eventbridge (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_lb_listener.human_review_https (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_route.private_a_internet (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_route.private_b_internet (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_route.public_internet (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_route53_record.human_review_api_530 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_route53_record.human_review_ui (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_route_table_association.database_a (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_route_table_association.database_b (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_route_table_association.private_a (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_route_table_association.private_b (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_route_table_association.public_a (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_route_table_association.public_b (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_s3_bucket_lifecycle_configuration.attachments (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_s3_bucket_ownership_controls.attachments (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_s3_bucket_policy.attachments (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_s3_bucket_public_access_block.classification_agent_artifacts (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_s3_bucket_server_side_encryption_configuration.attachments (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_s3_bucket_versioning.attachments (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_scheduler_schedule.email_ingestion (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_scheduler_schedule.workflow_dispatcher (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_sns_topic_subscription.psc_monitoring_email_540 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_sqs_queue_redrive_allow_policy.reply_dlq (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_sqs_queue_redrive_allow_policy.sqs1_dlq (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_sqs_queue_redrive_allow_policy.sqs2_dlq (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_endpoint.kms (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_endpoint.s3 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_endpoint.secrets_manager (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_endpoint.step_functions (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_security_group_egress_rule.human_review_alb_to_ecs (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_security_group_egress_rule.human_review_ecs_https (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_security_group_egress_rule.lambda_https (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_security_group_egress_rule.lambda_postgres (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_security_group_egress_rule.rds_proxy_to_aurora (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_security_group_ingress_rule.aurora_from_rds_proxy (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_security_group_ingress_rule.human_review_alb_https (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_security_group_ingress_rule.human_review_ecs_from_alb (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_security_group_ingress_rule.rds_proxy_from_lambda (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_security_group_ingress_rule.vpce_from_lambda (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"]" -> "[root] var.aws_account_id"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"]" -> "[root] var.aws_region"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"]" -> "[root] var.environment"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"]" -> "[root] var.project_name"
+		"[root] root" -> "[root] output.classification_agentcore_runtime_arn (expand)"
+		"[root] root" -> "[root] output.classification_agentcore_runtime_id (expand)"
+		"[root] root" -> "[root] output.classification_guardrail_arn (expand)"
+		"[root] root" -> "[root] output.classification_guardrail_version (expand)"
+		"[root] root" -> "[root] output.classification_model_id (expand)"
+		"[root] root" -> "[root] output.human_review_530_api_url (expand)"
+		"[root] root" -> "[root] output.human_review_530_invoke_url (expand)"
+		"[root] root" -> "[root] output.human_review_530_rest_api_execution_arn (expand)"
+		"[root] root" -> "[root] output.human_review_530_rest_api_id (expand)"
+		"[root] root" -> "[root] output.human_review_alb_dns_name (expand)"
+		"[root] root" -> "[root] output.human_review_alb_security_group_id (expand)"
+		"[root] root" -> "[root] output.human_review_backend_lambda_arn (expand)"
+		"[root] root" -> "[root] output.human_review_backend_lambda_name (expand)"
+		"[root] root" -> "[root] output.human_review_cognito_app_client_id (expand)"
+		"[root] root" -> "[root] output.human_review_cognito_issuer_url (expand)"
+		"[root] root" -> "[root] output.human_review_cognito_login_domain (expand)"
+		"[root] root" -> "[root] output.human_review_cognito_user_pool_id (expand)"
+		"[root] root" -> "[root] output.human_review_ecr_repository_arn (expand)"
+		"[root] root" -> "[root] output.human_review_ecr_repository_name (expand)"
+		"[root] root" -> "[root] output.human_review_ecr_repository_url (expand)"
+		"[root] root" -> "[root] output.human_review_ecs_cluster_arn (expand)"
+		"[root] root" -> "[root] output.human_review_ecs_cluster_id (expand)"
+		"[root] root" -> "[root] output.human_review_ecs_cluster_name (expand)"
+		"[root] root" -> "[root] output.human_review_ecs_execution_role_arn (expand)"
+		"[root] root" -> "[root] output.human_review_ecs_log_group_name (expand)"
+		"[root] root" -> "[root] output.human_review_ecs_security_group_id (expand)"
+		"[root] root" -> "[root] output.human_review_ecs_task_role_arn (expand)"
+		"[root] root" -> "[root] output.human_review_outbox_lambda_arn (expand)"
+		"[root] root" -> "[root] output.human_review_outbox_lambda_name (expand)"
+		"[root] root" -> "[root] output.human_review_ui_url (expand)"
+		"[root] root" -> "[root] output.identifier_validation_lambda_arn (expand)"
+		"[root] root" -> "[root] output.identifier_validation_lambda_name (expand)"
+		"[root] root" -> "[root] output.investigation_agent_runtime_arn (expand)"
+		"[root] root" -> "[root] output.investigation_agent_runtime_id (expand)"
+		"[root] root" -> "[root] output.investigation_gateway_id (expand)"
+		"[root] root" -> "[root] output.investigation_gateway_url (expand)"
+		"[root] root" -> "[root] output.investigation_invocation_lambda_arn (expand)"
+		"[root] root" -> "[root] output.investigation_invocation_lambda_name (expand)"
+		"[root] root" -> "[root] output.investigation_memory_arn (expand)"
+		"[root] root" -> "[root] output.investigation_memory_id (expand)"
+		"[root] root" -> "[root] output.investigation_policy_engine_arn (expand)"
+		"[root] root" -> "[root] output.investigation_policy_engine_id (expand)"
+		"[root] root" -> "[root] output.invoice_scope_lambda_arn (expand)"
+		"[root] root" -> "[root] output.invoice_scope_lambda_name (expand)"
+		"[root] root" -> "[root] output.pipe2_arn (expand)"
+		"[root] root" -> "[root] output.pipe2_name (expand)"
+		"[root] root" -> "[root] output.psc_acm_certificate_arn (expand)"
+		"[root] root" -> "[root] output.psc_cloudwatch_dashboard_name_540 (expand)"
+		"[root] root" -> "[root] output.psc_monitoring_sns_topic_arn_540 (expand)"
+		"[root] root" -> "[root] output.psc_route53_nameservers (expand)"
+		"[root] root" -> "[root] output.psc_route53_zone_id (expand)"
+		"[root] root" -> "[root] output.reply_dlq_arn (expand)"
+		"[root] root" -> "[root] output.reply_dlq_url (expand)"
+		"[root] root" -> "[root] output.reply_processing_510_lambda_arn (expand)"
+		"[root] root" -> "[root] output.reply_processing_510_lambda_name (expand)"
+		"[root] root" -> "[root] output.reply_processing_520_mapping_state (expand)"
+		"[root] root" -> "[root] output.reply_processing_520_mapping_uuid (expand)"
+		"[root] root" -> "[root] output.reply_queue_arn (expand)"
+		"[root] root" -> "[root] output.reply_queue_url (expand)"
+		"[root] root" -> "[root] output.s4hana_gateway_target_id (expand)"
+		"[root] root" -> "[root] output.s4hana_tool_lambda_arn (expand)"
+		"[root] root" -> "[root] output.s4hana_tool_lambda_name (expand)"
+		"[root] root" -> "[root] output.sqs1_dlq_arn (expand)"
+		"[root] root" -> "[root] output.sqs1_queue_arn (expand)"
+		"[root] root" -> "[root] output.sqs1_queue_url (expand)"
+		"[root] root" -> "[root] output.sqs2_dlq_arn (expand)"
+		"[root] root" -> "[root] output.sqs2_dlq_url (expand)"
+		"[root] root" -> "[root] output.sqs2_queue_arn (expand)"
+		"[root] root" -> "[root] output.sqs2_queue_url (expand)"
+		"[root] root" -> "[root] output.vpc_id (expand)"
+		"[root] root" -> "[root] provider[\"registry.terraform.io/hashicorp/archive\"] (close)"
+		"[root] root" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)"
+		"[root] root" -> "[root] var.agentcore_runtime_arn_classification"
+		"[root] root" -> "[root] var.agentcore_runtime_arn_investigation"
+		"[root] root" -> "[root] var.bedrock_model_id"
+		"[root] root" -> "[root] var.external_api_token_secret_arn"
+		"[root] root" -> "[root] var.human_review_jwt_audience"
+		"[root] root" -> "[root] var.human_review_jwt_issuer"
+		"[root] root" -> "[root] var.pr_itar_api_url"
+		"[root] root" -> "[root] var.sap_ariba_api_url"
+		"[root] root" -> "[root] var.sap_s4_api_url"
+		"[root] root" -> "[root] var.sf1_attachment_lambda_suffix"
+		"[root] var.attachments_abort_multipart_days (validation)" -> "[root] var.attachments_abort_multipart_days"
+		"[root] var.attachments_malware_object_tagging_status (validation)" -> "[root] var.attachments_malware_object_tagging_status"
+		"[root] var.attachments_versioning_status (validation)" -> "[root] var.attachments_versioning_status"
+		"[root] var.aurora_serverless_max_acu (validation)" -> "[root] var.aurora_serverless_max_acu"
+		"[root] var.classification_model_max_output_tokens (validation)" -> "[root] var.classification_model_max_output_tokens"
+		"[root] var.classification_model_temperature (validation)" -> "[root] var.classification_model_temperature"
+		"[root] var.classification_model_top_p (validation)" -> "[root] var.classification_model_top_p"
+		"[root] var.human_review_alb_allowed_cidr (validation)" -> "[root] var.human_review_alb_allowed_cidr"
+		"[root] var.human_review_container_port (validation)" -> "[root] var.human_review_container_port"
+		"[root] var.human_review_ecr_image_retention_count (validation)" -> "[root] var.human_review_ecr_image_retention_count"
+		"[root] var.human_review_ecs_log_retention_days (validation)" -> "[root] var.human_review_ecs_log_retention_days"
+		"[root] var.identifier_validation_max_identifier_length (validation)" -> "[root] var.identifier_validation_max_identifier_length"
+		"[root] var.identifier_validation_max_invoices (validation)" -> "[root] var.identifier_validation_max_invoices"
+		"[root] var.investigation_gateway_policy_mode (validation)" -> "[root] var.investigation_gateway_policy_mode"
+		"[root] var.investigation_memory_name (validation)" -> "[root] var.investigation_memory_name"
+		"[root] var.investigation_memory_retention_days (validation)" -> "[root] var.investigation_memory_retention_days"
+		"[root] var.investigation_policy_engine_name (validation)" -> "[root] var.investigation_policy_engine_name"
+		"[root] var.invoice_scope_max_invoices (validation)" -> "[root] var.invoice_scope_max_invoices"
+		"[root] var.invoice_scope_mode (validation)" -> "[root] var.invoice_scope_mode"
+		"[root] var.kms_deletion_window_days (validation)" -> "[root] var.kms_deletion_window_days"
+		"[root] var.pipe1_batch_size (validation)" -> "[root] var.pipe1_batch_size"
+		"[root] var.pipe1_desired_state (validation)" -> "[root] var.pipe1_desired_state"
+		"[root] var.pipe2_batch_size (validation)" -> "[root] var.pipe2_batch_size"
+		"[root] var.pipe2_desired_state (validation)" -> "[root] var.pipe2_desired_state"
+		"[root] var.reply_visibility_timeout_seconds (validation)" -> "[root] var.reply_visibility_timeout_seconds"
+		"[root] var.s4hana_integration_mode (validation)" -> "[root] var.s4hana_integration_mode"
+		"[root] var.secrets_recovery_window_days (validation)" -> "[root] var.secrets_recovery_window_days"
+		"[root] var.sf1_type (validation)" -> "[root] var.sf1_type"
+		"[root] var.sf2_type (validation)" -> "[root] var.sf2_type"
+		"[root] var.sqs2_max_receive_count (validation)" -> "[root] var.sqs2_max_receive_count"
+	}
+}
