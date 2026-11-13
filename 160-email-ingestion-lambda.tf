@@ -1,3 +1,4 @@
+
 # =========================================================
 # 160 - EMAIL INGESTION LAMBDA
 # =========================================================
@@ -136,17 +137,26 @@ resource "aws_lambda_function" "email_ingestion" {
 
   environment {
     variables = {
+      # Microsoft Graph authentication
       GRAPH_SECRET_ARN = aws_secretsmanager_secret.microsoft_graph.arn
+      GRAPH_SECRET_ID  = aws_secretsmanager_secret.microsoft_graph.arn
       GRAPH_MAILBOX    = var.mailbox_user
 
+      # Existing database configuration
       DB_PROXY_HOST = aws_db_proxy.psc.endpoint
       DB_NAME       = var.email_ingestion_db_name
       DB_USER       = var.email_ingestion_db_user
       DB_PORT       = "5432"
 
+      # Environment variables expected by developer Lambda code
+      # IAM authentication continues through RDS Proxy.
+      AURORA_HOST = aws_db_proxy.psc.endpoint
+      AURORA_DB   = var.email_ingestion_db_name
+      AURORA_USER = var.email_ingestion_db_user
+
       SF1_ARN = aws_sfn_state_machine.sf1.arn
 
-      # NEW: Queue used by the Outflow Dispatcher.
+      # Queue used by the Outflow Dispatcher.
       PRE_SF1_QUEUE_URL = aws_sqs_queue.pre_sf1.url
 
       # Keep workflow dispatch disabled until integration testing.

@@ -142,3 +142,17 @@ resource "aws_vpc_security_group_ingress_rule" "vpce_from_lambda" {
   to_port                      = 443
   referenced_security_group_id = aws_security_group.lambda.id
 }
+
+# ---------------------------------------------------------
+# Allow PostgreSQL Client EC2 to access VPC Interface Endpoints
+# ---------------------------------------------------------
+
+resource "aws_vpc_security_group_ingress_rule" "vpce_from_ec2_db_client" {
+  security_group_id = aws_security_group.vpc_endpoints.id
+
+  description                  = "Allow HTTPS from PostgreSQL client EC2"
+  ip_protocol                  = "tcp"
+  from_port                    = 443
+  to_port                      = 443
+  referenced_security_group_id = aws_security_group.ec2_db_client.id
+}

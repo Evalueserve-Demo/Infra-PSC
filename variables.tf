@@ -406,7 +406,7 @@ variable "email_ingestion_db_name" {
 
 variable "email_ingestion_db_user" {
   type    = string
-  default = "psc_ingestion"
+  default = "integ_app"
 }
 
 

@@ -177,7 +177,7 @@ email_ingestion_timeout            = 120
 email_ingestion_memory             = 256
 email_ingestion_log_retention_days = 30
 email_ingestion_db_name            = "paymentstatuscheck"
-email_ingestion_db_user            = "psc_ingestion"
+email_ingestion_db_user            = "integ_app"
 
 
 

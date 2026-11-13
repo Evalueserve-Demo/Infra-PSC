@@ -1,14 +1,8 @@
--- PSC STAGE 1 / BUSINESS SCHEMA — 001_init.sql
--- STATUS: PREPARED FOR REVIEW; NOT YET EXECUTED ON POSTGRESQL.
--- SOURCE: DBA ASCENT Payment Status v1.1 (13 tables) plus 5 proposed
--- operational tables for ingestion, checkpointing and workflow handoff.
--- Fresh database only; no existing data migration is included.
--- Before execution: DBA approval, PostgreSQL 15+ execution test,
--- application DB user/proxy grants, and alignment with Lambda/Step Functions.
--- Do not run this file against an existing populated database.
-
 -- ASCENT Payment Status (Epic 3) schema, v1.1. Aurora PostgreSQL 15+. Generated 2026-10-12. Review before applying.
-BEGIN;
+-- This is the single schema file for the platform. Mailbox sync state and message staging
+-- (formerly integration.graph_sync_state / integration.messages) live here too.
+-- One-time bootstrap for a fresh database. A live database that already has the earlier
+-- schema is moved with infra/migrations/002_move_staging_to_ps.sql instead of rerunning this.
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE SCHEMA IF NOT EXISTS ps;
 SET search_path TO ps;
@@ -56,7 +50,6 @@ CREATE TABLE case_header (
     case_id                    UUID             DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
     case_number                VARCHAR(20)      DEFAULT 'PSQ-' || to_char(now(),'YYYY') || '-' || lpad(nextval('seq_case_number')::text, 6, '0') NOT NULL,
     correlation_id             UUID             DEFAULT gen_random_uuid() NOT NULL,
-    mailbox_id                 VARCHAR(320)     NOT NULL,
     conversation_id            VARCHAR(255)     NOT NULL,
     case_status                VARCHAR(40)      DEFAULT 'NEW' NOT NULL,
     outcome_code               VARCHAR(40)     ,
@@ -72,7 +65,7 @@ CREATE TABLE case_header (
     last_reopened_at           TIMESTAMPTZ     ,
     CONSTRAINT uq_case_header_case_number UNIQUE (case_number),
     CONSTRAINT uq_case_header_correlation_id UNIQUE (correlation_id),
-    CONSTRAINT uq_case_header_mailbox_conversation UNIQUE (mailbox_id, conversation_id),
+    CONSTRAINT uq_case_header_conversation_id UNIQUE (conversation_id),
     CONSTRAINT fk_case_header_case_status FOREIGN KEY (case_status) REFERENCES status_ref(code) ON DELETE RESTRICT,
     CONSTRAINT fk_case_header_outcome_code FOREIGN KEY (outcome_code) REFERENCES status_ref(code) ON DELETE RESTRICT,
     CONSTRAINT fk_case_header_linked_case_id FOREIGN KEY (linked_case_id) REFERENCES case_header(case_id) ON DELETE RESTRICT,
@@ -88,8 +81,8 @@ CREATE TABLE case_message (
     message_id                 UUID             DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
     case_id                    UUID             NOT NULL,
     direction                  VARCHAR(8)       NOT NULL,
-    internet_message_id        VARCHAR(512)    ,
-    graph_message_id           VARCHAR(512)    ,
+    internet_message_id        VARCHAR(255)     NOT NULL,
+    graph_message_id           VARCHAR(255)    ,
     in_reply_to_message_id     VARCHAR(255)    ,
     sender_address             VARCHAR(320)     NOT NULL,
     recipient_addresses        TEXT            ,
@@ -100,6 +93,7 @@ CREATE TABLE case_message (
     received_at                TIMESTAMPTZ      NOT NULL,
     created_at                 TIMESTAMPTZ      DEFAULT now() NOT NULL,
     CONSTRAINT fk_case_message_case_id FOREIGN KEY (case_id) REFERENCES case_header(case_id) ON DELETE RESTRICT,
+    CONSTRAINT uq_case_message_internet_message_id UNIQUE (internet_message_id),
     CONSTRAINT ck_msg_direction CHECK (direction IN ('INBOUND','OUTBOUND')),
     CONSTRAINT ck_msg_body CHECK (body_text IS NOT NULL OR body_uri IS NOT NULL)
 );
@@ -124,7 +118,7 @@ CREATE TABLE case_attachment (
     CONSTRAINT ck_att_size CHECK (size_bytes > 0),
     CONSTRAINT ck_att_scan CHECK (scan_status IN ('PENDING','CLEAN','THREAT','FAILED','UNSUPPORTED')),
     CONSTRAINT ck_att_extract CHECK (extraction_status IN ('PENDING','EXTRACTED','FAILED','SKIPPED')),
-    CONSTRAINT uq_att_message_storage UNIQUE (message_id, storage_uri)
+    CONSTRAINT uq_att_case_hash UNIQUE (case_id, sha256)
 );
 CREATE TRIGGER case_attachment_upd BEFORE UPDATE ON case_attachment FOR EACH ROW EXECUTE FUNCTION trg_set_updated_at();
 
@@ -223,11 +217,11 @@ CREATE TABLE response_template (
     version                    SMALLINT         DEFAULT 1 NOT NULL,
     outcome_code               VARCHAR(40)      NOT NULL,
     audience                   VARCHAR(20)      NOT NULL,
-    subject_template           VARCHAR(500),
+    subject_template           VARCHAR(500)    ,
     body_template              TEXT             NOT NULL,
     required_placeholders      JSONB            DEFAULT '[]' NOT NULL,
     is_active                  BOOLEAN          DEFAULT true NOT NULL,
-    approved_by                VARCHAR(100),
+    approved_by                VARCHAR(100)    ,
     created_at                 TIMESTAMPTZ      DEFAULT now() NOT NULL,
     updated_at                 TIMESTAMPTZ      DEFAULT now() NOT NULL,
     CONSTRAINT fk_response_template_outcome_code FOREIGN KEY (outcome_code) REFERENCES status_ref(code) ON DELETE RESTRICT,
@@ -242,21 +236,21 @@ CREATE TABLE case_response (
     response_id                UUID             DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
     case_id                    UUID             NOT NULL,
     template_id                UUID             NOT NULL,
-    finding_id                 UUID,
+    finding_id                 UUID            ,
     draft_version              SMALLINT         DEFAULT 1 NOT NULL,
-    draft_subject              VARCHAR(500),
+    draft_subject              VARCHAR(500)    ,
     draft_body                 TEXT             NOT NULL,
     placeholder_values         JSONB            DEFAULT '{}' NOT NULL,
     review_status              VARCHAR(20)      DEFAULT 'QUEUED' NOT NULL,
-    assigned_to                VARCHAR(100),
-    assigned_at                TIMESTAMPTZ,
-    claim_expires_at           TIMESTAMPTZ,
-    reviewer_id                VARCHAR(100),
-    reviewed_at                TIMESTAMPTZ,
-    review_comment             VARCHAR(1000),
-    final_body                 TEXT,
-    sent_at                    TIMESTAMPTZ,
-    sent_external_ref          VARCHAR(255),
+    assigned_to                VARCHAR(100)    ,
+    assigned_at                TIMESTAMPTZ     ,
+    claim_expires_at           TIMESTAMPTZ     ,
+    reviewer_id                VARCHAR(100)    ,
+    reviewed_at                TIMESTAMPTZ     ,
+    review_comment             VARCHAR(1000)   ,
+    final_body                 TEXT            ,
+    sent_at                    TIMESTAMPTZ     ,
+    sent_external_ref          VARCHAR(255)    ,
     created_at                 TIMESTAMPTZ      DEFAULT now() NOT NULL,
     updated_at                 TIMESTAMPTZ      DEFAULT now() NOT NULL,
     CONSTRAINT fk_case_response_case_id FOREIGN KEY (case_id) REFERENCES case_header(case_id) ON DELETE RESTRICT,
@@ -278,13 +272,13 @@ CREATE TABLE outbound_dispatch (
     correlation_id             UUID             NOT NULL,
     attempt_no                 SMALLINT         DEFAULT 1 NOT NULL,
     status                     VARCHAR(20)      DEFAULT 'QUEUED' NOT NULL,
-    sqs_message_id             VARCHAR(100),
+    sqs_message_id             VARCHAR(100)    ,
     payload_hash               CHAR(64)         NOT NULL,
-    external_ref               VARCHAR(255),
-    error_code                 VARCHAR(50),
-    error_message              VARCHAR(1000),
+    external_ref               VARCHAR(255)    ,
+    error_code                 VARCHAR(50)     ,
+    error_message              VARCHAR(1000)   ,
     queued_at                  TIMESTAMPTZ      DEFAULT now() NOT NULL,
-    delivered_at               TIMESTAMPTZ,
+    delivered_at               TIMESTAMPTZ     ,
     updated_at                 TIMESTAMPTZ      DEFAULT now() NOT NULL,
     CONSTRAINT fk_outbound_dispatch_response_id FOREIGN KEY (response_id) REFERENCES case_response(response_id) ON DELETE RESTRICT,
     CONSTRAINT fk_outbound_dispatch_case_id FOREIGN KEY (case_id) REFERENCES case_header(case_id) ON DELETE RESTRICT,
@@ -300,25 +294,28 @@ CREATE TABLE integration_call_log (
     call_id                    BIGINT           GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
     correlation_id             UUID             NOT NULL,
     request_id                 UUID             DEFAULT gen_random_uuid() NOT NULL,
-    parent_request_id          UUID,
-    case_id                    UUID,
+    parent_request_id          UUID            ,
+    case_id                    UUID            ,
     component                  VARCHAR(50)      NOT NULL,
-    invoked_by                 VARCHAR(100),
+    invoked_by                 VARCHAR(100)    ,
     target_system              VARCHAR(30)      NOT NULL,
     operation                  VARCHAR(100)     NOT NULL,
     attempt_no                 SMALLINT         DEFAULT 1 NOT NULL,
-    http_status                SMALLINT,
+    http_status                SMALLINT        ,
     outcome                    VARCHAR(10)      NOT NULL,
-    latency_ms                 INTEGER,
-    request_hash               CHAR(64),
-    response_uri               VARCHAR(1024),
-    error_code                 VARCHAR(50),
-    error_message              VARCHAR(1000),
-    model_id                   VARCHAR(100),
-    input_tokens               INTEGER,
-    output_tokens              INTEGER,
-    guardrail_action           VARCHAR(12),
-    guardrail_ref              VARCHAR(100),
+    latency_ms                 INTEGER         ,
+    request_hash               CHAR(64)        ,
+    prompt_hash                CHAR(64)        ,
+    request_payload            JSONB           ,
+    response_payload           JSONB           ,
+    response_uri               VARCHAR(1024)   ,
+    error_code                 VARCHAR(50)     ,
+    error_message              VARCHAR(1000)   ,
+    model_id                   VARCHAR(100)    ,
+    input_tokens               INTEGER         ,
+    output_tokens              INTEGER         ,
+    guardrail_action           VARCHAR(12)     ,
+    guardrail_ref              VARCHAR(100)    ,
     run_at                     TIMESTAMPTZ      DEFAULT now() NOT NULL,
     CONSTRAINT uq_integration_call_log_request_id UNIQUE (request_id),
     CONSTRAINT fk_integration_call_log_case_id FOREIGN KEY (case_id) REFERENCES case_header(case_id) ON DELETE SET NULL,
@@ -335,17 +332,47 @@ CREATE TABLE case_event (
     case_id                    UUID             NOT NULL,
     correlation_id             UUID             NOT NULL,
     event_type                 VARCHAR(40)      NOT NULL,
-    from_status                VARCHAR(40),
-    to_status                  VARCHAR(40),
+    from_status                VARCHAR(40)     ,
+    to_status                  VARCHAR(40)     ,
     actor_type                 VARCHAR(10)      NOT NULL,
     actor_id                   VARCHAR(100)     NOT NULL,
-    details                    JSONB,
+    details                    JSONB           ,
     occurred_at                TIMESTAMPTZ      DEFAULT now() NOT NULL,
     CONSTRAINT fk_case_event_case_id FOREIGN KEY (case_id) REFERENCES case_header(case_id) ON DELETE RESTRICT,
     CONSTRAINT ck_evt_actor CHECK (actor_type IN ('AGENT','HUMAN','SYSTEM'))
 );
 
+-- graph_sync_state: Where the Graph mailbox has been read up to. One row per mailbox.
+CREATE TABLE graph_sync_state (
+    mailbox                    TEXT             NOT NULL PRIMARY KEY,
+    delta_link                 TEXT             NOT NULL,
+    committed_at               TIMESTAMPTZ      DEFAULT now() NOT NULL
+);
+
+-- messages: Ingestion staging, one row per Graph message. Deduplicates redelivery, feeds case creation,
+-- and lets the reconciler find a message that stalled (attempts/attempted_at track its retries).
+-- Canonical copies live in case_message.
+CREATE TABLE messages (
+    message_id                 TEXT             NOT NULL PRIMARY KEY,
+    internet_message_id        TEXT            ,
+    in_reply_to_message_id     TEXT            ,
+    conversation_id            TEXT             NOT NULL,
+    sender                     TEXT             NOT NULL,
+    recipient                  TEXT             NOT NULL,
+    subject                    TEXT            ,
+    body                       TEXT            ,
+    body_hash                  CHAR(64)        ,
+    has_attachment             BOOLEAN          DEFAULT false NOT NULL,
+    status                     TEXT             DEFAULT 'RECEIVED' NOT NULL,
+    received_at                TIMESTAMPTZ     ,
+    ingested_at                TIMESTAMPTZ      DEFAULT now() NOT NULL,
+    processed_at               TIMESTAMPTZ     ,
+    attempts                   INTEGER          DEFAULT 0 NOT NULL,
+    attempted_at               TIMESTAMPTZ
+);
+
 -- Indexes
+CREATE INDEX messages_conversation_idx ON messages (conversation_id);
 CREATE INDEX ix_case_status ON case_header (case_status, updated_at);
 CREATE INDEX ix_case_created ON case_header (created_at);
 CREATE INDEX ix_case_linked ON case_header (linked_case_id);
@@ -408,7 +435,6 @@ INSERT INTO status_ref (code, domain, description, is_terminal, sort_order) VALU
 INSERT INTO status_ref (code, domain, description, is_terminal, sort_order) VALUES ('OVERDUE', 'OUTCOME', 'Reconciled, unpaid, past due; root cause required', false, 40);
 INSERT INTO status_ref (code, domain, description, is_terminal, sort_order) VALUES ('REJECTED', 'OUTCOME', 'Invoice rejected in Ariba; root cause required', false, 50);
 INSERT INTO status_ref (code, domain, description, is_terminal, sort_order) VALUES ('RECONCILING', 'OUTCOME', 'Submitted, not yet 3-way matched', false, 60);
-
 INSERT INTO status_ref (code, domain, description, is_terminal, sort_order) VALUES ('RECEIPT_PENDING', 'OUTCOME', 'Waiting on receipt creation or approval (PO >= USD 5,000)', false, 70);
 INSERT INTO status_ref (code, domain, description, is_terminal, sort_order) VALUES ('MISMATCH_FOUND', 'OUTCOME', 'PO vs invoice vs receipt mismatch detected; see po_mismatch_finding', false, 80);
 INSERT INTO status_ref (code, domain, description, is_terminal, sort_order) VALUES ('NOT_FOUND', 'OUTCOME', 'Identifier valid in format but not found in source systems', false, 90);
@@ -454,159 +480,23 @@ INSERT INTO source_status_map (source_system, object_type, source_status, outcom
 INSERT INTO source_status_map (source_system, object_type, source_status, outcome_code, description, is_exception) VALUES ('ARIBA', 'RECEIPT', 'Invoiced', NULL, 'Fully invoiced', false);
 INSERT INTO source_status_map (source_system, object_type, source_status, outcome_code, description, is_exception) VALUES ('S4HANA', 'PAYMENT', 'TBC', NULL, 'Placeholder: S/4 payment API and status list not confirmed in any project document (open item). Replace once ESTS confirms.', false);
 
-
--- =========================================================
--- PSC operational ingestion and workflow tables (proposed)
--- =========================================================
-CREATE TABLE ps.ingestion_run (
- run_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
- mailbox_id VARCHAR(320) NOT NULL,
- folder_id VARCHAR(512) NOT NULL,
- started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
- finished_at TIMESTAMPTZ,
- status VARCHAR(20) NOT NULL DEFAULT 'RUNNING' CHECK(status IN ('RUNNING','COMPLETED','PARTIAL','FAILED')),
- fetched_count INTEGER NOT NULL DEFAULT 0 CHECK(fetched_count >= 0),
- inserted_count INTEGER NOT NULL DEFAULT 0 CHECK(inserted_count >= 0),
- duplicate_count INTEGER NOT NULL DEFAULT 0 CHECK(duplicate_count >= 0),
- failed_count INTEGER NOT NULL DEFAULT 0 CHECK(failed_count >= 0),
- error_summary TEXT
-);
-CREATE INDEX ix_ingestion_run_started ON ps.ingestion_run(mailbox_id, started_at DESC);
-
-CREATE TABLE ps.ingestion_message (
- ingestion_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
- run_id UUID REFERENCES ps.ingestion_run(run_id) ON DELETE SET NULL,
- mailbox_id VARCHAR(320) NOT NULL,
- graph_message_id VARCHAR(512) NOT NULL,
- internet_message_id VARCHAR(512),
- conversation_id VARCHAR(512),
- sender_address VARCHAR(320),
- recipient_addresses TEXT,
- subject TEXT,
- received_at TIMESTAMPTZ,
- body_text TEXT,
- body_uri TEXT,
- body_hash CHAR(64),
- has_attachments BOOLEAN,
- status VARCHAR(24) NOT NULL DEFAULT 'RECEIVED'
-   CHECK(status IN ('RECEIVED','STORED','ATTACHMENTS_PENDING','READY','HANDED_OFF','CLASSIFIED','IGNORED','FAILED')),
- attempt_count INTEGER NOT NULL DEFAULT 0 CHECK(attempt_count >= 0),
- last_error TEXT,
- case_id UUID REFERENCES ps.case_header(case_id) ON DELETE RESTRICT,
- case_message_id UUID UNIQUE REFERENCES ps.case_message(message_id) ON DELETE RESTRICT,
- created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
- updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
- CONSTRAINT uq_ingestion_mailbox_graph UNIQUE(mailbox_id, graph_message_id),
- CONSTRAINT ck_ingestion_body CHECK(body_text IS NULL OR body_hash IS NOT NULL)
-);
-CREATE INDEX ix_ingestion_message_status ON ps.ingestion_message(status, created_at);
-CREATE INDEX ix_ingestion_message_conversation ON ps.ingestion_message(mailbox_id, conversation_id);
-
-CREATE TABLE ps.ingestion_attachment (
- ingestion_attachment_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
- ingestion_id UUID NOT NULL REFERENCES ps.ingestion_message(ingestion_id) ON DELETE RESTRICT,
- graph_attachment_id VARCHAR(512) NOT NULL,
- attachment_type VARCHAR(100),
- filename TEXT,
- content_type VARCHAR(255),
- size_bytes BIGINT CHECK(size_bytes >= 0),
- sha256 CHAR(64),
- storage_uri TEXT,
- s3_version_id TEXT,
- upload_status VARCHAR(20) NOT NULL DEFAULT 'PENDING'
-   CHECK(upload_status IN ('PENDING','STORED','UNSUPPORTED','FAILED')),
- scan_status VARCHAR(20) NOT NULL DEFAULT 'PENDING'
-   CHECK(scan_status IN ('PENDING','CLEAN','THREAT','FAILED','UNSUPPORTED')),
- scan_completed_at TIMESTAMPTZ,
- last_error TEXT,
- case_attachment_id UUID UNIQUE REFERENCES ps.case_attachment(attachment_id) ON DELETE RESTRICT,
- created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
- updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
- CONSTRAINT uq_ingestion_attachment UNIQUE(ingestion_id, graph_attachment_id)
-);
-CREATE INDEX ix_ingestion_attachment_scan ON ps.ingestion_attachment(scan_status, created_at);
-
-CREATE TABLE ps.ingestion_checkpoint (
- mailbox_id VARCHAR(320) NOT NULL,
- folder_id VARCHAR(512) NOT NULL,
- cursor_url TEXT,
- cursor_kind VARCHAR(10) NOT NULL DEFAULT 'INITIAL'
-   CHECK(cursor_kind IN ('INITIAL','NEXT','DELTA')),
- lease_owner UUID,
- lease_expires_at TIMESTAMPTZ,
- version BIGINT NOT NULL DEFAULT 0 CHECK(version >= 0),
- last_success_at TIMESTAMPTZ,
- updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
- PRIMARY KEY(mailbox_id, folder_id)
-);
-
-CREATE TABLE ps.workflow_outbox (
- outbox_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
- ingestion_id UUID NOT NULL REFERENCES ps.ingestion_message(ingestion_id) ON DELETE RESTRICT,
- event_type VARCHAR(64) NOT NULL,
- payload JSONB NOT NULL,
- status VARCHAR(20) NOT NULL DEFAULT 'PENDING'
-   CHECK(status IN ('PENDING','IN_FLIGHT','DELIVERED','FAILED')),
- attempt_count INTEGER NOT NULL DEFAULT 0 CHECK(attempt_count >= 0),
- next_attempt_at TIMESTAMPTZ NOT NULL DEFAULT now(),
- lease_owner UUID,
- lease_expires_at TIMESTAMPTZ,
- execution_arn TEXT,
- delivered_at TIMESTAMPTZ,
- last_error TEXT,
- created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
- updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
- CONSTRAINT uq_outbox_ingestion_event UNIQUE(ingestion_id,event_type)
-);
-CREATE INDEX ix_workflow_outbox_due ON ps.workflow_outbox(status,next_attempt_at)
- WHERE status IN ('PENDING','FAILED');
-
--- =========================================================
--- STAGE 1: OPERATIONAL INTEGRITY AND QUERY SUPPORT
--- =========================================================
-CREATE TRIGGER ingestion_message_updated_at
-BEFORE UPDATE ON ps.ingestion_message
-FOR EACH ROW EXECUTE FUNCTION ps.trg_set_updated_at();
-
-CREATE TRIGGER ingestion_attachment_updated_at
-BEFORE UPDATE ON ps.ingestion_attachment
-FOR EACH ROW EXECUTE FUNCTION ps.trg_set_updated_at();
-
-CREATE TRIGGER ingestion_checkpoint_updated_at
-BEFORE UPDATE ON ps.ingestion_checkpoint
-FOR EACH ROW EXECUTE FUNCTION ps.trg_set_updated_at();
-
-CREATE TRIGGER workflow_outbox_updated_at
-BEFORE UPDATE ON ps.workflow_outbox
-FOR EACH ROW EXECUTE FUNCTION ps.trg_set_updated_at();
-
-CREATE INDEX ix_ingestion_checkpoint_lease
-ON ps.ingestion_checkpoint(lease_expires_at)
-WHERE lease_owner IS NOT NULL;
-
-CREATE INDEX ix_ingestion_attachment_message
-ON ps.ingestion_attachment(ingestion_id);
-
-CREATE INDEX ix_workflow_outbox_lease
-ON ps.workflow_outbox(lease_expires_at)
-WHERE status = 'IN_FLIGHT';
-
-ALTER TABLE ps.workflow_outbox
-ADD CONSTRAINT ck_workflow_event_type
-CHECK (length(trim(event_type)) > 0);
-
-ALTER TABLE ps.ingestion_run
-ADD CONSTRAINT ck_ingestion_run_completed
-CHECK (status <> 'COMPLETED' OR finished_at IS NOT NULL);
-
-ALTER TABLE ps.ingestion_attachment
-ADD CONSTRAINT ck_ingestion_attachment_storage
-CHECK (upload_status <> 'STORED' OR storage_uri IS NOT NULL);
-
-ALTER TABLE ps.ingestion_attachment
-ADD CONSTRAINT ck_ingestion_attachment_clean
-CHECK (scan_status <> 'CLEAN' OR (upload_status = 'STORED' AND storage_uri IS NOT NULL));
-
--- DBA review: use least-privilege roles; do not grant the app master-user access.
--- This file is a proposed fresh-install schema; NOT approved for execution.
-COMMIT;
+GRANT USAGE ON SCHEMA ps TO integ_app;
+GRANT USAGE, SELECT ON SEQUENCE ps.seq_case_number TO integ_app;
+GRANT USAGE, SELECT ON SEQUENCE ps.integration_call_log_call_id_seq TO integ_app;
+GRANT SELECT ON ps.status_ref, ps.source_status_map TO integ_app;
+GRANT SELECT, INSERT, UPDATE ON
+    ps.case_header,
+    ps.case_attachment,
+    ps.case_identifier,
+    ps.case_investigation
+TO integ_app;
+GRANT SELECT, INSERT, UPDATE ON
+    ps.graph_sync_state,
+    ps.messages
+TO integ_app;
+GRANT SELECT, INSERT ON
+    ps.case_message,
+    ps.invoice_finding,
+    ps.integration_call_log,
+    ps.case_event
+TO integ_app;

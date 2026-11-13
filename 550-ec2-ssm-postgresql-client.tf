@@ -162,3 +162,48 @@ resource "aws_vpc_security_group_ingress_rule" "aurora_from_ec2_admin" {
   to_port                      = 5432
   referenced_security_group_id = aws_security_group.ec2_db_client.id
 }
+
+# =========================================================
+# TEMPORARY EC2 ACCESS TO AURORA MASTER SECRET
+# Purpose: PostgreSQL database administration
+# Remove after database setup and validation
+# =========================================================
+
+resource "aws_iam_role_policy" "ec2_aurora_master_secret_access" {
+  name = "${var.project_name}-ec2-aurora-master-secret-${var.environment}"
+  role = aws_iam_role.ec2_ssm.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Sid    = "AllowAuroraMasterSecretRead"
+        Effect = "Allow"
+
+        Action = [
+          "secretsmanager:DescribeSecret",
+          "secretsmanager:GetSecretValue"
+        ]
+
+        Resource = aws_rds_cluster.psc.master_user_secret[0].secret_arn
+      },
+      {
+        Sid    = "AllowAuroraMasterSecretDecrypt"
+        Effect = "Allow"
+
+        Action = [
+          "kms:Decrypt"
+        ]
+
+        Resource = aws_kms_key.psc.arn
+
+        Condition = {
+          StringEquals = {
+            "kms:ViaService" = "secretsmanager.${var.aws_region}.amazonaws.com"
+          }
+        }
+      }
+    ]
+  })
+}
