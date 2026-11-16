@@ -1,6 +1,7 @@
-"""PSC #190 Email Processing — developer open_case logic adapted for company SF1.
-Original developer ZIP and DBA schema_ps.sql are unchanged.
-Single source file; third-party dependency: psycopg[binary] and boto3 (runtime).
+"""PSC #190 Email Processing.
+Finds or opens the case for the mail, saves the message and its attachments,
+and hands the case to SQS1. Used by SF1.
+Needs psycopg[binary] in the package and boto3 from the Lambda runtime.
 IAM-authenticated RDS Proxy requires AURORA_HOST, AURORA_DB, AURORA_USER.
 """
 import hashlib
@@ -318,7 +319,7 @@ class CaseRepository:
                 for name, mime, size, sha256, uri, status, text_uri in cursor.fetchall()
             ]
 
-# Developer's normalized context and attachment reference contract, unchanged.
+# The attachment references the next stage reads.
 def attachment_references(attachments: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Every stored attachment, as references only.
 
@@ -361,9 +362,9 @@ def _get_database() -> Database:
 
 
 def _unwrap_sf1(event: Dict[str, Any]) -> Dict[str, Any]:
-    """Architecture adaptation: accept SF1 optimized Lambda result from #180.
+    """Accept what SF1 passes on from #180 (message_id and its attachments).
 
-    Developer's original direct event is still accepted unchanged.
+    A direct event that carries the whole message still works.
     """
     if not isinstance(event, dict):
         raise ValueError("SF1 input must be a JSON object")
@@ -412,7 +413,7 @@ def _persist_scan_statuses(database: Database, case_id: str, attachments: List[D
 
 
 def lambda_handler(event: Dict[str, Any], context: Any = None) -> Dict[str, Any]:
-    """Developer steps 17–20: lookup, reuse/open case, persist, SQS1 handoff."""
+    """Steps 17 to 20: look up the case, reuse or open it, save, hand over to SQS1."""
     event = _unwrap_sf1(event)
     message_id = event["message_id"]
     if not isinstance(message_id, str) or not message_id.strip():
@@ -439,7 +440,7 @@ def lambda_handler(event: Dict[str, Any], context: Any = None) -> Dict[str, Any]
         case_id = cases.open_case(conversation_id)
         logger.info("Opened case %s for conversation %s", case_id, conversation_id)
 
-    # Use developer's event contract, filled from authoritative staged data.
+    # Start from the message as stored in the database, then add what the event carries.
     normalized_event = {**source_message, **event,
                         "message_id": message_id,
                         "conversation_id": conversation_id,
@@ -458,7 +459,7 @@ def lambda_handler(event: Dict[str, Any], context: Any = None) -> Dict[str, Any]
     logger.info("Case %s linked message %s and %d new attachments",
                 case_id, message_id, stored_attachments)
 
-    # Developer's step 20: hand normalized context to SQS1; no classification here.
+    # Step 20: hand the case to SQS1. Nothing is classified here.
     queue_url = os.environ["SQS1_QUEUE_URL"]
     body = json.dumps(normalized, ensure_ascii=False, default=str)
     if len(body.encode("utf-8")) > 256 * 1024:

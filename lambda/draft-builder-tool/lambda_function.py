@@ -1,6 +1,5 @@
 # PSC #394 Draft Builder Tool Lambda
-# Developer source consolidated from tools/_shared/toolkit.py and tools/draftbuilder/handler.py.
-# Only the now-local toolkit import was removed. Original developer sources are unchanged.
+# The shared tool helpers and the draft builder handler, in one file.
 
 """Shared plumbing for the tool Lambdas.
 

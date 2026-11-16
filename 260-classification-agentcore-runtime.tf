@@ -109,11 +109,12 @@ resource "aws_iam_role_policy" "classification_agentcore" {
         Sid    = "InvokeClassificationModel"
         Effect = "Allow"
         Action = [
-          "bedrock:InvokeModel"
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream"
         ]
         Resource = [
           "arn:${data.aws_partition.current.partition}:bedrock:*::foundation-model/*",
-          "arn:${data.aws_partition.current.partition}:bedrock:*:${data.aws_caller_identity.current.account_id}:inference-profile/${local.classification_model_config.model_id}"
+          "arn:${data.aws_partition.current.partition}:bedrock:*:${data.aws_caller_identity.current.account_id}:inference-profile/${var.agent_model_id}"
         ]
       },
       {
@@ -196,14 +197,13 @@ resource "aws_bedrockagentcore_agent_runtime" "classification" {
     server_protocol = "HTTP"
   }
 
+  # Runs payment_query_platform.intake.agent_runtime (a Strands agent).
+  # AGENT_ROLE picks which job it does. The guardrail has already checked
+  # the mail in the intake Lambda before this is called.
   environment_variables = {
-    AWS_REGION              = var.aws_region
-    MODEL_ID                = local.classification_model_config.model_id
-    MODEL_TEMPERATURE       = tostring(local.classification_model_config.temperature)
-    MODEL_TOP_P             = tostring(local.classification_model_config.top_p)
-    MODEL_MAX_OUTPUT_TOKENS = tostring(local.classification_model_config.max_output_tokens)
-    GUARDRAIL_ID            = aws_bedrock_guardrail.classification.guardrail_id
-    GUARDRAIL_VERSION       = aws_bedrock_guardrail_version.classification.version
+    AWS_REGION       = var.aws_region
+    AGENT_ROLE       = "classification"
+    BEDROCK_MODEL_ID = var.agent_model_id
   }
 
   depends_on = [

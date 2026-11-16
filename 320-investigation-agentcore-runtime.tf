@@ -137,6 +137,24 @@ resource "aws_iam_role_policy" "investigation_agentcore" {
           "logs:DescribeLogStreams"
         ]
         Resource = "*"
+      },
+      {
+        Sid    = "InvokeInvestigationModel"
+        Effect = "Allow"
+        Action = [
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream"
+        ]
+        Resource = [
+          "arn:${data.aws_partition.current.partition}:bedrock:*::foundation-model/*",
+          "arn:${data.aws_partition.current.partition}:bedrock:*:${data.aws_caller_identity.current.account_id}:inference-profile/${var.agent_model_id}"
+        ]
+      },
+      {
+        Sid      = "CallToolsGateway"
+        Effect   = "Allow"
+        Action   = ["bedrock-agentcore:InvokeGateway"]
+        Resource = "arn:${data.aws_partition.current.partition}:bedrock-agentcore:${var.aws_region}:${data.aws_caller_identity.current.account_id}:gateway/${aws_bedrockagentcore_gateway.investigation.gateway_id}"
       }
     ]
   })
@@ -176,9 +194,12 @@ resource "aws_bedrockagentcore_agent_runtime" "investigation" {
     server_protocol = "HTTP"
   }
 
+  # Runs payment_query_platform.investigation.agent_runtime (a Strands agent).
+  # It calls the tools through the Gateway.
   environment_variables = {
-    INVESTIGATION_MODE = "PENDING_ENTERPRISE_INTEGRATION"
-    LOG_LEVEL          = "INFO"
+    AWS_REGION       = var.aws_region
+    BEDROCK_MODEL_ID = var.agent_model_id
+    GATEWAY_URL      = aws_bedrockagentcore_gateway.investigation.gateway_url
   }
 
   depends_on = [

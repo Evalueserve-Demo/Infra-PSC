@@ -3,7 +3,7 @@
 #
 # Investigation Agent -> AgentCore Gateway -> Draft Builder
 #
-# Business logic will be supplied by developers.
+# The code is in lambda/draft-builder-tool/.
 # =========================================================
 
 # ---------------------------------------------------------

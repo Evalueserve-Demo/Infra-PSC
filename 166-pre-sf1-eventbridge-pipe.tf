@@ -162,7 +162,9 @@ resource "aws_pipes_pipe" "pre_sf1" {
 
   target_parameters {
     # Pass the JSON message body to SF1.
-    input_template = "<$.body>"
+    # Build the JSON object the state machine expects. Passing "<$.body>" on its own
+    # arrives as a map, and Step Functions rejects that.
+    input_template = "{\"message_id\":\"<$.body.message_id>\",\"conversation_id\":\"<$.body.conversation_id>\",\"sender\":\"<$.body.sender>\",\"recipient\":\"<$.body.recipient>\",\"subject\":\"<$.body.subject>\",\"body\":\"<$.body.body>\",\"has_attachment\":<$.body.has_attachment>}"
 
     step_function_state_machine_parameters {
       invocation_type = "FIRE_AND_FORGET"

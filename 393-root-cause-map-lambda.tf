@@ -3,7 +3,7 @@
 #
 # Investigation Agent -> AgentCore Gateway -> Root Cause Map
 #
-# Business logic will be supplied by developers.
+# The code is in lambda/root_cause_tool/.
 # =========================================================
 
 # ---------------------------------------------------------

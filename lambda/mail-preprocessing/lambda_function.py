@@ -1,7 +1,7 @@
-"""PSC #230 — Mail Preprocessing Lambda.
+"""PSC #230 Mail Preprocessing Lambda.
 
-Company SF2 contract adapted using developer's payment_query_platform.text
-normalization behavior. Original developer files and DBA schema are unchanged.
+Cleans the mail with the same rules as payment_query_platform.text and returns
+the fields SF2 expects.
 
 No SQL is executed here: #190 persists case/message/attachment records.
 This Lambda prepares bounded email-only inputs for both intake agents.
@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-# From developer payment_query_platform/text.py.
+# Same as payment_query_platform/text.py.
 TAGS = re.compile(r"<[^>]+>")
 SCRIPT_AND_STYLE = re.compile(r"<(script|style)\b.*?</\1>", re.I | re.S)
 WHITESPACE = re.compile(r"\s+")
@@ -25,7 +25,7 @@ MAX_BODY_CHARS = 20000
 
 
 def plain_text(body: str | None, limit: int = MAX_BODY_CHARS) -> str:
-    """Developer text normalization: remove scripts/styles/tags and cap size."""
+    """Remove scripts, styles and tags, and cap the length."""
     if not body:
         return ""
     text = SCRIPT_AND_STYLE.sub(" ", body)
@@ -65,14 +65,13 @@ def lambda_handler(event, context):
     if not isinstance(attachments, list):
         raise ValueError("attachments must be a list")
 
-    # Keep the original developer's plain_text behavior; do not interpret
-    # attachment content or bypass the dedicated malware/guardrail stages.
+    # Attachment content is not read here, so the malware scan and the
+    # guardrail still apply to it later.
     normalized_body = plain_text(body)
     normalized_subject = WHITESPACE.sub(" ", TAGS.sub(" ", subject)).strip()
 
-    # Developer intake/inputs.py layout, limited to the email itself here.
-    # Attachment text lives in S3 and MUST be guardrail-screened before it is
-    # supplied to either agent. Do not inline unscreened attachment text here.
+    # Same layout as intake/inputs.py, for the email only. Attachment text is in S3
+    # and must pass the guardrail before an agent sees it, so it is not added here.
     sender = event.get("from") or ""
     if isinstance(sender, dict):
         sender = ((sender.get("emailAddress") or {}).get("address") or "")
@@ -126,7 +125,7 @@ def lambda_handler(event, context):
     }
 
 
-# Developer intake/inputs.py: input layouts, preserved in a single Lambda file.
+# The agent input layout, as in intake/inputs.py.
 def _attachment_label(attachment: dict) -> str:
     return attachment.get("filename") or attachment.get("name") or "attachment"
 
@@ -159,7 +158,7 @@ def extraction_input(subject: str, body: str, attachments: Optional[List[dict]] 
     return "\n".join(parts)
 
 
-# --- Developer intake/guardrail.py (screening helpers) ---
+# --- Guardrail screening, as in intake/guardrail.py ---
 class GuardrailResult:
     """What the screen decided about one email."""
 

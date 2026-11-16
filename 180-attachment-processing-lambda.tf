@@ -1,8 +1,8 @@
 # =========================================================
 # 180 - ATTACHMENT PROCESSING LAMBDA
 # =========================================================
-# Receives ingestion_id from SF1, reads ps.ingestion_message and
-# persists attachment metadata to ps.ingestion_attachment.
+# Receives message_id from SF1, fetches the mail's attachments from Graph
+# and stores them.
 # Attachment uploads do not imply malware scan clearance.
 
 # ---------------------------------------------------------
@@ -109,6 +109,10 @@ resource "aws_lambda_function" "attachment_processing" {
       ATTACHMENT_PREFIX   = var.attachment_processing_s3_prefix
       ATTACHMENT_MAX_SIZE = tostring(var.attachment_processing_max_bytes)
       KMS_KEY_ARN         = aws_kms_key.psc.arn
+
+      # Names the code reads from its environment.
+      GRAPH_API_BASE_URL = var.graph_api_base_url
+      GRAPH_SECRET_ID    = aws_secretsmanager_secret.microsoft_graph.arn
 
       DB_PROXY_HOST = aws_db_proxy.psc.endpoint
       DB_NAME       = var.email_ingestion_db_name

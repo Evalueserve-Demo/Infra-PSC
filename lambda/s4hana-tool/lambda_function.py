@@ -1,118 +1,6 @@
-"""PSC #390 SAP S/4HANA Tool Lambda.
+"""PSC #390 SAP S/4HANA Tool Lambda. The shared tool helpers and the handler, in one file."""
 
-Consolidates the developer's tools/s4hana/handler.py and tools/_shared/toolkit.py,
-while preserving the company's original #390 entry behavior as a fallback.
-Gateway tool calls use developer operations s4_get_invoice_reconciliation and
-s4_get_payment_status. Legacy calls without tool metadata keep original behavior.
-No database access or schema changes. Mock SAP responses remain mock.
-"""
-
-# ===== Original company handler (retained, renamed for fallback) =====
-
-import json
-import logging
-import os
-from datetime import datetime as _company_datetime, timezone
-
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
-INTEGRATION_MODE = os.environ.get(
-    "S4HANA_INTEGRATION_MODE", "DISABLED"
-)
-
-
-def response(status, case_id, message_id, invoice_id, error_code=None):
-    result = {
-        "status": status,
-        "system": "SAP_S4HANA",
-        "case_id": case_id,
-        "message_id": message_id,
-        "invoice_id": invoice_id,
-        "payment_status": None,
-        "payment_date": None,
-        "payment_reference": None,
-        "amount": None,
-        "currency": None,
-        "error_code": error_code,
-        "checked_at": _company_datetime.now(timezone.utc).isoformat()
-    }
-
-    return result
-
-
-def _company_legacy_lambda_handler(event, context):
-    if not isinstance(event, dict):
-        return response(
-            "INVALID_REQUEST", None, None, None,
-            "EVENT_MUST_BE_OBJECT"
-        )
-
-    # Supports direct Lambda invocation and a Gateway
-    # payload containing the input under "body".
-    payload = event.get("body", event)
-
-    if isinstance(payload, str):
-        try:
-            payload = json.loads(payload)
-        except json.JSONDecodeError:
-            return response(
-                "INVALID_REQUEST", None, None, None,
-                "INVALID_JSON_BODY"
-            )
-
-    if not isinstance(payload, dict):
-        return response(
-            "INVALID_REQUEST", None, None, None,
-            "INVALID_PAYLOAD"
-        )
-
-    case_id = payload.get("case_id")
-    message_id = payload.get("message_id")
-    invoice_id = payload.get("invoice_id")
-
-    if not all(
-        isinstance(value, str) and value.strip()
-        for value in (case_id, message_id, invoice_id)
-    ):
-        return response(
-            "VALIDATION_FAILED",
-            case_id,
-            message_id,
-            invoice_id,
-            "MISSING_REQUIRED_IDENTIFIERS"
-        )
-
-    case_id = case_id.strip()
-    message_id = message_id.strip()
-    invoice_id = invoice_id.strip()
-
-    if INTEGRATION_MODE != "LIVE":
-        logger.info(
-            "SAP S/4HANA integration disabled for case_id=%s",
-            case_id
-        )
-
-        return response(
-            "INTEGRATION_NOT_CONFIGURED",
-            case_id,
-            message_id,
-            invoice_id,
-            "SAP_API_NOT_ENABLED"
-        )
-
-    # Fail closed until the approved SAP API contract,
-    # credentials, authorization, and response mapping
-    # have been implemented.
-    return response(
-        "INTEGRATION_NOT_CONFIGURED",
-        case_id,
-        message_id,
-        invoice_id,
-        "SAP_API_IMPLEMENTATION_PENDING"
-    )
-
-# ===== Developer shared toolkit (inlined, unmodified logic) =====
+# ===== Shared tool helpers =====
 """Shared plumbing for the tool Lambdas.
 
 Every tool container serves several operations from one function. The Gateway
@@ -182,7 +70,8 @@ def dispatch(table: dict, event, context):
             return {"error": f"{field} must be a non-empty string."}
     return func(**{k: v for k, v in event.items() if k != "tool"})
 
-# ===== Developer S4HANA handler (inlined; dispatcher wired locally) =====
+
+# ===== S/4HANA handler =====
 """S/4 Tool.
 
 One container for what S/4HANA holds about an invoice, as two operations that
@@ -354,23 +243,4 @@ _TOOLS = {
 
 
 def lambda_handler(event, context):
-    """Gateway tool dispatch; preserve legacy company invocation as fallback."""
-    name = resolve_tool_name(context)
-    if not name and isinstance(event, dict):
-        name = event.get("tool") or event.get("tool_name") or ""
-        if isinstance(name, str) and "___" in name:
-            name = name.split("___", 1)[1]
-    if name in _TOOLS:
-        if not isinstance(event, dict):
-            return {"error": "Expected a JSON object of tool arguments."}
-        if len(str(event)) > MAX_ARG_BYTES:
-            return {"error": "Arguments exceed the size limit."}
-        func, required = _TOOLS[name]
-        for field in required:
-            value = event.get(field)
-            if not isinstance(value, str) or not value.strip():
-                return {"error": f"{field} must be a non-empty string."}
-        return func(**{k: v for k, v in event.items() if k not in ("tool", "tool_name")})
-    if name:
-        return {"error": f"Unknown tool: {name!r}"}
-    return _company_legacy_lambda_handler(event, context)
+    return dispatch(_TOOLS, event, context)

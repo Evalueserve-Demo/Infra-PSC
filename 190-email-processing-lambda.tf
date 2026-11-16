@@ -53,6 +53,13 @@ resource "aws_iam_role_policy" "email_processing_access" {
           "kms:Decrypt"
         ]
         Resource = aws_kms_key.psc.arn
+      },
+      {
+        # Lets the function log in to the database through RDS Proxy.
+        Sid      = "DatabaseProxyIamAuth"
+        Effect   = "Allow"
+        Action   = ["rds-db:connect"]
+        Resource = "arn:${data.aws_partition.current.partition}:rds-db:${var.aws_region}:${data.aws_caller_identity.current.account_id}:dbuser:${element(split(":", aws_db_proxy.psc.arn), 6)}/${var.email_ingestion_db_user}"
       }
     ]
   })
@@ -90,6 +97,11 @@ resource "aws_lambda_function" "email_processing" {
     variables = {
       SQS1_QUEUE_URL     = aws_sqs_queue.sqs1.url
       ENABLE_SQS_PUBLISH = "false"
+
+      # Names the code reads from its environment.
+      AURORA_HOST = aws_db_proxy.psc.endpoint
+      AURORA_DB   = var.email_ingestion_db_name
+      AURORA_USER = var.email_ingestion_db_user
     }
   }
 

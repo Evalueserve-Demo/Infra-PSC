@@ -1,4 +1,3 @@
-
 # =========================================================
 # 160 - EMAIL INGESTION LAMBDA
 # =========================================================
@@ -64,15 +63,15 @@ resource "aws_iam_role_policy" "email_ingestion_access" {
         Resource = "arn:${data.aws_partition.current.partition}:rds-db:${var.aws_region}:${data.aws_caller_identity.current.account_id}:dbuser:${element(split(":", aws_db_proxy.psc.arn), 6)}/${var.email_ingestion_db_user}"
       },
       {
-        # Retained for compatibility with existing developer code.
-        # New dispatch should use the Pre-SF1 SQS queue.
+        # The Lambda code can still start SF1 directly.
+        # New mails normally go through the Pre-SF1 queue instead.
         Sid      = "StartWorkflowOne"
         Effect   = "Allow"
         Action   = ["states:StartExecution"]
         Resource = aws_sfn_state_machine.sf1.arn
       },
       {
-        # Retained for existing execution recovery logic.
+        # Used to look up SF1 runs when recovering.
         Sid      = "DescribeWorkflowOneExecutions"
         Effect   = "Allow"
         Action   = ["states:DescribeExecution"]
@@ -137,31 +136,36 @@ resource "aws_lambda_function" "email_ingestion" {
 
   environment {
     variables = {
-      # Microsoft Graph authentication
       GRAPH_SECRET_ARN = aws_secretsmanager_secret.microsoft_graph.arn
-      GRAPH_SECRET_ID  = aws_secretsmanager_secret.microsoft_graph.arn
       GRAPH_MAILBOX    = var.mailbox_user
 
-      # Existing database configuration
       DB_PROXY_HOST = aws_db_proxy.psc.endpoint
       DB_NAME       = var.email_ingestion_db_name
       DB_USER       = var.email_ingestion_db_user
       DB_PORT       = "5432"
 
-      # Environment variables expected by developer Lambda code
-      # IAM authentication continues through RDS Proxy.
-      AURORA_HOST = aws_db_proxy.psc.endpoint
-      AURORA_DB   = var.email_ingestion_db_name
-      AURORA_USER = var.email_ingestion_db_user
+      # Names the code reads from its environment.
+      AURORA_HOST        = aws_db_proxy.psc.endpoint
+      AURORA_DB          = var.email_ingestion_db_name
+      AURORA_USER        = var.email_ingestion_db_user
+      GRAPH_API_BASE_URL = var.graph_api_base_url
+      GRAPH_SECRET_ID    = aws_secretsmanager_secret.microsoft_graph.arn
+      SQS_QUEUE_URL      = aws_sqs_queue.pre_sf1.url
+
+      INGESTION_CUTOFF_UTC = var.ingestion_cutoff_utc
+
+      # Wait this many seconds between mails, so a burst does not start
+      # every workflow at the same moment.
+      START_INTERVAL_SECONDS = tostring(var.start_interval_seconds)
 
       SF1_ARN = aws_sfn_state_machine.sf1.arn
 
-      # Queue used by the Outflow Dispatcher.
+      # NEW: Queue used by the Outflow Dispatcher.
       PRE_SF1_QUEUE_URL = aws_sqs_queue.pre_sf1.url
 
-      # Keep workflow dispatch disabled until integration testing.
+      # "true" sends new mails on to the workflow. Use "false" to only read and store them.
       ENABLE_INGESTION = "true"
-      ENABLE_WORKFLOW  = "false"
+      ENABLE_WORKFLOW  = "true"
     }
   }
 

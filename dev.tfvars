@@ -173,11 +173,12 @@ email_scheduler_timezone   = "UTC"
 # 160 - EMAIL INGESTION LAMBDA
 # =========================================================
 
-email_ingestion_timeout            = 120
+email_ingestion_timeout            = 900
 email_ingestion_memory             = 256
 email_ingestion_log_retention_days = 30
 email_ingestion_db_name            = "paymentstatuscheck"
 email_ingestion_db_user            = "integ_app"
+ingestion_cutoff_utc               = "2026-11-12T22:30:00Z"
 
 
 

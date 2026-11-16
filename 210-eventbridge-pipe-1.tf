@@ -108,7 +108,9 @@ resource "aws_pipes_pipe" "pipe1" {
   }
 
   target_parameters {
-    input_template = "<$.body>"
+    # Build the JSON object the state machine expects. Passing "<$.body>" on its own
+    # arrives as a map, and Step Functions rejects that.
+    input_template = "{\"case_id\":\"<$.body.case_id>\",\"message_id\":\"<$.body.message_id>\",\"conversation_id\":\"<$.body.conversation_id>\",\"sender\":\"<$.body.sender>\",\"recipient\":\"<$.body.recipient>\",\"subject\":\"<$.body.subject>\",\"body\":\"<$.body.body>\",\"has_attachment\":<$.body.has_attachment>,\"attachment_id\":<$.body.attachment_id>,\"attachment_s3_reference\":<$.body.attachment_s3_reference>,\"attachments\":<$.body.attachments>}"
 
     step_function_state_machine_parameters {
       invocation_type = "FIRE_AND_FORGET"

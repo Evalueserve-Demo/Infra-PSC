@@ -8,7 +8,7 @@
 # LOGIN role/password and least-privilege grants before creating the
 # RDS Proxy. Terraform does NOT create the PostgreSQL role.
 # Example secret value (do not commit credentials):
-# {"username":"psc_ingestion","password":"<secure-password>"}
+# {"username":"integ_app","password":"<secure-password>"}
 
 # ---------------------------------------------------------
 # 1. RDS PROXY

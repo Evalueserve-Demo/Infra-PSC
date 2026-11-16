@@ -1,10 +1,10 @@
-"""PSC #180 Attachment Processing Lambda — single-file consolidation.
+"""PSC #180 Attachment Processing Lambda.
 
-Original developer modules are embedded below without changes to their function
-bodies. The company handler adds the architecture-specific post-malware-scan
-EXTRACT_CLEAN action. No developer source files or DBA schema were modified.
+Downloads the mail's attachments from Graph and stores them in S3. After the
+malware scan, the EXTRACT_CLEAN action reads the text out of the clean files.
+The helper modules are embedded below so this stays one file.
 
-Runtime dependency: boto3 (AWS runtime), pypdf (install in Lambda package).
+Needs boto3 (provided by Lambda) and pypdf (in the package).
 """
 
 from dataclasses import asdict, dataclass
@@ -27,7 +27,7 @@ from dataclasses import dataclass
 from typing import Any, Dict
 
 # ======================================================================
-# ORIGINAL MODULE: models.py
+# --- models.py ---
 # ======================================================================
 """The message shape carried through every stage of the workflow.
 
@@ -80,7 +80,7 @@ class EmailMessage:
         return asdict(self)
 
 # ======================================================================
-# ORIGINAL MODULE: text.py
+# --- text.py ---
 # ======================================================================
 """Reducing an email body to something safe to carry between stages.
 
@@ -115,7 +115,7 @@ def plain_text(body: str | None, limit: int = MAX_BODY_CHARS) -> str:
     return text[:limit].rstrip() + " [truncated]"
 
 # ======================================================================
-# ORIGINAL MODULE: mailbox/graph_auth.py
+# --- mailbox/graph_auth.py ---
 # ======================================================================
 """Acquires Microsoft Graph access tokens for the mailbox application.
 
@@ -198,7 +198,7 @@ class GraphTokenProvider:
         return self._token
 
 # ======================================================================
-# ORIGINAL MODULE: mailbox/graph_client.py
+# --- mailbox/graph_client.py ---
 # ======================================================================
 """Reads the shared mailbox from Microsoft Graph.
 
@@ -424,7 +424,7 @@ def thread_context(raw: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 # ======================================================================
-# ORIGINAL MODULE: storage/object_store.py
+# --- storage/object_store.py ---
 # ======================================================================
 """Stores attachment content in S3.
 
@@ -499,7 +499,7 @@ class AttachmentStore:
         return f"s3://{self.bucket}/{key}"
 
 # ======================================================================
-# ORIGINAL MODULE: attachment_text.py
+# --- attachment_text.py ---
 # ======================================================================
 """Reading the text out of an attachment.
 
@@ -600,7 +600,7 @@ def extract_text(content: bytes, content_type: Optional[str], filename: Optional
     return ExtractedText(SKIPPED, reason=f"unsupported type {content_type or 'unknown'}")
 
 # ======================================================================
-# ORIGINAL MODULE: company_180_handler.py
+# --- handler ---
 # ======================================================================
 """STAGE 2, part one — attachment processing.
 
@@ -755,8 +755,8 @@ def _extract_clean(event: Dict[str, Any]) -> Dict[str, Any]:
         if not bucket or not key:
             raise ValueError("Invalid attachment S3 URI")
         try:
-            # Extraction utility enforces developer's content limits.
-            # MAX_FILE_BYTES is embedded from the developer attachment_text module.
+            # Read one byte over the limit so an oversized file is noticed.
+            # MAX_FILE_BYTES is defined in attachment_text above.
             raw = s3.get_object(Bucket=bucket, Key=key)["Body"].read(MAX_FILE_BYTES + 1)
             result = extract_text(raw, item.get("content_type") or "", item.get("name") or "")
             item["extraction_status"] = result.status

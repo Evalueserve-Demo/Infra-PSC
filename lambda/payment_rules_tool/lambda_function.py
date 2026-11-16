@@ -1,6 +1,4 @@
-"""#392 Payment Rules Tool Lambda. Developer handler and shared toolkit combined.
-Original developer sources remain unchanged.
-"""
+"""#392 Payment Rules Tool Lambda. The shared tool helpers and the handler, in one file."""
 
 """Shared plumbing for the tool Lambdas.
 
@@ -72,7 +70,7 @@ def dispatch(table: dict, event, context):
     return func(**{k: v for k, v in event.items() if k != "tool"})
 
 
-# --- Developer paymentrules/handler.py ---
+# --- Payment rules handler ---
 """Payment Rules Tool.
 
 The deterministic check on a supplier invoice ID: whether it follows the naming

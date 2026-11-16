@@ -1,8 +1,7 @@
-"""PSC #270 — Identifier Validation Lambda.
+"""PSC #270 Identifier Validation Lambda.
 
-Company stage interface retained; validation conventions sourced from the
-original developer paymentrules tool. No database writes or external modules.
-The developer's original tool Lambda remains a separate, unchanged component.
+Checks the invoice and PO numbers found in a mail, using the same rules as the
+payment rules tool. It does not touch the database.
 """
 import logging
 import os
@@ -30,7 +29,7 @@ def _invoice(value: Any) -> str:
 
 
 def _extract(event: dict):
-    """Accept original company invoice fields and developer payment_info pairs."""
+    """Take the invoice numbers from invoice_ids, invoice_id or payment_info."""
     if "invoice_ids" in event:
         if not isinstance(event["invoice_ids"], list):
             return [], [], ["invoice_ids must be a list"]

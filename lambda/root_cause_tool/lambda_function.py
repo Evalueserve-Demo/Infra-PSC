@@ -1,4 +1,4 @@
-"""#393 Root Cause Map Tool Lambda. Original developer logic and toolkit combined."""
+"""#393 Root Cause Map Tool Lambda. The shared tool helpers and the handler, in one file."""
 
 """Shared plumbing for the tool Lambdas.
 
@@ -70,7 +70,7 @@ def dispatch(table: dict, event, context):
     return func(**{k: v for k, v in event.items() if k != "tool"})
 
 
-# --- Developer tools/rootcause/handler.py ---
+# --- Root cause handler ---
 """Helpdesk Routing Tool.
 
 Decides which helpdesk a case belongs to once its export control status is

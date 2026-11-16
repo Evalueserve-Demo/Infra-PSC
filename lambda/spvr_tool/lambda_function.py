@@ -1,10 +1,6 @@
-"""PSC #391 SPVR Tool Lambda.
-Developer tools/_shared/toolkit.py and tools/spvr/handler.py consolidated
-into one file without altering their business logic.
-Company placeholder replaced because it only raised RuntimeError.
-"""
+"""PSC #391 SPVR Tool Lambda. The shared tool helpers and the handler, in one file."""
 
-# ===== Developer shared toolkit (unchanged) =====
+# ===== Shared tool helpers =====
 """Shared plumbing for the tool Lambdas.
 
 Every tool container serves several operations from one function. The Gateway
@@ -75,7 +71,7 @@ def dispatch(table: dict, event, context):
     return func(**{k: v for k, v in event.items() if k != "tool"})
 
 
-# ===== Developer SPVR tool handler (import consolidated) =====
+# ===== SPVR handler =====
 """The SPVR supplier register.
 
 A separate system from S/4HANA, so a separate Gateway target. One operation,

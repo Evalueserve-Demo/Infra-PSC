@@ -3,7 +3,7 @@
 #
 # Investigation Agent -> AgentCore Gateway -> Payment Rules
 #
-# Business logic will be provided by developers.
+# The code is in lambda/payment_rules_tool/.
 # =========================================================
 
 # ---------------------------------------------------------

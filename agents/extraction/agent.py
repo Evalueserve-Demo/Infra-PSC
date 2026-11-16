@@ -1,6 +1,6 @@
 """PSC Extraction Agent business contract (no external dependencies).
 
-Mirrors the developer's payment_info / IdentifierPair schema.
+Same shape as the payment_info / IdentifierPair schema.
 """
 
 VALID_SOURCES = {"EMAIL_SUBJECT", "EMAIL_BODY", "ATTACHMENT"}

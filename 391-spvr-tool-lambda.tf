@@ -3,7 +3,7 @@
 #
 # Investigation Agent -> AgentCore Gateway -> SPVR Tool
 #
-# Lambda business logic will be supplied by developers.
+# The code is in lambda/spvr_tool/.
 # =========================================================
 
 # ---------------------------------------------------------
