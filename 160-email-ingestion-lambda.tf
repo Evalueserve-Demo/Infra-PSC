@@ -2,19 +2,18 @@
 # =========================================================
 # 160 - EMAIL INGESTION LAMBDA
 # =========================================================
-# Stage 1 uses the ps schema (18 tables), including ingestion
-# checkpointing and the transactional workflow outbox.
+# Stage 1 uses the DBA-approved ps schema.
 # Table-level operations are implemented in the Lambda code;
 # PostgreSQL role grants must be initialized separately.
 #
-# The Outflow Dispatcher is part of this existing Lambda.
+# SQS publishing occurs only when ENABLE_WORKFLOW=true.
 # No separate dispatcher Lambda is created.
 
 # ---------------------------------------------------------
 # 1. PACKAGE EMAIL INGESTION LAMBDA
 # ---------------------------------------------------------
 # Build directory must contain lambda_function.py and all
-# runtime dependencies (including pg8000) before Terraform plan.
+# runtime dependencies (including psycopg) before Terraform plan.
 data "archive_file" "email_ingestion" {
   type        = "zip"
   source_dir  = "${path.module}/build/email_ingestion"
@@ -62,21 +61,6 @@ resource "aws_iam_role_policy" "email_ingestion_access" {
         Effect   = "Allow"
         Action   = ["rds-db:connect"]
         Resource = "arn:${data.aws_partition.current.partition}:rds-db:${var.aws_region}:${data.aws_caller_identity.current.account_id}:dbuser:${element(split(":", aws_db_proxy.psc.arn), 6)}/${var.email_ingestion_db_user}"
-      },
-      {
-        # Retained for compatibility with existing developer code.
-        # New dispatch should use the Pre-SF1 SQS queue.
-        Sid      = "StartWorkflowOne"
-        Effect   = "Allow"
-        Action   = ["states:StartExecution"]
-        Resource = aws_sfn_state_machine.sf1.arn
-      },
-      {
-        # Retained for existing execution recovery logic.
-        Sid      = "DescribeWorkflowOneExecutions"
-        Effect   = "Allow"
-        Action   = ["states:DescribeExecution"]
-        Resource = "${replace(aws_sfn_state_machine.sf1.arn, ":stateMachine:", ":execution:")}:psc-ing-*"
       },
       {
         # NEW: Publish admitted workflow messages to Pre-SF1 SQS.
@@ -141,6 +125,7 @@ resource "aws_lambda_function" "email_ingestion" {
       GRAPH_SECRET_ARN = aws_secretsmanager_secret.microsoft_graph.arn
       GRAPH_SECRET_ID  = aws_secretsmanager_secret.microsoft_graph.arn
       GRAPH_MAILBOX    = var.mailbox_user
+      GRAPH_API_BASE_URL = "https://graph.microsoft.com/v1.0"
 
       # Existing database configuration
       DB_PROXY_HOST = aws_db_proxy.psc.endpoint
@@ -154,14 +139,13 @@ resource "aws_lambda_function" "email_ingestion" {
       AURORA_DB   = var.email_ingestion_db_name
       AURORA_USER = var.email_ingestion_db_user
 
-      SF1_ARN = aws_sfn_state_machine.sf1.arn
-
       # Queue used by the Outflow Dispatcher.
-      PRE_SF1_QUEUE_URL = aws_sqs_queue.pre_sf1.url
+      SQS_QUEUE_URL = aws_sqs_queue.pre_sf1.url
 
       # Keep workflow dispatch disabled until integration testing.
       ENABLE_INGESTION = "true"
-      ENABLE_WORKFLOW  = "false"
+      ENABLE_WORKFLOW  = "true"
+      INGESTION_CUTOFF_UTC = "2026-11-12T22:30:00Z"
     }
   }
 
