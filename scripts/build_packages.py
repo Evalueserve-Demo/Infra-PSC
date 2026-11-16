@@ -1,7 +1,7 @@
 """Assemble the build/<name>/ folders that Terraform zips with archive_file.
 
 Every Lambda and agent in the Terraform reads its code from build/<name>/. This
-script writes those folders from lambda/, so the same folders feed Terraform at
+script writes those folders from lambda/ and agents/, so the same folders feed Terraform at
 the client and the deploy script here.
 
     build/<name>/lambda_function.py     a Lambda (main.py for an agent)
@@ -37,8 +37,12 @@ LAMBDAS = ROOT / "lambda"
 DEPENDENCY_MODULES = ("psycopg", "pypdf")
 # Application folders an older bundle may still hold; the agent code is embedded in main.py.
 OLD_APP_DIRS = ("payment_query_platform/", "task2_payment_agent/", "email_agents/")
+AGENTS = ROOT / "agents"
 # A Terraform build folder whose lambda/ folder is named differently.
 FOLDER_NAMES = {"root_cause_map_tool": "root_cause_tool"}
+# The agent runtimes keep their code under agents/.
+AGENT_FOLDERS = {"classification_agent": "classification", "extraction_agent": "extraction",
+                 "investigation_agent": "investigation"}
 IGNORE = shutil.ignore_patterns("__pycache__", "*.pyc")
 
 
@@ -58,6 +62,8 @@ def expected_builds() -> list[str]:
 
 
 def source_folder(name: str) -> pathlib.Path:
+    if name in AGENT_FOLDERS:
+        return AGENTS / AGENT_FOLDERS[name]
     if name in FOLDER_NAMES:
         return LAMBDAS / FOLDER_NAMES[name]
     for folder in LAMBDAS.iterdir():

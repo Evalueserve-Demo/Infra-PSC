@@ -16,7 +16,7 @@ This is a **source-code draft, NOT a complete working deployment**. The stages a
 - No `terraform plan` or `terraform apply` has been executed.
 
 ## Source structure
-`lambda/*/handler.py`, `agents/*/agent.py`, `sql/migrations/001_init.sql`, `docs/AGENTCORE-INTEGRATIONS.md`. Terraform creates ZIPs from Python single files; package dependencies separately if adding third-party imports. Build folder must exist (`mkdir -p build`).
+`lambda/*/handler.py`, `agents/*/main.py`, `sql/migrations/001_init.sql`, `docs/AGENTCORE-INTEGRATIONS.md`. Terraform creates ZIPs from Python single files; package dependencies separately if adding third-party imports. Build folder must exist (`mkdir -p build`).
 
 ## Validation
 Terraform CLI is not installed in the generation environment; the Terraform configuration has not been validated. Validate and resolve all errors before planning or deployment. Keep your original PSC-Demo project unchanged.
