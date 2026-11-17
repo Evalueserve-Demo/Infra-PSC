@@ -65,7 +65,7 @@ database_subnet_b_cidr = "10.0.22.0/24"
 # ---------------------------------------------------------
 
 mailbox_user     = "Boeing.ISC@Evalueserve.com"
-enable_scheduler = false
+enable_scheduler = true
 
 
 # ---------------------------------------------------------
@@ -239,7 +239,7 @@ sqs1_kms_data_key_reuse_seconds = 300
 
 pipe1_name_suffix             = "pipe1"
 pipe1_role_name_suffix        = "pipe1-execution-role"
-pipe1_desired_state           = "STOPPED"
+pipe1_desired_state           = "RUNNING"
 pipe1_batch_size              = 1
 pipe1_batching_window_seconds = 0
 
@@ -389,7 +389,7 @@ sqs2_kms_data_key_reuse_seconds = 300
 
 pipe2_name_suffix   = "pipe2"
 pipe2_role_suffix   = "pipe2-role"
-pipe2_desired_state = "STOPPED"
+pipe2_desired_state = "RUNNING"
 pipe2_batch_size    = 1
 
 
@@ -402,7 +402,7 @@ investigation_invocation_timeout            = 180
 investigation_invocation_memory_size        = 256
 investigation_invocation_log_retention_days = 14
 
-enable_investigation_invocation = false
+enable_investigation_invocation = true
 
 
 # =========================================================
@@ -522,3 +522,24 @@ cloudwatch_alarm_email = "niranjankp2026@gmail.com"
 
 ec2_postgres_instance_type = "t3.small"
 
+
+# =========================================================
+# 395-397 - INTAKE AGENTS, RECONCILER, RESULTS REPORT
+# =========================================================
+ingestion_cutoff_utc               = ""
+intake_agents_timeout              = 300
+intake_agents_memory               = 512
+intake_agents_log_retention_days   = 30
+
+reconciler_timeout                 = 300
+reconciler_memory                  = 512
+reconciler_log_retention_days      = 30
+reconciler_schedule_expression     = "rate(15 minutes)"
+enable_reconciler_schedule = true
+reconcile_since                    = ""
+
+results_report_timeout             = 60
+results_report_memory              = 256
+results_report_log_retention_days  = 30
+results_export_schedule_expression = "rate(15 minutes)"
+enable_results_export_schedule = true

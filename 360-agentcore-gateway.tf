@@ -10,9 +10,7 @@
 # 4. Root Cause Map
 # 5. Draft Builder
 #
-# NOTE:
-# New tool schemas are PROVISIONAL.
-# Confirm with developers before deployment.
+# The tool names and schemas follow the tools in the application code.
 # =========================================================
 
 # ---------------------------------------------------------
@@ -171,30 +169,46 @@ resource "aws_bedrockagentcore_gateway_target" "s4hana" {
 
         tool_schema {
           inline_payload {
-            name        = "get_payment_status"
-            description = "Retrieve invoice payment status from SAP S4HANA"
+            name        = "s4_get_invoice_reconciliation"
+            description = "Check whether the invoice is in S/4HANA and whether it is reconciled. Returns the vendor code, company code and purchasing organisation, which the SPVR check needs later. Needs both the purchase order ID and the supplier invoice ID. If found is false the invoice is not in S/4HANA, so stop and treat it as not found."
 
             input_schema {
               type = "object"
 
               property {
-                name        = "case_id"
+                name        = "po_id"
                 type        = "string"
-                description = "Payment investigation case ID"
+                description = "The purchase order ID, for example 4500987654."
                 required    = true
               }
 
               property {
-                name        = "message_id"
+                name        = "supplier_invoice_id"
                 type        = "string"
-                description = "Supplier message ID"
+                description = "The invoice ID exactly as the supplier wrote it, for example INV-55678."
+                required    = true
+              }
+            }
+          }
+
+          inline_payload {
+            name        = "s4_get_payment_status"
+            description = "Read the payment status of an invoice in S/4HANA. Branch on what it returns: found false means the invoice is not in S/4HANA at all; payment_status is Paid, Scheduled, Sending or Rejected. When Paid it also returns the payment transaction ID and its details, to be shared with the supplier. It returns due_date_passed and days_overdue, computed against today's date, which is given as as_of. Use due_date_passed rather than comparing dates yourself; null means the due date was missing or unreadable."
+
+            input_schema {
+              type = "object"
+
+              property {
+                name        = "po_id"
+                type        = "string"
+                description = "The purchase order ID, for example 4500987654."
                 required    = true
               }
 
               property {
-                name        = "invoice_id"
+                name        = "supplier_invoice_id"
                 type        = "string"
-                description = "Invoice identifier"
+                description = "The invoice ID exactly as the supplier wrote it, for example INV-55678."
                 required    = true
               }
             }
@@ -211,7 +225,9 @@ resource "aws_bedrockagentcore_gateway_target" "s4hana" {
 # ---------------------------------------------------------
 
 resource "aws_bedrockagentcore_gateway_target" "spvr" {
-  name               = "${var.project_name}-${var.environment}-spvr-target"
+  # Kept short on purpose. The gateway names each tool "<target>___<tool>"
+  # and Bedrock rejects tool names over 64 characters.
+  name               = "spvr-target"
   gateway_identifier = aws_bedrockagentcore_gateway.investigation.gateway_id
 
   description = "SPVR investigation tool"
@@ -227,16 +243,30 @@ resource "aws_bedrockagentcore_gateway_target" "spvr" {
 
         tool_schema {
           inline_payload {
-            name        = "get_spvr_details"
-            description = "Retrieve SPVR information for payment investigation"
+            name        = "spvr_get_supplier_block"
+            description = "Check the supplier in the SPVR supplier register. This is the supplier check, and it runs only when an invoice is overdue and unpaid. Pass the vendor, company code and purchasing organisation exactly as the S/4HANA reconciliation lookup returned them; the best code is worked out for you. If in_spvr is false the supplier is not registered, so stop the supplier checks and draft a helpdesk mail saying so. If blocked is true the supplier is on hold: report the entries in active_blocks as the reason the invoice has not been paid. If blocked is false the overdue invoice has no supported automated explanation, so draft a helpdesk mail."
 
             input_schema {
               type = "object"
 
               property {
-                name        = "case_id"
+                name        = "vendor"
                 type        = "string"
-                description = "Payment investigation case ID"
+                description = "The vendor code from s4_get_invoice_reconciliation, for example 001234."
+                required    = true
+              }
+
+              property {
+                name        = "company_code"
+                type        = "string"
+                description = "The company code from s4_get_invoice_reconciliation."
+                required    = true
+              }
+
+              property {
+                name        = "purchase_organisation"
+                type        = "string"
+                description = "The purchasing organisation from s4_get_invoice_reconciliation."
                 required    = true
               }
             }
@@ -253,7 +283,7 @@ resource "aws_bedrockagentcore_gateway_target" "spvr" {
 # ---------------------------------------------------------
 
 resource "aws_bedrockagentcore_gateway_target" "payment_rules" {
-  name               = "${var.project_name}-${var.environment}-payment-rules-target"
+  name               = "payment-rules-target"
   gateway_identifier = aws_bedrockagentcore_gateway.investigation.gateway_id
 
   description = "Payment Rules investigation tool"
@@ -269,16 +299,16 @@ resource "aws_bedrockagentcore_gateway_target" "payment_rules" {
 
         tool_schema {
           inline_payload {
-            name        = "evaluate_payment_rules"
-            description = "Evaluate payment rules for an investigation case"
+            name        = "validate_invoice_id"
+            description = "Check whether a supplier invoice ID follows the Boeing naming convention before any system lookup. Always call this first. If it returns valid=false, stop the investigation and draft a helpdesk mail stating the invoice ID convention is incorrect."
 
             input_schema {
               type = "object"
 
               property {
-                name        = "case_id"
+                name        = "supplier_invoice_id"
                 type        = "string"
-                description = "Payment investigation case ID"
+                description = "The supplier invoice reference taken from the query, for example INV-55678."
                 required    = true
               }
             }
@@ -295,7 +325,7 @@ resource "aws_bedrockagentcore_gateway_target" "payment_rules" {
 # ---------------------------------------------------------
 
 resource "aws_bedrockagentcore_gateway_target" "root_cause_map" {
-  name               = "${var.project_name}-${var.environment}-root-cause-map-target"
+  name               = "root-cause-map-target"
   gateway_identifier = aws_bedrockagentcore_gateway.investigation.gateway_id
 
   description = "Root Cause Map investigation tool"
@@ -311,17 +341,17 @@ resource "aws_bedrockagentcore_gateway_target" "root_cause_map" {
 
         tool_schema {
           inline_payload {
-            name        = "map_payment_root_cause"
-            description = "Map potential root causes for a payment investigation"
+            name        = "route_helpdesk"
+            description = "Decide which helpdesk a drafted reply should go to. ITAR controlled items route to the US Helpdesk, everything else to TCS. Call this before concluding, passing the ITAR flag exactly as the query gave it, and state clearly when the ITAR flag is unknown."
 
             input_schema {
               type = "object"
 
               property {
-                name        = "case_id"
+                name        = "itar_flag"
                 type        = "string"
-                description = "Payment investigation case ID"
-                required    = true
+                description = "The ITAR flag from the query. Use Yes or No. Omit when the query did not give one."
+                required    = false
               }
             }
           }
@@ -337,7 +367,7 @@ resource "aws_bedrockagentcore_gateway_target" "root_cause_map" {
 # ---------------------------------------------------------
 
 resource "aws_bedrockagentcore_gateway_target" "draft_builder" {
-  name               = "${var.project_name}-${var.environment}-draft-builder-target"
+  name               = "draft-builder-target"
   gateway_identifier = aws_bedrockagentcore_gateway.investigation.gateway_id
 
   description = "Draft Builder investigation tool"
@@ -353,17 +383,52 @@ resource "aws_bedrockagentcore_gateway_target" "draft_builder" {
 
         tool_schema {
           inline_payload {
-            name        = "build_payment_response_draft"
-            description = "Build a proposed payment status response draft"
+            name        = "build_draft_reply"
+            description = "Compose the supplier reply from the confirmed findings. Use this rather than writing the reply yourself, so that export-control wording is applied consistently. Pass itar_controlled exactly as the query gave it. For a paid invoice, also pass the transaction ID and transaction details from s4_get_payment_status so the supplier receives them."
 
             input_schema {
               type = "object"
 
               property {
-                name        = "case_id"
+                name        = "query_summary"
                 type        = "string"
-                description = "Payment investigation case ID"
+                description = "One line describing what the supplier asked, e.g. invoice INV-55678."
                 required    = true
+              }
+
+              property {
+                name        = "root_cause"
+                type        = "string"
+                description = "The confirmed finding in plain language."
+                required    = true
+              }
+
+              property {
+                name        = "next_action"
+                type        = "string"
+                description = "What happens next or what is needed."
+                required    = true
+              }
+
+              property {
+                name        = "itar_controlled"
+                type        = "string"
+                description = "Yes or No, as the query gave it. Omit when it gave none."
+                required    = false
+              }
+
+              property {
+                name        = "transaction_id"
+                type        = "string"
+                description = "The payment transaction ID, for a paid invoice."
+                required    = false
+              }
+
+              property {
+                name        = "transaction_details"
+                type        = "object"
+                description = "The transaction details exactly as s4_get_payment_status returned them, for a paid invoice."
+                required    = false
               }
             }
           }

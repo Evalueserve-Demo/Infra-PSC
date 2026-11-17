@@ -151,11 +151,12 @@ resource "aws_iam_role_policy" "extraction_agentcore" {
         Sid    = "InvokeExtractionModel"
         Effect = "Allow"
         Action = [
-          "bedrock:InvokeModel"
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream"
         ]
         Resource = [
           "arn:${data.aws_partition.current.partition}:bedrock:*::foundation-model/*",
-          "arn:${data.aws_partition.current.partition}:bedrock:*:${data.aws_caller_identity.current.account_id}:inference-profile/${local.extraction_model_config.model_id}"
+          "arn:${data.aws_partition.current.partition}:bedrock:*:${data.aws_caller_identity.current.account_id}:inference-profile/${var.agent_model_id}"
         ]
       },
       {
@@ -239,15 +240,11 @@ resource "aws_bedrockagentcore_agent_runtime" "extraction" {
     server_protocol = "HTTP"
   }
 
+  # Same code as the classification runtime. AGENT_ROLE picks which job it does.
   environment_variables = {
-    AWS_REGION              = var.aws_region
-    MODEL_ID                = local.extraction_model_config.model_id
-    MODEL_TEMPERATURE       = tostring(local.extraction_model_config.temperature)
-    MODEL_TOP_P             = tostring(local.extraction_model_config.top_p)
-    MODEL_MAX_OUTPUT_TOKENS = tostring(local.extraction_model_config.max_output_tokens)
-    GUARDRAIL_ID            = aws_bedrock_guardrail.classification.guardrail_id
-    GUARDRAIL_VERSION       = aws_bedrock_guardrail_version.classification.version
-    LOG_LEVEL               = "INFO"
+    AWS_REGION       = var.aws_region
+    AGENT_ROLE       = "extraction"
+    BEDROCK_MODEL_ID = var.agent_model_id
   }
 
   depends_on = [

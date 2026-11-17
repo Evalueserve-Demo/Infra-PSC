@@ -63,6 +63,18 @@ resource "aws_iam_role_policy" "email_ingestion_access" {
         Resource = "arn:${data.aws_partition.current.partition}:rds-db:${var.aws_region}:${data.aws_caller_identity.current.account_id}:dbuser:${element(split(":", aws_db_proxy.psc.arn), 6)}/${var.email_ingestion_db_user}"
       },
       {
+        Sid      = "StartWorkflowOne"
+        Effect   = "Allow"
+        Action   = ["states:StartExecution"]
+        Resource = aws_sfn_state_machine.sf1.arn
+      },
+      {
+        Sid      = "DescribeWorkflowOneExecutions"
+        Effect   = "Allow"
+        Action   = ["states:DescribeExecution"]
+        Resource = "${replace(aws_sfn_state_machine.sf1.arn, ":stateMachine:", ":execution:")}:psc-ing-*"
+      },
+      {
         # NEW: Publish admitted workflow messages to Pre-SF1 SQS.
         Sid    = "PublishPreSF1Messages"
         Effect = "Allow"
@@ -122,9 +134,9 @@ resource "aws_lambda_function" "email_ingestion" {
   environment {
     variables = {
       # Microsoft Graph authentication
-      GRAPH_SECRET_ARN = aws_secretsmanager_secret.microsoft_graph.arn
-      GRAPH_SECRET_ID  = aws_secretsmanager_secret.microsoft_graph.arn
-      GRAPH_MAILBOX    = var.mailbox_user
+      GRAPH_SECRET_ARN   = aws_secretsmanager_secret.microsoft_graph.arn
+      GRAPH_SECRET_ID    = aws_secretsmanager_secret.microsoft_graph.arn
+      GRAPH_MAILBOX      = var.mailbox_user
       GRAPH_API_BASE_URL = "https://graph.microsoft.com/v1.0"
 
       # Existing database configuration
@@ -143,9 +155,13 @@ resource "aws_lambda_function" "email_ingestion" {
       SQS_QUEUE_URL = aws_sqs_queue.pre_sf1.url
 
       # Keep workflow dispatch disabled until integration testing.
-      ENABLE_INGESTION = "true"
-      ENABLE_WORKFLOW  = "true"
+      ENABLE_INGESTION     = "true"
+      ENABLE_WORKFLOW      = "true"
       INGESTION_CUTOFF_UTC = "2026-11-12T22:30:00Z"
+
+      START_INTERVAL_SECONDS = tostring(var.start_interval_seconds)
+      SF1_ARN                = aws_sfn_state_machine.sf1.arn
+      PRE_SF1_QUEUE_URL      = aws_sqs_queue.pre_sf1.url
     }
   }
 

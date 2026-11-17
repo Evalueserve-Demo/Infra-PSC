@@ -107,6 +107,8 @@ resource "aws_lambda_function" "attachment_processing" {
       GRAPH_MAILBOX       = var.mailbox_user
       ATTACHMENT_BUCKET   = aws_s3_bucket.attachments.bucket
       ATTACHMENT_PREFIX   = var.attachment_processing_s3_prefix
+      GRAPH_API_BASE_URL  = var.graph_api_base_url
+      GRAPH_SECRET_ID     = aws_secretsmanager_secret.microsoft_graph.arn
       ATTACHMENT_MAX_SIZE = tostring(var.attachment_processing_max_bytes)
       KMS_KEY_ARN         = aws_kms_key.psc.arn
 

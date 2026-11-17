@@ -45,8 +45,28 @@ resource "aws_iam_role_policy" "investigation_invocation_access" {
           "bedrock-agentcore:InvokeAgentRuntime"
         ]
         Resource = [
-          aws_bedrockagentcore_agent_runtime.investigation.agent_runtime_arn
+          aws_bedrockagentcore_agent_runtime.investigation.agent_runtime_arn,
+          "${aws_bedrockagentcore_agent_runtime.investigation.agent_runtime_arn}/runtime-endpoint/*"
         ]
+      },
+      {
+        Sid      = "ReadGraphSecret"
+        Effect   = "Allow"
+        Action   = ["secretsmanager:GetSecretValue"]
+        Resource = aws_secretsmanager_secret.microsoft_graph.arn
+      },
+      {
+        Sid      = "DecryptApplicationSecrets"
+        Effect   = "Allow"
+        Action   = ["kms:Decrypt"]
+        Resource = aws_kms_key.psc.arn
+      },
+      {
+        # Lets the function log in to the database through RDS Proxy.
+        Sid      = "DatabaseProxyIamAuth"
+        Effect   = "Allow"
+        Action   = ["rds-db:connect"]
+        Resource = "arn:${data.aws_partition.current.partition}:rds-db:${var.aws_region}:${data.aws_caller_identity.current.account_id}:dbuser:${element(split(":", aws_db_proxy.psc.arn), 6)}/${var.email_ingestion_db_user}"
       }
     ]
   })
@@ -72,11 +92,31 @@ resource "aws_lambda_function" "investigation_invocation" {
   timeout     = var.investigation_invocation_timeout
   memory_size = var.investigation_invocation_memory_size
 
+  # It reads and writes the case in the database, so it has to run inside the VPC.
+  vpc_config {
+    subnet_ids = [
+      aws_subnet.private_a.id,
+      aws_subnet.private_b.id
+    ]
+
+    security_group_ids = [
+      aws_security_group.lambda.id
+    ]
+  }
+
   environment {
     variables = {
       INVESTIGATION_RUNTIME_ARN = aws_bedrockagentcore_agent_runtime.investigation.agent_runtime_arn
 
       ENABLE_INVESTIGATION_INVOCATION = tostring(var.enable_investigation_invocation)
+
+      # Names the code reads from its environment.
+      AURORA_HOST        = aws_db_proxy.psc.endpoint
+      AURORA_DB          = var.email_ingestion_db_name
+      AURORA_USER        = var.email_ingestion_db_user
+      GRAPH_API_BASE_URL = var.graph_api_base_url
+      GRAPH_SECRET_ID    = aws_secretsmanager_secret.microsoft_graph.arn
+      GRAPH_MAILBOX      = var.mailbox_user
     }
   }
 

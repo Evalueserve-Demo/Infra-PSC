@@ -39,15 +39,37 @@ resource "aws_sfn_state_machine" "sf1" {
 
   definition = jsonencode({
     Comment = "Payment Status Check - Step Functions 1: attachment and email processing"
-    StartAt = "ValidateInput"
+    StartAt = "UnwrapInput"
 
     States = {
+      # The pipe sends the SQS batch as a list, even for one mail. A manual start
+      # sends the object itself. If it is a list, take the first item.
+      UnwrapInput = {
+        Type = "Choice"
+
+        Choices = [
+          {
+            Variable  = "$[0]"
+            IsPresent = true
+            Next      = "TakeFirstItem"
+          }
+        ]
+
+        Default = "ValidateInput"
+      }
+
+      TakeFirstItem = {
+        Type      = "Pass"
+        InputPath = "$[0]"
+        Next      = "ValidateInput"
+      }
+
       ValidateInput = {
         Type = "Choice"
 
         Choices = [
           {
-            Variable  = "$.ingestion_id"
+            Variable  = "$.message_id"
             IsPresent = true
             Next      = "ValidateIngestionIdType"
           }
@@ -61,7 +83,7 @@ resource "aws_sfn_state_machine" "sf1" {
 
         Choices = [
           {
-            Variable = "$.ingestion_id"
+            Variable = "$.message_id"
             IsString = true
             Next     = "ProcessAttachments"
           }
@@ -151,7 +173,7 @@ resource "aws_sfn_state_machine" "sf1" {
       InvalidInput = {
         Type  = "Fail"
         Error = "InvalidInput"
-        Cause = "Required ingestion_id must be present and must be a string"
+        Cause = "Required message_id must be present and must be a string"
       }
 
       ProcessingFailed = {

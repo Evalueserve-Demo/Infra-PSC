@@ -1484,3 +1484,102 @@ variable "ec2_postgres_instance_type" {
   description = "EC2 instance type for the SSM PostgreSQL administration client"
   type        = string
 }
+
+# Developer integration variables
+
+variable "agent_model_id" {
+  description = "Bedrock model or inference profile every agent runs on, read as BEDROCK_MODEL_ID"
+  type        = string
+  default     = "global.anthropic.claude-sonnet-4-6"
+}
+
+variable "graph_api_base_url" {
+  description = "Microsoft Graph base URL read by the Lambdas as GRAPH_API_BASE_URL"
+  type        = string
+  default     = "https://graph.microsoft.com/v1.0"
+}
+
+variable "ingestion_cutoff_utc" {
+  description = "Mail received before this ISO-8601 UTC time is not ingested, and the reconciler does not look for it; empty means no cutoff"
+  type        = string
+  default     = ""
+}
+
+variable "intake_agents_timeout" {
+  type    = number
+  default = 300
+}
+
+variable "intake_agents_memory" {
+  type    = number
+  default = 512
+}
+
+variable "intake_agents_log_retention_days" {
+  type    = number
+  default = 30
+}
+
+variable "reconciler_timeout" {
+  type    = number
+  default = 300
+}
+
+variable "reconciler_memory" {
+  type    = number
+  default = 512
+}
+
+variable "reconciler_log_retention_days" {
+  type    = number
+  default = 30
+}
+
+variable "reconciler_schedule_expression" {
+  type    = string
+  default = "rate(15 minutes)"
+}
+
+variable "enable_reconciler_schedule" {
+  description = "The reconciler schedule stays DISABLED until explicitly enabled"
+  type        = bool
+  default     = false
+}
+
+variable "reconcile_since" {
+  description = "Ignore mails ingested before this ISO time; empty keeps the reconciler default of one day"
+  type        = string
+  default     = ""
+}
+
+variable "results_report_timeout" {
+  type    = number
+  default = 60
+}
+
+variable "results_report_memory" {
+  type    = number
+  default = 256
+}
+
+variable "results_report_log_retention_days" {
+  type    = number
+  default = 30
+}
+
+variable "results_export_schedule_expression" {
+  type    = string
+  default = "rate(15 minutes)"
+}
+
+variable "enable_results_export_schedule" {
+  description = "The results export schedule stays DISABLED until explicitly enabled"
+  type        = bool
+  default     = false
+}
+
+variable "start_interval_seconds" {
+  description = "Seconds between mails handed to the workflow, so a burst stays under the Lambda concurrency limit; 0 sends them all at once"
+  type        = number
+  default     = 1
+}
