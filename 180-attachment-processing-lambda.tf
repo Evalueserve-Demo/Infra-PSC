@@ -56,6 +56,12 @@ resource "aws_iam_role_policy" "attachment_processing_access" {
         Resource = "arn:${data.aws_partition.current.partition}:rds-db:${var.aws_region}:${data.aws_caller_identity.current.account_id}:dbuser:${element(split(":", aws_db_proxy.psc.arn), 6)}/${var.email_ingestion_db_user}"
       },
       {
+        Sid      = "ReadMailFiles"
+        Effect   = "Allow"
+        Action   = ["s3:GetObject"]
+        Resource = "${aws_s3_bucket.attachments.arn}/${var.mail_s3_prefix}*"
+      },
+      {
         Sid      = "WriteAttachments"
         Effect   = "Allow"
         Action   = ["s3:PutObject"]
@@ -109,6 +115,12 @@ resource "aws_lambda_function" "attachment_processing" {
       ATTACHMENT_PREFIX   = var.attachment_processing_s3_prefix
       ATTACHMENT_MAX_SIZE = tostring(var.attachment_processing_max_bytes)
       KMS_KEY_ARN         = aws_kms_key.psc.arn
+
+      # Where mail is read from: "graph" is Outlook, "s3" is CSV files under MAIL_S3_PREFIX
+      # in the attachments bucket.
+      MAIL_SOURCE    = var.mail_source
+      MAIL_S3_BUCKET = aws_s3_bucket.attachments.bucket
+      MAIL_S3_PREFIX = var.mail_s3_prefix
 
       # Names the code reads from its environment.
       GRAPH_API_BASE_URL = var.graph_api_base_url

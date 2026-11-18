@@ -1602,6 +1602,27 @@ variable "enable_results_export_schedule" {
 }
 
 
+# =========================================================
+# MAIL SOURCE
+# =========================================================
+
+variable "mail_source" {
+  description = "Where mail is read from: graph (Outlook through Microsoft Graph) or s3 (CSV files under mail_s3_prefix in the attachments bucket)"
+  type        = string
+  default     = "graph"
+
+  validation {
+    condition     = contains(["graph", "s3"], var.mail_source)
+    error_message = "mail_source must be graph or s3."
+  }
+}
+
+variable "mail_s3_prefix" {
+  description = "Folder in the attachments bucket holding the mail CSV files when mail_source is s3; each mail's attachments go under <prefix>attachments/<message_id>/"
+  type        = string
+  default     = "inbox/"
+}
+
 variable "start_interval_seconds" {
   description = "Seconds between mails handed to the workflow, so a burst stays under the Lambda concurrency limit; 0 sends them all at once"
   type        = number

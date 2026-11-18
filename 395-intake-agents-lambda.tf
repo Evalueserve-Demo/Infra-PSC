@@ -157,6 +157,9 @@ resource "aws_lambda_function" "intake_agents" {
 
       ATTACHMENT_BUCKET = aws_s3_bucket.attachments.bucket
 
+      # "s3" means there is no Outlook mailbox, so mails are not labelled.
+      MAIL_SOURCE = var.mail_source
+
       CLASSIFICATION_RUNTIME_ARN = aws_bedrockagentcore_agent_runtime.classification.agent_runtime_arn
       EXTRACTION_RUNTIME_ARN     = aws_bedrockagentcore_agent_runtime.extraction.agent_runtime_arn
 

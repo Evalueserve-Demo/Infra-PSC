@@ -65,6 +65,19 @@ resource "aws_iam_role_policy" "reconciler_access" {
 
     Statement = [
       {
+        Sid      = "ReadMailFiles"
+        Effect   = "Allow"
+        Action   = ["s3:GetObject"]
+        Resource = "${aws_s3_bucket.attachments.arn}/${var.mail_s3_prefix}*"
+      },
+      {
+        Sid       = "ListMailFiles"
+        Effect    = "Allow"
+        Action    = ["s3:ListBucket"]
+        Resource  = aws_s3_bucket.attachments.arn
+        Condition = { StringLike = { "s3:prefix" = ["${var.mail_s3_prefix}*"] } }
+      },
+      {
         Sid      = "ReadGraphSecret"
         Effect   = "Allow"
         Action   = ["secretsmanager:GetSecretValue"]
@@ -159,6 +172,12 @@ resource "aws_lambda_function" "reconciler" {
         INGESTION_FUNCTION = aws_lambda_function.email_ingestion.function_name
 
         INGESTION_CUTOFF_UTC = var.ingestion_cutoff_utc
+
+        # Where mail is read from: "graph" is Outlook, "s3" is CSV files under MAIL_S3_PREFIX
+        # in the attachments bucket.
+        MAIL_SOURCE    = var.mail_source
+        MAIL_S3_BUCKET = aws_s3_bucket.attachments.bucket
+        MAIL_S3_PREFIX = var.mail_s3_prefix
       },
       var.reconcile_since == "" ? {} : { RECONCILE_SINCE = var.reconcile_since }
     )

@@ -656,8 +656,28 @@ def _get_store() -> AttachmentStore:
     return _store
 
 
-def _build_mailbox() -> GraphApiRepository:
-    """Step 12 — credentials from Secrets Manager."""
+class S3Attachments:
+    """The attachments of mail read from S3 (MAIL_SOURCE=s3): <prefix>attachments/<message_id>/<file name>."""
+
+    def __init__(self, bucket: str, prefix: str):
+        self.bucket = bucket
+        self.prefix = prefix if prefix.endswith("/") else prefix + "/"
+
+    def get_attachment_bytes(self, message_id: str, attachment_id: str) -> bytes:
+        key = f"{self.prefix}attachments/{message_id}/{attachment_id}"
+        try:
+            return boto3.client("s3").get_object(Bucket=self.bucket, Key=key)["Body"].read()
+        except Exception as exc:  # a missing file is a 404, as it is from Graph
+            raise GraphApiError(f"No attachment at {key}: {exc}", status=404) from exc
+
+
+def _build_mailbox() -> GraphApiRepository | S3Attachments:
+    """Step 12 — S3 when MAIL_SOURCE=s3, otherwise Graph with credentials from Secrets Manager."""
+    source = os.getenv("MAIL_SOURCE", "graph").strip().lower()
+    if source not in ("graph", "s3"):
+        raise ValueError(f"MAIL_SOURCE must be graph or s3, not {source!r}")
+    if source == "s3":
+        return S3Attachments(os.environ["MAIL_S3_BUCKET"], os.getenv("MAIL_S3_PREFIX", "inbox/"))
     credentials = load_credentials(os.environ["GRAPH_SECRET_ID"])
     mailbox = os.getenv("GRAPH_MAILBOX") or credentials.get("mailbox")
     if not mailbox:

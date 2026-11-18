@@ -1,0 +1,5 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# tools/_shared holds toolkit.py, which each tool Lambda gets at the root of
+# its own zip. Adding it here lets the handlers import it the same way locally.
+pythonpath = [".", "tools/_shared"]

@@ -110,6 +110,9 @@ resource "aws_lambda_function" "investigation_invocation" {
 
       ENABLE_INVESTIGATION_INVOCATION = tostring(var.enable_investigation_invocation)
 
+      # "s3" means there is no Outlook mailbox, so mails are not labelled.
+      MAIL_SOURCE = var.mail_source
+
       # Names the code reads from its environment.
       AURORA_HOST        = aws_db_proxy.psc.endpoint
       AURORA_DB          = var.email_ingestion_db_name

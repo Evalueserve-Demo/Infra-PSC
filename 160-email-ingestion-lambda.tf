@@ -50,6 +50,19 @@ resource "aws_iam_role_policy" "email_ingestion_access" {
         Resource = aws_secretsmanager_secret.microsoft_graph.arn
       },
       {
+        Sid      = "ReadMailFiles"
+        Effect   = "Allow"
+        Action   = ["s3:GetObject"]
+        Resource = "${aws_s3_bucket.attachments.arn}/${var.mail_s3_prefix}*"
+      },
+      {
+        Sid       = "ListMailFiles"
+        Effect    = "Allow"
+        Action    = ["s3:ListBucket"]
+        Resource  = aws_s3_bucket.attachments.arn
+        Condition = { StringLike = { "s3:prefix" = ["${var.mail_s3_prefix}*"] } }
+      },
+      {
         Sid      = "DecryptApplicationSecrets"
         Effect   = "Allow"
         Action   = ["kms:Decrypt"]
@@ -153,6 +166,12 @@ resource "aws_lambda_function" "email_ingestion" {
       SQS_QUEUE_URL      = aws_sqs_queue.pre_sf1.url
 
       INGESTION_CUTOFF_UTC = var.ingestion_cutoff_utc
+
+      # Where mail is read from: "graph" is Outlook, "s3" is CSV files under MAIL_S3_PREFIX
+      # in the attachments bucket.
+      MAIL_SOURCE    = var.mail_source
+      MAIL_S3_BUCKET = aws_s3_bucket.attachments.bucket
+      MAIL_S3_PREFIX = var.mail_s3_prefix
 
       # Wait this many seconds between mails, so a burst does not start
       # every workflow at the same moment.

@@ -1,0 +1,4 @@
+message_id,received_at,sender,subject,body,recipients,conversation_id,attachment_names,internet_message_id
+demo-0001,2026-11-17T09:00:00Z,supplier.one@example.com,Payment status for INV-620460,"Hello, please confirm the payment status of invoice INV-620460 against PO 4500123456. Thanks, Riya",ap.desk@example.com,,,
+demo-0002,2026-11-17T09:05:00Z,supplier.two@example.com,Supplier bank details update,"Our bank account has changed. Please update our payment details to the new account. Regards, Rohit",ap.desk@example.com,,,
+demo-0003,2026-11-17T09:10:00Z,supplier.three@example.com,Invoice INV-620431 submitted,Please find invoice INV-620431 attached for processing.,ap.desk@example.com,,invoice-620431.pdf,
