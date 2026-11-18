@@ -114,36 +114,129 @@ Two scripts do the whole deploy from this folder. Run them in this order:
 
 
 
-mkdir Infra-PSC; cd Infra-PSC
+$root = "C:\Users\vv797f\source\Infra-PSC"
+New-Item -ItemType Directory -Path $root -Force | Out-Null
+Set-Location $root
 git init -b psc-local
+
 $files = @(
-'.gitignore','.terraform.lock.hcl','README.md','dev.tfvars','outputs.tf','providers.tf','variables.tf','versions.tf','sf2-definition.json','terraform-dependencies.dot',
-'010-vpc.tf','020-subnets.tf','030-internet-gateway.tf','040-elastic-ip.tf','050-nat-gateway.tf','060-route-tables.tf','070-security-groups.tf','080-vpc-endpoints.tf','090-kms.tf','100-secrets-manager.tf','110-s3-attachments.tf','120-aurora.tf','130-rds-proxy.tf','140-iam.tf','150-eventbridge-scheduler.tf','160-email-ingestion-lambda.tf','165-pre-sf1-sqs-dlq.tf','166-pre-sf1-eventbridge-pipe.tf','170-step-function-1.tf','180-attachment-processing-lambda.tf','190-email-processing-lambda.tf','200-sqs1-dlq.tf','210-eventbridge-pipe-1.tf','220-step-function-2.tf','230-mail-preprocessing-lambda.tf','240-bedrock-guardrail.tf','250-bedrock-model-configuration.tf','260-classification-agentcore-runtime.tf','265-extraction-agentcore-runtime.tf','270-identifier-validation-lambda.tf','280-invoice-scope-lambda.tf','290-sqs2-dlq.tf','300-eventbridge-pipe2.tf','310-investigation-invocation-lambda.tf','320-investigation-agentcore-runtime.tf','330-agentcore-identity.tf','340-agentcore-policy.tf','350-agentcore-memory.tf','360-agentcore-gateway.tf','370-pr-itar-tool-lambda.tf','380-ariba-tool-lambda.tf','390-s4hana-tool-lambda.tf','391-spvr-tool-lambda.tf','392-payment-rules-lambda.tf','393-root-cause-map-lambda.tf','394-draft-builder-lambda.tf','395-intake-agents-lambda.tf','396-reconciler-lambda.tf','397-results-report-lambda.tf','540-cloudwatch-monitoring.tf','550-ec2-ssm-postgresql-client.tf',
-'agents/classification/README.md','agents/classification/main.py','agents/extraction/README.md','agents/extraction/main.py','agents/investigation/README.md','agents/investigation/main.py',
-'docs/AGENTCORE-INTEGRATIONS.md','docs/handover/README.md',
-'scripts/README.md','scripts/build_packages.py',
-'sql/admin/setup_integ_app_role.sql','sql/admin/setup_psc_ingestion_role.sql','sql/migrations/001_init.sql','sql/migrations/README.md',
-'lambda/ariba-tool/handler.py','lambda/pr-itar-tool/handler.py',
-'lambda/attachment-processing/README.md','lambda/attachment-processing/lambda_function.py','lambda/attachment-processing/requirements.txt',
-'lambda/draft-builder-tool/lambda_function.py',
-'lambda/email-ingestion/README.md','lambda/email-ingestion/lambda_function.py','lambda/email-ingestion/requirements.txt',
-'lambda/email-processing/README.md','lambda/email-processing/lambda_function.py','lambda/email-processing/requirements.txt',
-'lambda/enterprise-tools/README.md',
-'lambda/human-review-backend/README.md','lambda/human-review-backend/lambda_function.py','lambda/human-review-backend/schema.sql',
-'lambda/human-review-outbox/lambda_function.py',
-'lambda/identifier-validation/README.md','lambda/identifier-validation/lambda_function.py',
-'lambda/intake-agents/lambda_function.py',
-'lambda/investigation-invocation/README.md','lambda/investigation-invocation/lambda_function.py','lambda/investigation-invocation/requirements.txt',
-'lambda/invoice-scope/README.md','lambda/invoice-scope/lambda_function.py',
-'lambda/mail-preprocessing/README.md','lambda/mail-preprocessing/lambda_function.py',
-'lambda/payment_rules_tool/lambda_function.py',
-'lambda/reconciler/lambda_function.py',
-'lambda/reply-processing/README.md','lambda/reply-processing/lambda_function.py',
-'lambda/results-report/lambda_function.py',
-'lambda/root_cause_tool/lambda_function.py',
-'lambda/s4hana-tool/lambda_function.py',
-'lambda/spvr_tool/lambda_function.py'
+  '.gitignore'
+  '.terraform.lock.hcl'
+  'README.md'
+  'dev.tfvars'
+  'outputs.tf'
+  'providers.tf'
+  'variables.tf'
+  'versions.tf'
+  'sf2-definition.json'
+  'terraform-dependencies.dot'
+  '010-vpc.tf'
+  '020-subnets.tf'
+  '030-internet-gateway.tf'
+  '040-elastic-ip.tf'
+  '050-nat-gateway.tf'
+  '060-route-tables.tf'
+  '070-security-groups.tf'
+  '080-vpc-endpoints.tf'
+  '090-kms.tf'
+  '100-secrets-manager.tf'
+  '110-s3-attachments.tf'
+  '120-aurora.tf'
+  '130-rds-proxy.tf'
+  '140-iam.tf'
+  '150-eventbridge-scheduler.tf'
+  '160-email-ingestion-lambda.tf'
+  '165-pre-sf1-sqs-dlq.tf'
+  '166-pre-sf1-eventbridge-pipe.tf'
+  '170-step-function-1.tf'
+  '180-attachment-processing-lambda.tf'
+  '190-email-processing-lambda.tf'
+  '200-sqs1-dlq.tf'
+  '210-eventbridge-pipe-1.tf'
+  '220-step-function-2.tf'
+  '230-mail-preprocessing-lambda.tf'
+  '240-bedrock-guardrail.tf'
+  '250-bedrock-model-configuration.tf'
+  '260-classification-agentcore-runtime.tf'
+  '265-extraction-agentcore-runtime.tf'
+  '270-identifier-validation-lambda.tf'
+  '280-invoice-scope-lambda.tf'
+  '290-sqs2-dlq.tf'
+  '300-eventbridge-pipe2.tf'
+  '310-investigation-invocation-lambda.tf'
+  '320-investigation-agentcore-runtime.tf'
+  '330-agentcore-identity.tf'
+  '340-agentcore-policy.tf'
+  '350-agentcore-memory.tf'
+  '360-agentcore-gateway.tf'
+  '370-pr-itar-tool-lambda.tf'
+  '380-ariba-tool-lambda.tf'
+  '390-s4hana-tool-lambda.tf'
+  '391-spvr-tool-lambda.tf'
+  '392-payment-rules-lambda.tf'
+  '393-root-cause-map-lambda.tf'
+  '394-draft-builder-lambda.tf'
+  '395-intake-agents-lambda.tf'
+  '396-reconciler-lambda.tf'
+  '397-results-report-lambda.tf'
+  '540-cloudwatch-monitoring.tf'
+  '550-ec2-ssm-postgresql-client.tf'
+  'agents/classification/README.md'
+  'agents/classification/main.py'
+  'agents/extraction/README.md'
+  'agents/extraction/main.py'
+  'agents/investigation/README.md'
+  'agents/investigation/main.py'
+  'docs/AGENTCORE-INTEGRATIONS.md'
+  'docs/handover/README.md'
+  'scripts/README.md'
+  'scripts/build_packages.py'
+  'sql/admin/setup_integ_app_role.sql'
+  'sql/admin/setup_psc_ingestion_role.sql'
+  'sql/migrations/001_init.sql'
+  'sql/migrations/README.md'
+  'lambda/ariba-tool/handler.py'
+  'lambda/pr-itar-tool/handler.py'
+  'lambda/attachment-processing/README.md'
+  'lambda/attachment-processing/lambda_function.py'
+  'lambda/attachment-processing/requirements.txt'
+  'lambda/draft-builder-tool/lambda_function.py'
+  'lambda/email-ingestion/README.md'
+  'lambda/email-ingestion/lambda_function.py'
+  'lambda/email-ingestion/requirements.txt'
+  'lambda/email-processing/README.md'
+  'lambda/email-processing/lambda_function.py'
+  'lambda/email-processing/requirements.txt'
+  'lambda/enterprise-tools/README.md'
+  'lambda/human-review-backend/README.md'
+  'lambda/human-review-backend/lambda_function.py'
+  'lambda/human-review-backend/schema.sql'
+  'lambda/human-review-outbox/lambda_function.py'
+  'lambda/identifier-validation/README.md'
+  'lambda/identifier-validation/lambda_function.py'
+  'lambda/intake-agents/lambda_function.py'
+  'lambda/investigation-invocation/README.md'
+  'lambda/investigation-invocation/lambda_function.py'
+  'lambda/investigation-invocation/requirements.txt'
+  'lambda/invoice-scope/README.md'
+  'lambda/invoice-scope/lambda_function.py'
+  'lambda/mail-preprocessing/README.md'
+  'lambda/mail-preprocessing/lambda_function.py'
+  'lambda/payment_rules_tool/lambda_function.py'
+  'lambda/reconciler/lambda_function.py'
+  'lambda/reply-processing/README.md'
+  'lambda/reply-processing/lambda_function.py'
+  'lambda/results-report/lambda_function.py'
+  'lambda/root_cause_tool/lambda_function.py'
+  'lambda/s4hana-tool/lambda_function.py'
+  'lambda/spvr_tool/lambda_function.py'
 )
-$files | % { New-Item -ItemType File -Path $_ -Force | Out-Null }
-(Get-ChildItem -Recurse -File -Force | ? { $_.FullName -notmatch '\\\.git\\' }).Count
+
+foreach ($f in $files) {
+  $p = Join-Path $root $f
+  if (-not (Test-Path $p)) { New-Item -ItemType File -Path $p -Force | Out-Null }
+}
+
+(Get-ChildItem -Recurse -File -Force | Where-Object { $_.FullName -notmatch '\\\.git\\' }).Count
+
 
