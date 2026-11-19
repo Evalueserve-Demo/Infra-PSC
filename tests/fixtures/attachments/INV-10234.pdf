@@ -1,0 +1,76 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 990 >>
+stream
+BT
+/F1 24 Tf
+1 0 0 1 60 720 Tm
+(INV-10234) Tj
+/F1 14 Tf
+1 0 0 1 60 690 Tm
+(ACME SUPPLIES LTD) Tj
+/F1 11 Tf
+1 0 0 1 60 650 Tm
+(Invoice Number:     INV-10234) Tj
+/F1 11 Tf
+1 0 0 1 60 632 Tm
+(Purchase Order:     4500123456) Tj
+/F1 11 Tf
+1 0 0 1 60 614 Tm
+(Invoice Date:       15-Sep-2026) Tj
+/F1 11 Tf
+1 0 0 1 60 596 Tm
+(Due Date:           15-Oct-2026) Tj
+/F1 11 Tf
+1 0 0 1 60 578 Tm
+(Currency:           USD) Tj
+/F1 11 Tf
+1 0 0 1 60 540 Tm
+(Description                       Qty        Amount) Tj
+/F1 11 Tf
+1 0 0 1 60 526 Tm
+(--------------------------------------------------) Tj
+/F1 11 Tf
+1 0 0 1 60 508 Tm
+(Titanium fastener assembly        100      45,000.00) Tj
+/F1 11 Tf
+1 0 0 1 60 494 Tm
+(--------------------------------------------------) Tj
+/F1 11 Tf
+1 0 0 1 60 476 Tm
+(Total Due                                  45,000.00) Tj
+/F1 10 Tf
+1 0 0 1 60 430 Tm
+(Remit to: ACME SUPPLIES LTD, Account 000123456789) Tj
+/F1 10 Tf
+1 0 0 1 60 414 Tm
+(Queries: accounts@acmesupplies.com) Tj
+ET
+
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001282 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1352
+%%EOF

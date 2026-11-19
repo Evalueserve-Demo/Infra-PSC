@@ -1,0 +1,8 @@
+SYNTHETIC TEST ATTACHMENT - NOT A REAL INVOICE
+
+Supplier: Example Components Ltd
+Invoice number: INV-55678
+Purchase order: 4500987654
+Document purpose: Payment status test
+
+This attachment is synthetic test data for the payment-status workflow.

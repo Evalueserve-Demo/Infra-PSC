@@ -1,5 +1,5 @@
-# PSC: single-file packaging of payment_query_platform.investigation.invoke_agent.
-# The modules it imports from payment_query_platform are embedded below.
+# PSC: the investigation invocation Lambda, a thin handler around payment_query_platform.investigation.invoke_agent.
+# That module and the modules it imports from payment_query_platform are embedded below.
 # Lambda handler: lambda_function.lambda_handler
 # Requires boto3 and psycopg in the Lambda deployment environment.
 import importlib.abc as _psc_abc

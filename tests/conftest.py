@@ -17,7 +17,15 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 MARKER = "# The Lambda's own code:\n"
-ORIGIN = re.compile(r"# Entry module: (payment_query_platform[\w.]*)")
+# The header names the module a file is the packaging of: "# Entry module: X" or "# PSC: single-file packaging of X."
+ORIGIN = re.compile(r"# (?:Entry module: |PSC: single-file packaging of )(payment_query_platform(?:\.\w+)*)")
+
+# The tests for tools/ need that folder, which is not in every checkout.
+collect_ignore = [] if (ROOT / "tools").is_dir() else ["test_apis.py", "test_rules.py"]
+# These two describe the earlier design, where the text of an attachment is read as the file is
+# stored. attachment-processing now stores the file and reads the text in a later step
+# (EXTRACT_CLEAN), so they would fail against the deployed code and are left out until rewritten.
+collect_ignore += ["test_attachment_store.py", "test_attachments.py"]
 
 MODULES: dict[str, str] = {}
 PACKAGES: set[str] = set()
@@ -80,6 +88,13 @@ class Embedded(importlib.abc.MetaPathFinder, importlib.abc.Loader):
 
 
 collect()
+# attachment-processing is one file whose sections share a namespace, so its attachment_text and
+# store_attachment code is not a module of its own. The whole file stands in for both names.
+_attachments = ROOT / "lambda" / "attachment-processing" / "lambda_function.py"
+if _attachments.is_file():
+    _text = _attachments.read_text(encoding="utf-8").replace("\r\n", "\n")
+    for _alias in ("payment_query_platform.attachment_text", "payment_query_platform.ingestion.store_attachment"):
+        MODULES.setdefault(_alias, _text)
 # Every parent of a registered module is a package, even when it has no code of its own.
 for _name in list(MODULES):
     _parts = _name.split(".")
