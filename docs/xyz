@@ -1,0 +1,55 @@
+.psc_component:
+  needs: []
+  variables:
+    AWS_REGION: "us-gov-west-1"
+    AWS_ACCOUNT_ID: "ACCOUNTID"
+    ACCOUNT: "ACCOUNTID"
+    RUNNER_TAGS: "aws-ACCOUNTID,us-gov-west-1,docker"
+    ENV_DIR: "dev"
+    STATE_PREFIX: "psc_agentcore_dev"
+    ECR_NAMESPACE: "psc-agents"
+    TF_VAR_sres_user: "${SRES_USER}"
+    TF_VAR_sres_api: "${SRES_TOKEN}"
+    CI_ECS_GITLAB_ACCOUNT: "${GIT_USERNAME}"
+    CI_ECS_GITLAB_TOKEN: "${GIT_PASSWORD}"
+    CI_ECS_SRES_ACCOUNT: "${SRES_USER}"
+    CI_ECS_SRES_TOKEN: "${SRES_TOKEN}"
+    TF_TOKEN_sres_web_boeing_com: "${SRES_TOKEN}"
+    TF_HTTP_USERNAME: "${GIT_USERNAME}"
+    TF_HTTP_PASSWORD: "${GIT_PASSWORD}"
+  trigger:
+    strategy: depend
+    forward:
+      pipeline_variables: true
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "dev"'
+      when: manual
+      allow_failure: true
+
+psc-ecr-repositories:
+  extends: .psc_component
+  stage: setup
+  trigger:
+    include:
+      - local: psc-agentcore/components/ecr-repositories/.gitlab-ci.yml
+
+psc-runtime-image-build:
+  extends: .psc_component
+  stage: build
+  trigger:
+    include:
+      - local: psc-agentcore/components/runtime/build.gitlab-ci.yml
+
+psc-guardrail-deploy:
+  extends: .psc_component
+  stage: deploy
+  trigger:
+    include:
+      - local: psc-agentcore/components/guardrail/.gitlab-ci.yml
+
+psc-runtime-deploy:
+  extends: .psc_component
+  stage: deploy
+  trigger:
+    include:
+      - local: psc-agentcore/components/runtime/deploy.gitlab-ci.yml
