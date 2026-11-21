@@ -63,8 +63,55 @@ def test_an_agent_is_the_bundle_with_its_own_main(tmp_path):
 
     assert (folder / "strands" / "__init__.py").is_file()
     assert (folder / "main.py").read_text(encoding="utf-8") != "old"
-    assert not (folder / "payment_query_platform").exists()
+    assert sorted(p.name for p in folder.glob("*.py")) == ["main.py"]   # an agent is that one file
+    assert not (folder / "payment_query_platform").exists()             # the stale copy in the bundle is dropped
 
 
 def test_the_root_cause_build_folder_comes_from_the_root_cause_tool(tmp_path):
     assert bp.source_folder("root_cause_map_tool").name == "root_cause_tool"
+
+
+def test_a_lambda_carries_only_the_modules_it_imports(tmp_path):
+    folder = bp.build("results_report", tmp_path, fake_deps(tmp_path / "deps"), None)
+    carried = sorted(p.name for p in folder.glob("*.py"))
+
+    assert carried == ["database.py", "lambda_function.py", "results.py", "text.py"]   # results.py is its own
+
+
+def test_a_lambda_borrows_what_another_lambda_owns(tmp_path):
+    folder = bp.build("reconciler", tmp_path, fake_deps(tmp_path / "deps"), None)
+    carried = {p.name for p in folder.glob("*.py")}
+
+    assert {"ingest_mail.py", "open_case.py"} <= carried          # its own
+    assert {"database.py", "graph_client.py", "escalation.py"} <= carried   # owned by other folders
+    assert "invoke_agent.py" not in carried                       # not needed, so not carried
+
+
+def test_a_module_may_live_in_only_one_folder(tmp_path, monkeypatch):
+    extra = bp.LAMBDAS / "results-report" / "text.py"
+    extra.write_text("")
+    try:
+        with pytest.raises(SystemExit, match="keep one copy"):
+            bp.module_files()
+    finally:
+        extra.unlink()
+
+
+@pytest.mark.parametrize("name", [n for n in bp.expected_builds() if n not in bp.AGENT_FOLDERS])
+def test_every_built_lambda_imports_from_its_own_folder_alone(name, tmp_path):
+    """The built folder, not the repository, must hold everything the handler imports."""
+    import os, subprocess, sys
+    folder = bp.build(name, tmp_path / "out", fake_deps(tmp_path / "deps"), None)
+    # Stand-ins for the packages Lambda supplies, so the import does not depend on this machine's.
+    code = (
+        "import sys, importlib.util\n"
+        "for n in ('psycopg', 'psycopg.types', 'psycopg.types.json', 'pypdf', 'boto3', 'botocore', 'botocore.config', 'botocore.exceptions', 'pg8000', 'pg8000.dbapi'):\n"
+        "    sys.modules.setdefault(n, __import__('unittest.mock').mock.MagicMock())\n"
+        "sys.path[:] = [p for p in sys.path if p and 'site-packages' not in p] + [sys.argv[1]]\n"
+        "import lambda_function\n"
+        "assert callable(lambda_function.lambda_handler)\n"
+    )
+    result = subprocess.run([sys.executable, "-c", code, str(folder)], capture_output=True, text=True, cwd=folder,
+                            env={**os.environ, "PYTHONPATH": "", "AWS_DEFAULT_REGION": "us-east-1"})
+
+    assert result.returncode == 0, result.stderr

@@ -42,5 +42,7 @@ def test_the_intake_lambda_imports_without_pydantic():
         "spec = importlib.util.spec_from_file_location('intake_lambda', sys.argv[1])\n"
         "spec.loader.exec_module(importlib.util.module_from_spec(spec))\n"
     )
-    result = subprocess.run([sys.executable, "-c", code, str(lambda_file)], capture_output=True, text=True)
+    from tests.conftest import SOURCE_PATH as src
+    result = subprocess.run([sys.executable, "-c", code, str(lambda_file)], capture_output=True, text=True,
+                            env={**__import__("os").environ, "PYTHONPATH": src})
     assert result.returncode == 0, result.stderr

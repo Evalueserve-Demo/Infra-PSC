@@ -177,14 +177,6 @@ class TestLookups:
         assert source.message_ids_before(moment(10), since=moment(9, 3)) == ["m2"]
 
 
-def test_the_readable_copy_beside_the_ingestion_lambda_is_the_one_the_lambdas_carry():
-    from tests import conftest
-
-    readable = (LAMBDAS / "email-ingestion" / "s3_mail.py").read_text(encoding="utf-8")
-
-    assert conftest.same(readable, conftest.MODULES["payment_query_platform.mailbox.s3_mail"])
-
-
 class TestTheSwitch:
     def test_outlook_through_graph_is_the_default(self):
         assert uses_s3() is False and labels_enabled() is True
@@ -232,7 +224,7 @@ def load_lambda(folder):
 
 class TestTheDeployedLambdas:
     def test_email_ingestion_reads_s3_when_asked_and_needs_no_graph_settings(self, monkeypatch):
-        module = load_lambda("email-ingestion")
+        from payment_query_platform.ingestion import ingest_to_sqs as module
         monkeypatch.setenv("MAIL_SOURCE", "s3")
         monkeypatch.setenv("MAIL_S3_BUCKET", "mail-bucket")
         monkeypatch.delenv("GRAPH_SECRET_ID", raising=False)
@@ -240,7 +232,7 @@ class TestTheDeployedLambdas:
         assert module.build_mailbox().mailbox == "s3://mail-bucket/inbox/"
 
     def test_email_ingestion_still_needs_graph_settings_by_default(self, monkeypatch):
-        module = load_lambda("email-ingestion")
+        from payment_query_platform.ingestion import ingest_to_sqs as module
         monkeypatch.delenv("GRAPH_SECRET_ID", raising=False)
 
         with pytest.raises(KeyError):

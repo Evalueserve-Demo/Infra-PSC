@@ -3,6 +3,7 @@
 import importlib
 import io
 import json
+import os
 import pathlib
 import subprocess
 import sys
@@ -163,6 +164,8 @@ def test_lambda_modules_import_without_runtime_only_dependencies():
     )
     files = [str(lambdas / "intake-agents" / "lambda_function.py"),
              str(lambdas / "investigation-invocation" / "lambda_function.py")]
-    result = subprocess.run([sys.executable, "-c", code, *files], capture_output=True, text=True)
+    from tests.conftest import SOURCE_PATH as src
+    result = subprocess.run([sys.executable, "-c", code, *files], capture_output=True, text=True,
+                            env={**os.environ, "PYTHONPATH": src})
 
     assert result.returncode == 0, result.stderr

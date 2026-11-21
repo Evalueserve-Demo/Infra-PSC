@@ -5,8 +5,9 @@
 # Does the intake work for each mail: guardrail, classification,
 # the reason for sending it to a person, the Outlook label and
 # the invoice extraction. Step Function 2 calls it.
-# The code is generated from payment_query_platform.intake.invoke_agents
-# by scripts/build_single_file_lambda.py. Do not edit it by hand.
+# The code is lambda/intake-agents/lambda_function.py and the files beside it, plus the
+# modules it borrows from other Lambdas' folders; the build copies them into build/.
+# Edit those, not build/.
 
 # ---------------------------------------------------------
 # 1. PACKAGE LAMBDA SOURCE

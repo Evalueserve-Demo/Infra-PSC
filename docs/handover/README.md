@@ -54,9 +54,20 @@ else in it (`tools/`, `tests/`, `infra/`, `docs/`) is not read by Terraform.
      mcp, httpx, boto3). Only the three agents use it.
    - A Lambda that uses the database gets `--deps` beside its code; a tool
      Lambda is just its own file.
-   - `intake-agents`, `reconciler`, `results-report` and the three agents are
-     each one complete file with the application code inside, so they need
-     nothing else from this repository.
+   - Each Lambda holds its code in its own folder: `lambda_function.py` with the
+     modules that belong to it beside it, for example
+     `lambda/reconciler/` has `ingest_mail.py` and `open_case.py`, and
+     `lambda/email-ingestion/` has `database.py` and the Graph mailbox code.
+     A module lives in one folder only. A Lambda or agent that needs one from
+     another folder imports it by name, and `build_packages.py` copies it into
+     its `build/<name>/` (it stops if two folders hold a module of the same
+     name).
+   - An agent is different: its `main.py` is one self-contained file, because
+     it is deployed on its own (`agents/Dockerfile` copies only `main.py`, and
+     the client's AgentCore pipeline takes that one file as `app.py`).
+     `agents/classification/main.py` and `agents/extraction/main.py` are the
+     same file. `tests/test_agents.py` fails if an agent needs any other file,
+     or if its prompts drift from the copies the Lambdas record.
 
 ## Going live
 

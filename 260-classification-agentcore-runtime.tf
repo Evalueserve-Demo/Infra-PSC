@@ -197,7 +197,7 @@ resource "aws_bedrockagentcore_agent_runtime" "classification" {
     server_protocol = "HTTP"
   }
 
-  # Runs payment_query_platform.intake.agent_runtime (a Strands agent).
+  # Runs agents/classification/main.py (a Strands agent).
   # AGENT_ROLE picks which job it does. The guardrail has already checked
   # the mail in the intake Lambda before this is called.
   environment_variables = {

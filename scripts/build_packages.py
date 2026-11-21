@@ -5,6 +5,8 @@ script writes those folders from lambda/ and agents/, so the same folders feed T
 the client and the deploy script here.
 
     build/<name>/lambda_function.py     a Lambda (main.py for an agent)
+    build/<name>/<module>.py             the modules it imports, directly or through others: its own, and the ones
+                                         it borrows from other Lambdas' and agents' folders (each lives in one place)
     build/<name>/<dependencies>         the Linux build of psycopg and pypdf, where the code uses them
     build/<name>/<agent bundle>         for an agent: Strands and the rest, built for AgentCore
 
@@ -25,6 +27,7 @@ Python runtime. Only the agents use it.
 """
 
 import argparse
+import ast
 import os
 import pathlib
 import re
@@ -35,7 +38,7 @@ import zipfile
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 LAMBDAS = ROOT / "lambda"
 DEPENDENCY_MODULES = ("psycopg", "pypdf")
-# Application folders an older bundle may still hold; the agent code is embedded in main.py.
+# Application folders an older agent bundle may still hold; the code now sits beside main.py.
 OLD_APP_DIRS = ("payment_query_platform/", "task2_payment_agent/", "email_agents/")
 AGENTS = ROOT / "agents"
 # A Terraform build folder whose lambda/ folder is named differently.
@@ -52,6 +55,54 @@ def long_path(path: pathlib.Path) -> pathlib.Path:
         return path
     text = str(path.resolve())
     return pathlib.Path(text if text.startswith("\\\\?\\") else "\\\\?\\" + text)
+
+
+ENTRY_NAMES = ("lambda_function.py", "main.py", "handler.py")
+
+
+def module_files() -> dict[str, pathlib.Path]:
+    """Every module that sits beside a handler under lambda/ and agents/, by name.
+
+    A module lives once, in the folder of the Lambda or agent it belongs to, and the others that
+    import it get it copied into their package. So a name must not appear in two folders.
+    """
+    found: dict[str, pathlib.Path] = {}
+    for folder in sorted([*LAMBDAS.iterdir(), *AGENTS.iterdir()]):
+        for path in sorted(folder.glob("*.py")) if folder.is_dir() else []:
+            if path.name in ENTRY_NAMES:
+                continue
+            if path.stem in found:
+                raise SystemExit(f"{path.name} is in both {found[path.stem].parent} and {folder}: keep one copy")
+            found[path.stem] = path
+    return found
+
+
+def imports_of(code: str) -> set[str]:
+    """The top-level name of every module the code imports, anywhere in it (lazy imports too)."""
+    found = set()
+    for node in ast.walk(ast.parse(code)):
+        if isinstance(node, ast.Import):
+            found |= {a.name.split(".")[0] for a in node.names}
+        elif isinstance(node, ast.ImportFrom) and node.module and not node.level:
+            found.add(node.module.split(".")[0])
+    return found
+
+
+def needed_files(entry: pathlib.Path) -> list[pathlib.Path]:
+    """The modules of ours the entry file needs, found by following imports.
+
+    Its own folder first, then the folders of the other Lambdas and agents it borrows from.
+    Everything else (boto3, psycopg, strands ...) is a dependency, not ours.
+    """
+    ours, found, todo = module_files(), {}, [entry]
+    while todo:
+        for name in imports_of(todo.pop().read_text(encoding="utf-8")):
+            beside = entry.parent / (name + ".py")
+            path = beside if beside.is_file() and beside.name not in ENTRY_NAMES else ours.get(name)
+            if path is not None and path not in found:
+                found[path] = True
+                todo.append(path)
+    return sorted(found)
 
 
 def expected_builds() -> list[str]:
@@ -97,7 +148,13 @@ def build(name: str, out: pathlib.Path, deps: pathlib.Path | None, bundle: pathl
                 destination = long_path(target / item.filename)
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 destination.write_bytes(z.read(item.filename))
-    elif any(module in entry.read_text(encoding="utf-8") for module in DEPENDENCY_MODULES):
+
+    code = entry.read_text(encoding="utf-8")
+    needed = needed_files(entry)
+    for path in needed:
+        shutil.copy2(path, long_path(target / path.name))
+
+    if not is_agent and any(module in code + "".join(p.read_text(encoding="utf-8") for p in needed) for module in DEPENDENCY_MODULES):
         if deps is None or not all((deps / module).is_dir() for module in DEPENDENCY_MODULES):
             # An empty or missing folder would build without complaint and fail on import.
             raise SystemExit(f"{name} needs psycopg and pypdf: pass --deps with both built for Lambda's platform")

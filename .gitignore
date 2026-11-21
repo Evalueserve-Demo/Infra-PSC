@@ -32,3 +32,7 @@ lambda-backup/
 *.pfx
 *credentials*
 EOF
+
+# Local tooling and the deploy script's saved copies of the stack's settings
+.vscode/
+psc-backup-*/

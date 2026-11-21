@@ -10,8 +10,8 @@ import pytest
 
 from payment_query_platform.intake import attachments as attachment_inputs
 from payment_query_platform.intake import guardrail, invoke_agents
-from payment_query_platform.intake.classification import build_input as classification_build_input
-from payment_query_platform.intake.extraction import build_input as extraction_build_input
+from payment_query_platform.intake.classification import classification_input as classification_build_input
+from payment_query_platform.intake.extraction import extraction_input as extraction_build_input
 from payment_query_platform.intake.guardrail import AttachmentScreen
 
 INVOICE_TEXT = "ACME SUPPLIES LTD\nInvoice Number: INV-10234\nPurchase Order: 4500123456"

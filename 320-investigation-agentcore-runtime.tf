@@ -194,7 +194,7 @@ resource "aws_bedrockagentcore_agent_runtime" "investigation" {
     server_protocol = "HTTP"
   }
 
-  # Runs payment_query_platform.investigation.agent_runtime (a Strands agent).
+  # Runs agents/investigation/main.py (a Strands agent).
   # It calls the tools through the Gateway.
   environment_variables = {
     AWS_REGION       = var.aws_region

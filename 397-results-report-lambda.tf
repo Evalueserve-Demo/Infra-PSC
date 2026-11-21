@@ -5,8 +5,9 @@
 # A read-only report of what the pipeline decided for each mail.
 # The export writes results/latest.csv and a copy for the day under
 # results/daily/, in a private bucket.
-# The code is generated from payment_query_platform.reporting.api
-# by scripts/build_single_file_lambda.py. Do not edit it by hand.
+# The code is lambda/results-report/lambda_function.py and the files beside it, plus the
+# modules it borrows from other Lambdas' folders; the build copies them into build/.
+# Edit those, not build/.
 #
 # The schedule is DISABLED until enable_results_export_schedule is set.
 

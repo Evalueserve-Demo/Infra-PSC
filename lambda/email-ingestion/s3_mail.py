@@ -32,7 +32,7 @@ import os
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
 
-from payment_query_platform.mailbox.graph_client import GraphApiError, cutoff_from_env
+from graph_client import GraphApiError, cutoff_from_env
 
 logger = logging.getLogger(__name__)
 

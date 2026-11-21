@@ -5,8 +5,9 @@
 # Catches mails that got stuck. It sends each one back to the step where
 # it stopped, hands it to a person if it keeps failing, and re-reads the
 # mailbox when a mail was never saved.
-# The code is generated from payment_query_platform.reconciliation.reconcile
-# by scripts/build_single_file_lambda.py. Do not edit it by hand.
+# The code is lambda/reconciler/lambda_function.py and the files beside it, plus the
+# modules it borrows from other Lambdas' folders; the build copies them into build/.
+# Edit those, not build/.
 #
 # The schedule is DISABLED until enable_reconciler_schedule is set.
 

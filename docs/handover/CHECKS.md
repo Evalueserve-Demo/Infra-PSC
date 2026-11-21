@@ -13,9 +13,9 @@ Run from the repository root:
     python scripts/check_lambdas.py
     python -m pytest tests
 
-`check_lambdas.py` compiles and loads every Lambda, tool and agent. Lambdas are loaded twice, once reading mail from Outlook (`MAIL_SOURCE` unset) and once with `MAIL_SOURCE=s3`. It prints `PASS`, `SKIP` or `FAIL` per file and exits with 1 if anything failed. A `SKIP` means a package is missing on this machine (the line names it); install it and run again. A `FAIL` naming an embedded module means a Lambda is missing a module it imports.
+`check_lambdas.py` compiles and loads every Lambda, tool and agent. Lambdas are loaded twice, once reading mail from Outlook (`MAIL_SOURCE` unset) and once with `MAIL_SOURCE=s3`. It prints `PASS`, `SKIP` or `FAIL` per file and exits with 1 if anything failed. A `SKIP` means a package is missing on this machine (the line names it); install it and run again. A `FAIL` naming a module means the handler imports a module that is not in any Lambda or agent folder.
 
-`pytest` runs the tests against the code inside the Lambda and agent files, so they check what is deployed. They also compare every embedded copy of a module across files and fail if two copies differ.
+`pytest` runs the tests against the code that is deployed: each Lambda and agent folder. It also builds every Lambda into a temporary folder and imports its handler from that folder alone, so a module missing from a package fails here and not on the first invocation.
 
 Expected: all tests pass, none fail. Two groups are left out on purpose:
 
