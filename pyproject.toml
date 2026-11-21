@@ -1,7 +1,5 @@
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-# tools/_shared holds toolkit.py, which each tool Lambda gets at the root of
-# its own zip. Adding it here lets the handlers import it the same way locally. The Lambda and
-# agent folders are on the path for the same reason: each keeps its modules beside its handler.
-pythonpath = [".", "tools/_shared", "lambda/email-ingestion", "lambda/intake-agents", "lambda/investigation-invocation",
+# The Lambda and agent folders are on the path because each keeps its modules beside its handler.
+pythonpath = [".", "lambda/email-ingestion", "lambda/intake-agents", "lambda/investigation-invocation",
     "lambda/reconciler", "lambda/results-report", "agents/classification", "agents/extraction", "agents/investigation"]

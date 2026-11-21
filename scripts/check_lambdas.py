@@ -48,8 +48,6 @@ def main() -> int:
     for path in sorted((ROOT / "lambda").glob("*/lambda_function.py")):
         for mode in ("graph", "s3"):
             checks.append((path, f"{path.parent.name} [MAIL_SOURCE={mode}]", mode))
-    for path in sorted((ROOT / "tools").glob("*/handler.py")):
-        checks.append((path, f"tools/{path.parent.name}", None))
     agents_ok = importlib.util.find_spec("bedrock_agentcore") is not None
     for path in sorted((ROOT / "agents").glob("*/main.py")):
         checks.append((path, f"agents/{path.parent.name}", "agent"))
@@ -64,11 +62,11 @@ def main() -> int:
                 os.environ["MAIL_SOURCE"] = mode
             else:
                 os.environ.pop("MAIL_SOURCE", None)
-            sys.path[:0] = [*(str(p) for p in HANDLER_FOLDERS), str(ROOT / "tools" / "_shared")]
+            sys.path[:0] = [*(str(p) for p in HANDLER_FOLDERS)]
             try:
                 load(path, label)
             finally:
-                del sys.path[:len(HANDLER_FOLDERS) + 1]
+                del sys.path[:len(HANDLER_FOLDERS)]
             print(f"PASS  {label}")
         except ModuleNotFoundError as exc:
             if any(list((ROOT / d).glob("*/" + (exc.name or "?") + ".py")) for d in ("lambda", "agents")):

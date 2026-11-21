@@ -9,7 +9,7 @@ To see them all:
 
 This repository holds the same Terraform files at its root, so the folder
 structure, file names and resource names are those of Infra-PSC. Everything
-else in it (`tools/`, `tests/`, `infra/`, `docs/`) is not read by Terraform.
+else in it (`tests/`, `infra/`, `docs/`) is not read by Terraform.
 
 ## What changed
 

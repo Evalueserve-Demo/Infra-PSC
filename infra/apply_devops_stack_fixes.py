@@ -294,10 +294,10 @@ def norm(text: str) -> str:
 
 # ---------------------------------------------------------------- gateway
 
-# The tool Lambda behind each gateway target, and the folder under tools/ that holds its tool_schema.json.
+# The tool Lambda behind each gateway target, and its folder under lambda/, which holds its tool_schema.json.
 TOOL_FOLDERS = {
-    "s4hana-tool": "s4hana", "spvr-tool": "spvr", "payment-rules-tool": "paymentrules",
-    "root-cause-map-tool": "rootcause", "draft-builder-tool": "draftbuilder",
+    "s4hana-tool": "s4hana-tool", "spvr-tool": "spvr_tool", "payment-rules-tool": "payment_rules_tool",
+    "root-cause-map-tool": "root_cause_tool", "draft-builder-tool": "draft-builder-tool",
 }
 
 
@@ -712,8 +712,8 @@ def main() -> None:
                     help="the folder holding the Terraform files and lambda/ (this repository's root)")
     ap.add_argument("--region", default="us-east-2")
     ap.add_argument("--only", choices=["iam", "env", "code", "gateway", "agents", "state-machines", "new-lambdas"], action="append")
-    ap.add_argument("--tools-dir", default=str(pathlib.Path(__file__).resolve().parent.parent / "tools"),
-                    help="gateway: the folder holding each tool's tool_schema.json")
+    ap.add_argument("--tools-dir", default=str(pathlib.Path(__file__).resolve().parent.parent / "lambda"),
+                    help="gateway: the folder holding each tool Lambda's folder, with its tool_schema.json")
     ap.add_argument("--enable-investigation", action="store_true",
                     help="env: set ENABLE_INVESTIGATION_INVOCATION=true on the investigation Lambda")
     ap.add_argument("--agent-model", default="global.anthropic.claude-sonnet-4-6",

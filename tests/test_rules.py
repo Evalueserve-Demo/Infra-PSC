@@ -10,9 +10,9 @@ The S/4HANA and SPVR tools are in test_apis.py.
 
 import pytest
 
-from tools.draftbuilder.handler import build_draft_reply
-from tools.paymentrules.handler import validate_invoice_id
-from tools.rootcause.handler import route_helpdesk
+from draft_builder_tool import build_draft_reply
+from payment_rules_tool import validate_invoice_id
+from root_cause_tool import route_helpdesk
 
 
 class TestValidateInvoiceId:

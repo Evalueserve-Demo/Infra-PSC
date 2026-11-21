@@ -19,7 +19,6 @@ Run from the repository root:
 
 Expected: all tests pass, none fail. Two groups are left out on purpose:
 
-- `test_apis.py` and `test_rules.py` need the `tools/` folder and are skipped when it is absent.
 - `test_attachment_store.py` and `test_attachments.py` describe the earlier design in which the text of an attachment is read as the file is stored. attachment-processing now stores the file and reads the text in a later step (`EXTRACT_CLEAN`). They need rewriting before they are switched on.
 
 These tests use fakes (for example a fake S3 and a fake database). They show each piece works alone. They do not show that one stage hands the right data to the next; that is level 2.

@@ -18,8 +18,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
-# The tests for tools/ need that folder, which is not in every checkout.
-collect_ignore = [] if (ROOT / "tools").is_dir() else ["test_apis.py", "test_rules.py"]
+collect_ignore = []
 # These two describe the earlier design, where the text of an attachment is read as the file is
 # stored. attachment-processing now stores the file and reads the text in a later step
 # (EXTRACT_CLEAN), so they would fail against the deployed code and are left out until rewritten.
@@ -39,6 +38,12 @@ ENTRY_FILES = {
     P + "investigation.agent_runtime": "agents/investigation/main.py",
     P + "investigation.schema": "agents/investigation/main.py",
     P + "investigation.gateway": "agents/investigation/main.py",
+    # The tool Lambdas, each one file.
+    "s4hana_tool": "lambda/s4hana-tool/lambda_function.py",
+    "spvr_tool": "lambda/spvr_tool/lambda_function.py",
+    "payment_rules_tool": "lambda/payment_rules_tool/lambda_function.py",
+    "root_cause_tool": "lambda/root_cause_tool/lambda_function.py",
+    "draft_builder_tool": "lambda/draft-builder-tool/lambda_function.py",
     # attachment-processing is one file with sections, so the whole file stands in for both names.
     P + "attachment_text": "lambda/attachment-processing/lambda_function.py",
     P + "ingestion.store_attachment": "lambda/attachment-processing/lambda_function.py",

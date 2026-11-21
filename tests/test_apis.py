@@ -17,9 +17,9 @@ from payment_query_platform.investigation.invoke_agent import (
     itar_routed,
 )
 from payment_query_platform.investigation.schema import Investigation
-from tools.s4hana import handler as s4
-from tools.s4hana.handler import s4_get_invoice_reconciliation, s4_get_payment_status
-from tools.spvr.handler import BLOCK_FLAGS, best_code_from_vendor, spvr_get_supplier_block
+import s4hana_tool as s4
+from s4hana_tool import s4_get_invoice_reconciliation, s4_get_payment_status
+from spvr_tool import BLOCK_FLAGS, best_code_from_vendor, spvr_get_supplier_block
 
 # (purchase order, invoice) for each branch of the flow.
 PAID = ("4500123456", "INV-10234")
