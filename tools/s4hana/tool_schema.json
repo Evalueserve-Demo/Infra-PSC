@@ -1,0 +1,44 @@
+[
+  {
+    "name": "s4_get_invoice_reconciliation",
+    "description": "Check whether the invoice is in S/4HANA and whether it is reconciled. Returns the vendor code, company code and purchasing organisation, which the SPVR check needs later. Needs both the purchase order ID and the supplier invoice ID. If found is false the invoice is not in S/4HANA, so stop and treat it as not found.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "po_id": {
+          "type": "string",
+          "description": "The purchase order ID, for example 4500987654."
+        },
+        "supplier_invoice_id": {
+          "type": "string",
+          "description": "The invoice ID exactly as the supplier wrote it, for example INV-55678."
+        }
+      },
+      "required": [
+        "po_id",
+        "supplier_invoice_id"
+      ]
+    }
+  },
+  {
+    "name": "s4_get_payment_status",
+    "description": "Read the payment status of an invoice in S/4HANA. Branch on what it returns: found false means the invoice is not in S/4HANA at all; payment_status is Paid, Scheduled, Sending or Rejected. When Paid it also returns the payment transaction ID and its details, to be shared with the supplier. It returns due_date_passed and days_overdue, computed against today's date, which is given as as_of. Use due_date_passed rather than comparing dates yourself; null means the due date was missing or unreadable.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "po_id": {
+          "type": "string",
+          "description": "The purchase order ID, for example 4500987654."
+        },
+        "supplier_invoice_id": {
+          "type": "string",
+          "description": "The invoice ID exactly as the supplier wrote it, for example INV-55678."
+        }
+      },
+      "required": [
+        "po_id",
+        "supplier_invoice_id"
+      ]
+    }
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "name": "validate_invoice_id",
+    "description": "Check whether a supplier invoice ID follows the Boeing naming convention before any system lookup. Always call this first. If it returns valid=false, stop the investigation and draft a helpdesk mail stating the invoice ID convention is incorrect.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "supplier_invoice_id": {
+          "type": "string",
+          "description": "The supplier invoice reference taken from the query, for example INV-55678."
+        }
+      },
+      "required": [
+        "supplier_invoice_id"
+      ]
+    }
+  }
+]

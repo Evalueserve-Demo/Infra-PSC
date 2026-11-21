@@ -1,0 +1,28 @@
+[
+  {
+    "name": "spvr_get_supplier_block",
+    "description": "Check the supplier in the SPVR supplier register. This is the supplier check, and it runs only when an invoice is overdue and unpaid. Pass the vendor, company code and purchasing organisation exactly as the S/4HANA reconciliation lookup returned them; the best code is worked out for you. If in_spvr is false the supplier is not registered, so stop the supplier checks and draft a helpdesk mail saying so. If blocked is true the supplier is on hold: report the entries in active_blocks as the reason the invoice has not been paid. If blocked is false the overdue invoice has no supported automated explanation, so draft a helpdesk mail.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "description": "The vendor code from s4_get_invoice_reconciliation, for example 001234."
+        },
+        "company_code": {
+          "type": "string",
+          "description": "The company code from s4_get_invoice_reconciliation."
+        },
+        "purchase_organisation": {
+          "type": "string",
+          "description": "The purchasing organisation from s4_get_invoice_reconciliation."
+        }
+      },
+      "required": [
+        "vendor",
+        "company_code",
+        "purchase_organisation"
+      ]
+    }
+  }
+]

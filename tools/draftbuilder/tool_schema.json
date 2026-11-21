@@ -1,0 +1,49 @@
+[
+  {
+    "name": "build_draft_reply",
+    "description": "Compose the supplier reply from the confirmed findings. Use this rather than writing the reply yourself, so that export-control wording is applied consistently. Pass itar_controlled exactly as the query gave it. For a paid invoice, also pass the transaction ID and transaction details from s4_get_payment_status so the supplier receives them.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query_summary": {
+          "type": "string",
+          "description": "One line describing what the supplier asked, e.g. invoice INV-55678."
+        },
+        "root_cause": {
+          "type": "string",
+          "description": "The confirmed finding in plain language."
+        },
+        "next_action": {
+          "type": "string",
+          "description": "What happens next or what is needed."
+        },
+        "itar_controlled": {
+          "type": "string",
+          "description": "Yes or No, as the query gave it. Omit when it gave none."
+        },
+        "transaction_id": {
+          "type": "string",
+          "description": "The payment transaction ID, for a paid invoice."
+        },
+        "transaction_details": {
+          "type": "object",
+          "description": "The transaction details exactly as s4_get_payment_status returned them, for a paid invoice.",
+          "properties": {
+            "Supplier": { "type": "string" },
+            "Amount Paid": { "type": "string" },
+            "Payment Date": { "type": "string" },
+            "Payment Method": { "type": "string" },
+            "Reference #": { "type": "string" },
+            "Originating Bank": { "type": "string" },
+            "Receiving Bank": { "type": "string" }
+          }
+        }
+      },
+      "required": [
+        "query_summary",
+        "root_cause",
+        "next_action"
+      ]
+    }
+  }
+]

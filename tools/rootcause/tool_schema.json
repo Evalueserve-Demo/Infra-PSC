@@ -1,0 +1,16 @@
+[
+  {
+    "name": "route_helpdesk",
+    "description": "Decide which helpdesk a drafted reply should go to. ITAR controlled items route to the US Helpdesk, everything else to TCS. Call this before concluding, passing the ITAR flag exactly as the query gave it, and state clearly when the ITAR flag is unknown.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "itar_flag": {
+          "type": "string",
+          "description": "The ITAR flag from the query. Use Yes or No. Omit when the query did not give one."
+        }
+      },
+      "required": []
+    }
+  }
+]
