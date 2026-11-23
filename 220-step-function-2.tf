@@ -3,15 +3,17 @@
 # 220 - STEP FUNCTION 2
 # PSC - PAYMENT STATUS CHECK
 # ==========================================================
-# Classifies the mail and pulls out the invoice number.
-# The intake Lambda (395) does the work: it runs the guardrail, calls the
-# two agents and colours the mail in Outlook.
-# A payment status request goes on to SQS2. Any other mail stops here,
-# with its label and the reason saved on the case.
+# 230 Preprocessing + 240 Guardrail
+# 395 Classification and Extraction
+# 270 Identifier Validation
+# 280 Invoice Scope Determination
+# SQS2 handoff
+#
+# Uses existing AgentCore Runtime through Lambda 395.
+# ==========================================================
 
 # ----------------------------------------------------------
 # 1. SF2 EXECUTION IAM POLICY
-# Existing role is defined in 140-iam.tf
 # ----------------------------------------------------------
 
 resource "aws_iam_role_policy" "sf2" {
@@ -23,7 +25,7 @@ resource "aws_iam_role_policy" "sf2" {
 
     Statement = [
       {
-        Sid    = "InvokeIntakeAgentsLambda"
+        Sid    = "InvokeProcessingLambdas"
         Effect = "Allow"
 
         Action = [
@@ -31,7 +33,10 @@ resource "aws_iam_role_policy" "sf2" {
         ]
 
         Resource = [
-          aws_lambda_function.intake_agents.arn
+          aws_lambda_function.mail_preprocessing.arn,
+          aws_lambda_function.intake_agents.arn,
+          aws_lambda_function.identifier_validation.arn,
+          aws_lambda_function.invoice_scope.arn
         ]
       },
       {
@@ -69,14 +74,13 @@ resource "aws_sfn_state_machine" "sf2" {
   type     = var.sf2_type
 
   definition = jsonencode({
-    Comment = "PSC - SF2 Classification and Identifier Extraction"
+    Comment = "PSC SF2 - Preprocess, Classify, Extract, Validate, Scope and Handoff"
 
     StartAt = "UnwrapInput"
 
     States = {
 
-      # The pipe sends the SQS batch as a list, even for one mail. A manual start
-      # sends the object itself. If it is a list, take the first item.
+      # Accept either a single case object or an array.
       UnwrapInput = {
         Type = "Choice"
 
@@ -97,11 +101,6 @@ resource "aws_sfn_state_machine" "sf2" {
         Next      = "ValidateInput"
       }
 
-      # ----------------------------------------------------
-      # VALIDATE SQS1 INPUT
-      # The pipe passes the case in as the execution input.
-      # ----------------------------------------------------
-
       ValidateInput = {
         Type = "Choice"
 
@@ -118,7 +117,7 @@ resource "aws_sfn_state_machine" "sf2" {
               }
             ]
 
-            Next = "Classify"
+            Next = "PreprocessMail"
           }
         ]
 
@@ -126,12 +125,86 @@ resource "aws_sfn_state_machine" "sf2" {
       }
 
       # ----------------------------------------------------
-      # CLASSIFY
-      # Runs the guardrail, then asks the classification agent what the
-      # supplier wants. The Lambda colours the mail in Outlook and decides
-      # (rules in escalation.py) whether it gets investigated.
-      # RuntimeClientError is retried, because an agent runtime that has
-      # been idle can fail its first call.
+      # 230 - MAIL PREPROCESSING + 240 GUARDRAIL
+      # ----------------------------------------------------
+
+      PreprocessMail = {
+        Type     = "Task"
+        Resource = "arn:${data.aws_partition.current.partition}:states:::lambda:invoke"
+
+        Parameters = {
+          FunctionName = aws_lambda_function.mail_preprocessing.arn
+          "Payload.$"  = "$"
+        }
+
+        ResultSelector = {
+          "case.$" = "$.Payload"
+        }
+
+        OutputPath = "$.case"
+
+        Retry = [
+          {
+            ErrorEquals = [
+              "Lambda.ServiceException",
+              "Lambda.AWSLambdaException",
+              "Lambda.SdkClientException",
+              "Lambda.TooManyRequestsException"
+            ]
+            IntervalSeconds = 3
+            MaxAttempts     = 3
+            BackoffRate     = 2
+          }
+        ]
+
+        Catch = [
+          {
+            ErrorEquals = ["States.ALL"]
+            ResultPath  = "$.error"
+            Next        = "ProcessingFailed"
+          }
+        ]
+
+        Next = "GuardrailDecision"
+      }
+
+      GuardrailDecision = {
+        Type = "Choice"
+
+        Choices = [
+          {
+            Variable     = "$.guardrail_status"
+            StringEquals = "ALLOWED"
+            Next         = "PrepareIntakeCase"
+          }
+        ]
+
+        Default = "NotInvestigated"
+      }
+
+      # ----------------------------------------------------
+      # MAP 230 OUTPUT TO 395 INPUT
+      # ----------------------------------------------------
+
+      PrepareIntakeCase = {
+        Type = "Pass"
+
+        Parameters = {
+          "case_id.$"           = "$.case_id"
+          "message_id.$"        = "$.message_id"
+          "subject.$"           = "$.subject"
+          "body.$"              = "$.preprocessed_body"
+          "attachments.$"       = "$.attachments"
+          "preprocessed_body.$" = "$.preprocessed_body"
+          "guardrail_status.$"  = "$.guardrail_status"
+          "processing_status.$" = "$.processing_status"
+        }
+
+        Next = "Classify"
+      }
+
+      # ----------------------------------------------------
+      # 395 - CLASSIFICATION
       # ----------------------------------------------------
 
       Classify = {
@@ -142,7 +215,7 @@ resource "aws_sfn_state_machine" "sf2" {
           FunctionName = aws_lambda_function.intake_agents.arn
 
           Payload = {
-            role    = "classification"
+            role     = "classification"
             "case.$" = "$"
           }
         }
@@ -159,12 +232,10 @@ resource "aws_sfn_state_machine" "sf2" {
               "Lambda.ServiceException",
               "Lambda.AWSLambdaException",
               "Lambda.SdkClientException",
-              "Lambda.TooManyRequestsException",
-              "RuntimeClientError"
+              "Lambda.TooManyRequestsException"
             ]
-
             IntervalSeconds = 3
-            MaxAttempts     = 6
+            MaxAttempts     = 3
             BackoffRate     = 2
           }
         ]
@@ -179,11 +250,6 @@ resource "aws_sfn_state_machine" "sf2" {
 
         Next = "IsPaymentRelated"
       }
-
-      # ----------------------------------------------------
-      # ONLY A CONFIDENT PAYMENT STATUS REQUEST CONTINUES
-      # The Lambda sets the investigate flag; only true carries on.
-      # ----------------------------------------------------
 
       IsPaymentRelated = {
         Type = "Choice"
@@ -200,9 +266,7 @@ resource "aws_sfn_state_machine" "sf2" {
       }
 
       # ----------------------------------------------------
-      # EXTRACT IDENTIFIERS
-      # Finds which invoice the mail is about. If the invoice is missing or
-      # badly formed the flow carries on, and the reply asks the supplier for it.
+      # 395 - EXTRACTION
       # ----------------------------------------------------
 
       ExtractIdentifiers = {
@@ -230,12 +294,139 @@ resource "aws_sfn_state_machine" "sf2" {
               "Lambda.ServiceException",
               "Lambda.AWSLambdaException",
               "Lambda.SdkClientException",
-              "Lambda.TooManyRequestsException",
-              "RuntimeClientError"
+              "Lambda.TooManyRequestsException"
             ]
-
             IntervalSeconds = 3
-            MaxAttempts     = 6
+            MaxAttempts     = 3
+            BackoffRate     = 2
+          }
+        ]
+
+        Catch = [
+          {
+            ErrorEquals = ["States.ALL"]
+            ResultPath  = "$.error"
+            Next        = "ProcessingFailed"
+          }
+        ]
+
+        Next = "PrepareIdentifierValidation"
+      }
+
+      # ----------------------------------------------------
+      # MAP 395 OUTPUT TO 270 INPUT
+      # ----------------------------------------------------
+
+      PrepareIdentifierValidation = {
+        Type = "Pass"
+
+        Parameters = {
+          "case_id.$"      = "$.case_id"
+          "message_id.$"   = "$.message_id"
+          "payment_info.$" = "$.identifiers.candidates"
+          "case.$"         = "$"
+        }
+
+        Next = "ValidateIdentifiers"
+      }
+
+      # ----------------------------------------------------
+      # 270 - IDENTIFIER VALIDATION
+      # ----------------------------------------------------
+
+      ValidateIdentifiers = {
+        Type     = "Task"
+        Resource = "arn:${data.aws_partition.current.partition}:states:::lambda:invoke"
+
+        Parameters = {
+          FunctionName = aws_lambda_function.identifier_validation.arn
+          "Payload.$"  = "$"
+        }
+
+        ResultSelector = {
+          "validation.$" = "$.Payload"
+        }
+
+        ResultPath = "$.identifier_validation"
+
+        Retry = [
+          {
+            ErrorEquals = [
+              "Lambda.ServiceException",
+              "Lambda.AWSLambdaException",
+              "Lambda.SdkClientException",
+              "Lambda.TooManyRequestsException"
+            ]
+            IntervalSeconds = 3
+            MaxAttempts     = 3
+            BackoffRate     = 2
+          }
+        ]
+
+        Catch = [
+          {
+            ErrorEquals = ["States.ALL"]
+            ResultPath  = "$.error"
+            Next        = "ProcessingFailed"
+          }
+        ]
+
+        Next = "ValidationDecision"
+      }
+
+      ValidationDecision = {
+        Type = "Choice"
+
+        Choices = [
+          {
+            Variable     = "$.identifier_validation.validation.validation_status"
+            StringEquals = "VALIDATED"
+            Next         = "DetermineInvoiceScope"
+          }
+        ]
+
+        Default = "NeedsManualReview"
+      }
+
+      # ----------------------------------------------------
+      # 280 - INVOICE SCOPE DETERMINATION
+      # ----------------------------------------------------
+
+      DetermineInvoiceScope = {
+        Type     = "Task"
+        Resource = "arn:${data.aws_partition.current.partition}:states:::lambda:invoke"
+
+        Parameters = {
+          FunctionName = aws_lambda_function.invoice_scope.arn
+
+          Payload = {
+            "case_id.$"     = "$.case_id"
+            "message_id.$"  = "$.message_id"
+            "invoice_ids.$" = "$.identifier_validation.validation.invoice_ids"
+
+            identifier_validation = {
+              "valid_invoice_ids.$" = "$.identifier_validation.validation.invoice_ids"
+              "validation_status.$" = "$.identifier_validation.validation.validation_status"
+            }
+          }
+        }
+
+        ResultSelector = {
+          "scope.$" = "$.Payload"
+        }
+
+        ResultPath = "$.invoice_scope_result"
+
+        Retry = [
+          {
+            ErrorEquals = [
+              "Lambda.ServiceException",
+              "Lambda.AWSLambdaException",
+              "Lambda.SdkClientException",
+              "Lambda.TooManyRequestsException"
+            ]
+            IntervalSeconds = 3
+            MaxAttempts     = 3
             BackoffRate     = 2
           }
         ]
@@ -252,8 +443,7 @@ resource "aws_sfn_state_machine" "sf2" {
       }
 
       # ----------------------------------------------------
-      # 290 - SQS2
-      # Sends the full case, in the shape the investigation reads.
+      # SQS2 HANDOFF
       # ----------------------------------------------------
 
       PublishToSQS2 = {
@@ -261,8 +451,7 @@ resource "aws_sfn_state_machine" "sf2" {
         Resource = "arn:${data.aws_partition.current.partition}:states:::sqs:sendMessage"
 
         Parameters = {
-          QueueUrl = aws_sqs_queue.sqs2.id
-
+          QueueUrl        = aws_sqs_queue.sqs2.id
           "MessageBody.$" = "$"
         }
 
@@ -289,33 +478,31 @@ resource "aws_sfn_state_machine" "sf2" {
       }
 
       # ----------------------------------------------------
-      # SUCCESS
+      # TERMINAL STATES
       # ----------------------------------------------------
 
       ProcessingCompleted = {
         Type = "Succeed"
       }
 
-      # Not a failure. The mail is either not about payment, or a person should
-      # handle it. It is labelled in Outlook and the reason is saved on the case.
       NotInvestigated = {
         Type = "Succeed"
       }
 
-      # ----------------------------------------------------
-      # FAILURE STATES
-      # ----------------------------------------------------
+      NeedsManualReview = {
+        Type = "Succeed"
+      }
 
       InvalidInput = {
         Type  = "Fail"
         Error = "InvalidInput"
-        Cause = "Missing required SQS1 message fields"
+        Cause = "Missing case_id or message_id"
       }
 
       ProcessingFailed = {
         Type  = "Fail"
         Error = "ProcessingFailed"
-        Cause = "SF2 task invocation or processing failed"
+        Cause = "SF2 processing failed"
       }
     }
   })

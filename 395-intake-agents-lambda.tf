@@ -89,10 +89,8 @@ resource "aws_iam_role_policy" "intake_agents_access" {
         Effect = "Allow"
         Action = ["bedrock-agentcore:InvokeAgentRuntime"]
         Resource = [
-          aws_bedrockagentcore_agent_runtime.classification.agent_runtime_arn,
-          "${aws_bedrockagentcore_agent_runtime.classification.agent_runtime_arn}/runtime-endpoint/*",
-          aws_bedrockagentcore_agent_runtime.extraction.agent_runtime_arn,
-          "${aws_bedrockagentcore_agent_runtime.extraction.agent_runtime_arn}/runtime-endpoint/*"
+          var.existing_agentcore_runtime_arn,
+          "${var.existing_agentcore_runtime_arn}/runtime-endpoint/*",
         ]
       },
       {
@@ -162,7 +160,7 @@ resource "aws_lambda_function" "intake_agents" {
       MAIL_SOURCE = var.mail_source
 
       CLASSIFICATION_RUNTIME_ARN = aws_bedrockagentcore_agent_runtime.classification.agent_runtime_arn
-      EXTRACTION_RUNTIME_ARN     = aws_bedrockagentcore_agent_runtime.extraction.agent_runtime_arn
+      EXTRACTION_RUNTIME_ARN     = aws_bedrockagentcore_agent_runtime.classification.agent_runtime_arn
 
       GUARDRAIL_ID      = aws_bedrock_guardrail.classification.guardrail_id
       GUARDRAIL_VERSION = aws_bedrock_guardrail_version.classification.version

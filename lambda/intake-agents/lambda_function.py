@@ -114,7 +114,7 @@ def invoke_runtime(role: str, payload: Dict[str, Any], case_id: str) -> Dict[str
         response = client.invoke_agent_runtime(
             agentRuntimeArn=arn,
             runtimeSessionId=f"intake-{role}-{case_id}-{uuid.uuid4()}",
-            payload=json.dumps(payload).encode(),
+            payload=json.dumps({**payload, "role": role}).encode(),
         )
         answer = json.loads(response["response"].read().decode("utf-8"))
         return answer

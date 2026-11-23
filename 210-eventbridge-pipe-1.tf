@@ -1,25 +1,29 @@
+v
 # =========================================================
-# 210 - EVENTBRIDGE PIPE 1
-# SQS1 -> STEP FUNCTIONS 2
+# 210 - SQS1 TO SF2 DISPATCHER LAMBDA
+# =========================================================
+# Architecture:
+# SQS1 -> Dispatcher Lambda -> SF2
+#
+# Replaces EventBridge Pipe 1 completely.
 # =========================================================
 
 # ---------------------------------------------------------
-# 1. EVENTBRIDGE PIPE EXECUTION ROLE
+# 1. DISPATCHER LAMBDA IAM ROLE
 # ---------------------------------------------------------
 
-resource "aws_iam_role" "pipe1" {
-  name = "${var.project_name}-${var.environment}-${var.pipe1_role_name_suffix}"
+resource "aws_iam_role" "sf2_dispatcher" {
+  name = "${var.project_name}-${var.environment}-sf2-dispatcher-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
 
     Statement = [
       {
-        Sid    = "AllowEventBridgePipesAssumeRole"
         Effect = "Allow"
 
         Principal = {
-          Service = "pipes.amazonaws.com"
+          Service = "lambda.amazonaws.com"
         }
 
         Action = "sts:AssumeRole"
@@ -28,17 +32,17 @@ resource "aws_iam_role" "pipe1" {
   })
 
   tags = {
-    Name = "${var.project_name}-${var.environment}-${var.pipe1_role_name_suffix}"
+    Name = "${var.project_name}-${var.environment}-sf2-dispatcher-role"
   }
 }
 
 # ---------------------------------------------------------
-# 2. EVENTBRIDGE PIPE IAM POLICY
+# 2. DISPATCHER IAM POLICY
 # ---------------------------------------------------------
 
-resource "aws_iam_role_policy" "pipe1" {
-  name = "pipe1-sqs1-to-sf2-access"
-  role = aws_iam_role.pipe1.id
+resource "aws_iam_role_policy" "sf2_dispatcher" {
+  name = "sf2-dispatcher-access"
+  role = aws_iam_role.sf2_dispatcher.id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -57,7 +61,7 @@ resource "aws_iam_role_policy" "pipe1" {
         Resource = aws_sqs_queue.sqs1.arn
       },
       {
-        Sid    = "DecryptSQS1Messages"
+        Sid    = "DecryptSQS1"
         Effect = "Allow"
 
         Action = [
@@ -67,7 +71,7 @@ resource "aws_iam_role_policy" "pipe1" {
         Resource = aws_kms_key.psc.arn
       },
       {
-        Sid    = "StartStepFunctions2"
+        Sid    = "StartSF2"
         Effect = "Allow"
 
         Action = [
@@ -75,54 +79,94 @@ resource "aws_iam_role_policy" "pipe1" {
         ]
 
         Resource = aws_sfn_state_machine.sf2.arn
+      },
+      {
+        Sid    = "CloudWatchLogging"
+        Effect = "Allow"
+
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+
+        Resource = "arn:${data.aws_partition.current.partition}:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.project_name}-${var.environment}-sf2-dispatcher:*"
       }
     ]
   })
 }
 
 # ---------------------------------------------------------
-# 3. EVENTBRIDGE PIPE 1
+# 3. DISPATCHER CLOUDWATCH LOG GROUP
 # ---------------------------------------------------------
 
-resource "aws_pipes_pipe" "pipe1" {
-  name          = "${var.project_name}-${var.environment}-${var.pipe1_name_suffix}"
-  role_arn      = aws_iam_role.pipe1.arn
-  source        = aws_sqs_queue.sqs1.arn
-  target        = aws_sfn_state_machine.sf2.arn
-  desired_state = var.pipe1_desired_state
+resource "aws_cloudwatch_log_group" "sf2_dispatcher" {
+  name              = "/aws/lambda/${var.project_name}-${var.environment}-sf2-dispatcher"
+  retention_in_days = 14
 
-  log_configuration {
-    level                  = "ERROR"
-    include_execution_data = []
-
-    cloudwatch_logs_log_destination {
-      log_group_arn = aws_cloudwatch_log_group.pipe1_540.arn
-    }
+  tags = {
+    Name = "${var.project_name}-${var.environment}-sf2-dispatcher"
   }
+}
 
-  source_parameters {
-    sqs_queue_parameters {
-      batch_size                         = var.pipe1_batch_size
-      maximum_batching_window_in_seconds = var.pipe1_batching_window_seconds
-    }
-  }
+# ---------------------------------------------------------
+# 4. DISPATCHER LAMBDA SOURCE PACKAGE
+# ---------------------------------------------------------
 
-  target_parameters {
-    # Build the JSON object the state machine expects. Passing "<$.body>" on its own
-    # arrives as a map, and Step Functions rejects that.
-    input_template = "{\"case_id\":\"<$.body.case_id>\",\"message_id\":\"<$.body.message_id>\",\"conversation_id\":\"<$.body.conversation_id>\",\"sender\":\"<$.body.sender>\",\"recipient\":\"<$.body.recipient>\",\"subject\":\"<$.body.subject>\",\"body\":\"<$.body.body>\",\"has_attachment\":<$.body.has_attachment>,\"attachment_id\":<$.body.attachment_id>,\"attachment_s3_reference\":<$.body.attachment_s3_reference>,\"attachments\":<$.body.attachments>}"
+data "archive_file" "sf2_dispatcher" {
+  type        = "zip"
+  source_dir  = "${path.module}/lambda/sf2-dispatcher"
+  output_path = "${path.module}/sf2-dispatcher.zip"
+}
 
-    step_function_state_machine_parameters {
-      invocation_type = "FIRE_AND_FORGET"
+# ---------------------------------------------------------
+# 5. DISPATCHER LAMBDA
+# ---------------------------------------------------------
+
+resource "aws_lambda_function" "sf2_dispatcher" {
+  function_name = "${var.project_name}-${var.environment}-sf2-dispatcher"
+
+  role    = aws_iam_role.sf2_dispatcher.arn
+  runtime = "python3.12"
+  handler = "lambda_function.lambda_handler"
+
+  filename         = data.archive_file.sf2_dispatcher.output_path
+  source_code_hash = data.archive_file.sf2_dispatcher.output_base64sha256
+
+  timeout     = 60
+  memory_size = 256
+
+  environment {
+    variables = {
+      SF2_STATE_MACHINE_ARN = aws_sfn_state_machine.sf2.arn
     }
   }
 
   depends_on = [
-    aws_iam_role_policy.pipe1,
-    aws_iam_role_policy.pipe1_logging_540
+    aws_iam_role_policy.sf2_dispatcher,
+    aws_cloudwatch_log_group.sf2_dispatcher
   ]
 
   tags = {
-    Name = "${var.project_name}-${var.environment}-${var.pipe1_name_suffix}"
+    Name = "${var.project_name}-${var.environment}-sf2-dispatcher"
   }
+}
+
+# ---------------------------------------------------------
+# 6. SQS1 EVENT SOURCE MAPPING
+# ---------------------------------------------------------
+
+resource "aws_lambda_event_source_mapping" "sf2_dispatcher" {
+  event_source_arn = aws_sqs_queue.sqs1.arn
+  function_name    = aws_lambda_function.sf2_dispatcher.arn
+
+  batch_size = 1
+  enabled    = true
+
+  function_response_types = [
+    "ReportBatchItemFailures"
+  ]
+
+  depends_on = [
+    aws_iam_role_policy.sf2_dispatcher
+  ]
 }
