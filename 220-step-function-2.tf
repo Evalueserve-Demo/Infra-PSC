@@ -5,9 +5,7 @@
 # ==========================================================
 # 230 Preprocessing + 240 Guardrail
 # 395 Classification and Extraction
-# 270 Identifier Validation
-# 280 Invoice Scope Determination
-# SQS2 handoff
+# Direct SQS2 handoff
 #
 # Uses existing AgentCore Runtime through Lambda 395.
 # ==========================================================
@@ -34,9 +32,7 @@ resource "aws_iam_role_policy" "sf2" {
 
         Resource = [
           aws_lambda_function.mail_preprocessing.arn,
-          aws_lambda_function.intake_agents.arn,
-          aws_lambda_function.identifier_validation.arn,
-          aws_lambda_function.invoice_scope.arn
+          aws_lambda_function.intake_agents.arn
         ]
       },
       {
@@ -74,7 +70,7 @@ resource "aws_sfn_state_machine" "sf2" {
   type     = var.sf2_type
 
   definition = jsonencode({
-    Comment = "PSC SF2 - Preprocess, Classify, Extract, Validate, Scope and Handoff"
+    Comment = "PSC SF2 - Preprocess, Classify, Extract and Handoff"
 
     StartAt = "UnwrapInput"
 
@@ -310,135 +306,6 @@ resource "aws_sfn_state_machine" "sf2" {
           }
         ]
 
-        Next = "PrepareIdentifierValidation"
-      }
-
-      # ----------------------------------------------------
-      # MAP 395 OUTPUT TO 270 INPUT
-      # ----------------------------------------------------
-
-      PrepareIdentifierValidation = {
-        Type = "Pass"
-
-        Parameters = {
-          "case_id.$"      = "$.case_id"
-          "message_id.$"   = "$.message_id"
-          "payment_info.$" = "$.identifiers.candidates"
-          "case.$"         = "$"
-        }
-
-        Next = "ValidateIdentifiers"
-      }
-
-      # ----------------------------------------------------
-      # 270 - IDENTIFIER VALIDATION
-      # ----------------------------------------------------
-
-      ValidateIdentifiers = {
-        Type     = "Task"
-        Resource = "arn:${data.aws_partition.current.partition}:states:::lambda:invoke"
-
-        Parameters = {
-          FunctionName = aws_lambda_function.identifier_validation.arn
-          "Payload.$"  = "$"
-        }
-
-        ResultSelector = {
-          "validation.$" = "$.Payload"
-        }
-
-        ResultPath = "$.identifier_validation"
-
-        Retry = [
-          {
-            ErrorEquals = [
-              "Lambda.ServiceException",
-              "Lambda.AWSLambdaException",
-              "Lambda.SdkClientException",
-              "Lambda.TooManyRequestsException"
-            ]
-            IntervalSeconds = 3
-            MaxAttempts     = 3
-            BackoffRate     = 2
-          }
-        ]
-
-        Catch = [
-          {
-            ErrorEquals = ["States.ALL"]
-            ResultPath  = "$.error"
-            Next        = "ProcessingFailed"
-          }
-        ]
-
-        Next = "ValidationDecision"
-      }
-
-      ValidationDecision = {
-        Type = "Choice"
-
-        Choices = [
-          {
-            Variable     = "$.identifier_validation.validation.validation_status"
-            StringEquals = "VALIDATED"
-            Next         = "DetermineInvoiceScope"
-          }
-        ]
-
-        Default = "NeedsManualReview"
-      }
-
-      # ----------------------------------------------------
-      # 280 - INVOICE SCOPE DETERMINATION
-      # ----------------------------------------------------
-
-      DetermineInvoiceScope = {
-        Type     = "Task"
-        Resource = "arn:${data.aws_partition.current.partition}:states:::lambda:invoke"
-
-        Parameters = {
-          FunctionName = aws_lambda_function.invoice_scope.arn
-
-          Payload = {
-            "case_id.$"     = "$.case_id"
-            "message_id.$"  = "$.message_id"
-            "invoice_ids.$" = "$.identifier_validation.validation.invoice_ids"
-
-            identifier_validation = {
-              "valid_invoice_ids.$" = "$.identifier_validation.validation.invoice_ids"
-              "validation_status.$" = "$.identifier_validation.validation.validation_status"
-            }
-          }
-        }
-
-        ResultSelector = {
-          "scope.$" = "$.Payload"
-        }
-
-        ResultPath = "$.invoice_scope_result"
-
-        Retry = [
-          {
-            ErrorEquals = [
-              "Lambda.ServiceException",
-              "Lambda.AWSLambdaException",
-              "Lambda.SdkClientException",
-              "Lambda.TooManyRequestsException"
-            ]
-            IntervalSeconds = 3
-            MaxAttempts     = 3
-            BackoffRate     = 2
-          }
-        ]
-
-        Catch = [
-          {
-            ErrorEquals = ["States.ALL"]
-            ResultPath  = "$.error"
-            Next        = "ProcessingFailed"
-          }
-        ]
-
         Next = "PublishToSQS2"
       }
 
@@ -489,9 +356,6 @@ resource "aws_sfn_state_machine" "sf2" {
         Type = "Succeed"
       }
 
-      NeedsManualReview = {
-        Type = "Succeed"
-      }
 
       InvalidInput = {
         Type  = "Fail"

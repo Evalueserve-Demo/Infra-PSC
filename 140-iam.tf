@@ -4,14 +4,14 @@
 # PROJECT: BOEING HELPDESK PAYMENT STATUS CHECK
 # =========================================================
 #
-# 10 Lambda execution roles
-# 10 Lambda baseline policy attachments
+# 8 Lambda execution roles
+# 8 Lambda baseline policy attachments
 #  1 Shared Lambda baseline IAM policy
 #  2 Step Functions execution roles
 #  1 RDS Proxy IAM role
 #  1 RDS Proxy IAM inline policy
 #
-# TOTAL: 25 TERRAFORM RESOURCES
+# TOTAL: 21 TERRAFORM RESOURCES
 #
 # Service-specific IAM permissions will be added
 # in the corresponding infrastructure stages.
@@ -167,45 +167,7 @@ resource "aws_iam_role_policy_attachment" "mail_preprocessing_baseline" {
 
 
 # =========================================================
-# 7. IDENTIFIER VALIDATION LAMBDA - STAGE 270
-# =========================================================
-
-resource "aws_iam_role" "identifier_validation" {
-  name               = "${var.project_name}-${var.environment}-idval-role"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-
-  tags = {
-    Name = "${var.project_name}-identifier-validation-role-${var.environment}"
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "identifier_validation_baseline" {
-  role       = aws_iam_role.identifier_validation.name
-  policy_arn = aws_iam_policy.lambda_baseline.arn
-}
-
-
-# =========================================================
-# 8. INVOICE SCOPE LAMBDA - STAGE 280
-# =========================================================
-
-resource "aws_iam_role" "invoice_scope" {
-  name               = "${var.project_name}-${var.environment}-scope-role"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
-
-  tags = {
-    Name = "${var.project_name}-invoice-scope-role-${var.environment}"
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "invoice_scope_baseline" {
-  role       = aws_iam_role.invoice_scope.name
-  policy_arn = aws_iam_policy.lambda_baseline.arn
-}
-
-
-# =========================================================
-# 9. INVESTIGATION INVOCATION LAMBDA - STAGE 310
+# 7. INVESTIGATION INVOCATION LAMBDA - STAGE 310
 # =========================================================
 
 resource "aws_iam_role" "investigation_invocation" {
@@ -224,7 +186,7 @@ resource "aws_iam_role_policy_attachment" "investigation_invocation_baseline" {
 
 
 # =========================================================
-# 10. SAP S/4HANA TOOL LAMBDA - STAGE 390
+# 8. SAP S/4HANA TOOL LAMBDA - STAGE 390
 # =========================================================
 
 resource "aws_iam_role" "s4hana_tool" {
@@ -243,7 +205,7 @@ resource "aws_iam_role_policy_attachment" "s4hana_tool_baseline" {
 
 
 # =========================================================
-# 11. HUMAN REVIEW BACKEND LAMBDA - STAGE 410
+# 9. HUMAN REVIEW BACKEND LAMBDA - STAGE 410
 # =========================================================
 
 resource "aws_iam_role" "human_review_backend" {
@@ -262,7 +224,7 @@ resource "aws_iam_role_policy_attachment" "human_review_backend_baseline" {
 
 
 # =========================================================
-# 12. REPLY PROCESSING LAMBDA - STAGE 430
+# 10. REPLY PROCESSING LAMBDA - STAGE 430
 # =========================================================
 
 resource "aws_iam_role" "reply_processing" {
@@ -281,7 +243,7 @@ resource "aws_iam_role_policy_attachment" "reply_processing_baseline" {
 
 
 # =========================================================
-# 13. STEP FUNCTIONS 1 EXECUTION ROLE - STAGE 170
+# 11. STEP FUNCTIONS 1 EXECUTION ROLE - STAGE 170
 # =========================================================
 
 resource "aws_iam_role" "sf1" {
@@ -295,7 +257,7 @@ resource "aws_iam_role" "sf1" {
 
 
 # =========================================================
-# 14. STEP FUNCTIONS 2 EXECUTION ROLE - STAGE 220
+# 12. STEP FUNCTIONS 2 EXECUTION ROLE - STAGE 220
 # =========================================================
 
 resource "aws_iam_role" "sf2" {
@@ -309,7 +271,7 @@ resource "aws_iam_role" "sf2" {
 
 
 # =========================================================
-# 15. RDS PROXY IAM ROLE
+# 13. RDS PROXY IAM ROLE
 # =========================================================
 
 resource "aws_iam_role" "rds_proxy" {
@@ -335,7 +297,7 @@ resource "aws_iam_role" "rds_proxy" {
 
 
 # =========================================================
-# 16. RDS PROXY IAM POLICY
+# 14. RDS PROXY IAM POLICY
 # =========================================================
 
 resource "aws_iam_role_policy" "rds_proxy" {

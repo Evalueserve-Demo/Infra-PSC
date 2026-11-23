@@ -13,8 +13,9 @@ locals {
     attachment_processing    = aws_lambda_function.attachment_processing.function_name
     email_processing         = aws_lambda_function.email_processing.function_name
     mail_preprocessing       = aws_lambda_function.mail_preprocessing.function_name
-    identifier_validation    = aws_lambda_function.identifier_validation.function_name
-    invoice_scope            = aws_lambda_function.invoice_scope.function_name
+    pre_sf1_dispatcher       = aws_lambda_function.pre_sf1_dispatcher.function_name
+    sf2_dispatcher           = aws_lambda_function.sf2_dispatcher.function_name
+    intake_agents            = aws_lambda_function.intake_agents.function_name
     investigation_invocation = aws_lambda_function.investigation_invocation.function_name
     s4hana_tool              = aws_lambda_function.s4hana_tool.function_name
     spvr_tool                = aws_lambda_function.spvr_tool.function_name
@@ -668,128 +669,6 @@ resource "aws_cloudwatch_dashboard" "psc_540" {
     ]
   })
 }
-
-
-# ==========================================================
-# 540 - EVENTBRIDGE PIPES MONITORING
-# ==========================================================
-
-locals {
-  psc_pipes_540 = {
-    pre_sf1 = aws_pipes_pipe.pre_sf1.name
-    pipe1   = aws_pipes_pipe.pipe1.name
-    pipe2   = aws_pipes_pipe.pipe2.name
-  }
-}
-
-# ----------------------------------------------------------
-# EventBridge Pipes Execution Failures
-# ----------------------------------------------------------
-
-resource "aws_cloudwatch_metric_alarm" "pipe_execution_failures_540" {
-  for_each = local.psc_pipes_540
-
-  alarm_name        = "${var.project_name}-${var.environment}-${each.key}-execution-failures"
-  alarm_description = "EventBridge Pipe ${each.key} execution failures"
-
-  namespace   = "AWS/Pipes"
-  metric_name = "ExecutionFailed"
-
-  statistic = "Sum"
-  period    = 300
-
-  evaluation_periods = 1
-  threshold          = 1
-
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  treat_missing_data  = "notBreaching"
-
-  dimensions = {
-    PipeName = each.value
-  }
-
-  alarm_actions = [
-    aws_sns_topic.psc_monitoring_540.arn
-  ]
-}
-
-# ----------------------------------------------------------
-# EventBridge Pipes Target Invocation Failures
-# ----------------------------------------------------------
-
-resource "aws_cloudwatch_metric_alarm" "pipe_target_failures_540" {
-  for_each = local.psc_pipes_540
-
-  alarm_name        = "${var.project_name}-${var.environment}-${each.key}-target-failures"
-  alarm_description = "EventBridge Pipe ${each.key} target invocation failures"
-
-  namespace   = "AWS/Pipes"
-  metric_name = "TargetStageFailed"
-
-  statistic = "Sum"
-  period    = 300
-
-  evaluation_periods = 1
-  threshold          = 1
-
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  treat_missing_data  = "notBreaching"
-
-  dimensions = {
-    PipeName = each.value
-  }
-
-  alarm_actions = [
-    aws_sns_topic.psc_monitoring_540.arn
-  ]
-}
-
-
-
-# ==========================================================
-# 540 - EVENTBRIDGE PIPES EXECUTION LOGGING
-# ==========================================================
-
-resource "aws_cloudwatch_log_group" "pipe1_540" {
-  name              = "/aws/vendedlogs/pipes/${var.project_name}-${var.environment}-${var.pipe1_name_suffix}"
-  retention_in_days = 30
-}
-
-resource "aws_cloudwatch_log_group" "pipe2_540" {
-  name              = "/aws/vendedlogs/pipes/${var.project_name}-${var.environment}-${var.pipe2_name_suffix}"
-  retention_in_days = 30
-}
-
-resource "aws_iam_role_policy" "pipe1_logging_540" {
-  name = "${var.project_name}-${var.environment}-pipe1-logging"
-  role = aws_iam_role.pipe1.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Sid      = "AllowPipe1CloudWatchLogging"
-      Effect   = "Allow"
-      Action   = ["logs:CreateLogStream", "logs:PutLogEvents"]
-      Resource = "${aws_cloudwatch_log_group.pipe1_540.arn}:*"
-    }]
-  })
-}
-
-resource "aws_iam_role_policy" "pipe2_logging_540" {
-  name = "${var.project_name}-${var.environment}-pipe2-logging"
-  role = aws_iam_role.pipe2.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Sid      = "AllowPipe2CloudWatchLogging"
-      Effect   = "Allow"
-      Action   = ["logs:CreateLogStream", "logs:PutLogEvents"]
-      Resource = "${aws_cloudwatch_log_group.pipe2_540.arn}:*"
-    }]
-  })
-}
-
 
 
 # ==========================================================

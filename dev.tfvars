@@ -340,31 +340,6 @@ classification_agent_artifact_key     = "classification/classification_agent.zip
 
 
 # =========================================================
-# 270 - IDENTIFIER VALIDATION
-# =========================================================
-
-identifier_validation_lambda_suffix         = "identifier-validation"
-identifier_validation_timeout               = 30
-identifier_validation_memory_size           = 256
-identifier_validation_log_retention_days    = 14
-identifier_validation_max_invoices          = 25
-identifier_validation_max_identifier_length = 100
-
-
-# =========================================================
-# 280 - INVOICE SCOPE DETERMINATION
-# =========================================================
-
-invoice_scope_lambda_suffix      = "invoice-scope"
-invoice_scope_timeout            = 60
-invoice_scope_memory_size        = 256
-invoice_scope_log_retention_days = 14
-invoice_scope_mode               = "DISABLED"
-invoice_scope_max_invoices       = 25
-
-
-
-# =========================================================
 # 290 - SQS2 AND DLQ
 # =========================================================
 
