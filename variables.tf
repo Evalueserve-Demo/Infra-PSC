@@ -1419,6 +1419,11 @@ variable "intake_agents_log_retention_days" {
   default = 30
 }
 
+variable "existing_agentcore_runtime_arn" {
+  description = "Existing classification and extraction AgentCore Runtime ARN"
+  type        = string
+}
+
 
 # =========================================================
 # 396 - RECONCILER LAMBDA VARIABLES
