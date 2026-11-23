@@ -180,6 +180,10 @@ email_ingestion_db_name            = "paymentstatuscheck"
 email_ingestion_db_user            = "integ_app"
 ingestion_cutoff_utc               = "2026-11-12T22:30:00Z"
 
+mail_source            = "graph"
+mail_s3_prefix         = "inbox/"
+start_interval_seconds = 2
+
 
 
 # =========================================================
