@@ -16,7 +16,19 @@ locals {
 }
 
 # ---------------------------------------------------------
-# 1. CLOUDWATCH LOG GROUP
+# 1. DEPLOYMENT ARCHIVE
+# ---------------------------------------------------------
+# Build directory must contain lambda_function.py.
+# No external Python packages required.
+
+data "archive_file" "pre_sf1_dispatcher" {
+  type        = "zip"
+  source_dir  = "${path.module}/build/pre_sf1_dispatcher"
+  output_path = "${path.module}/build/pre_sf1_dispatcher.zip"
+}
+
+# ---------------------------------------------------------
+# 2. CLOUDWATCH LOG GROUP
 # ---------------------------------------------------------
 
 resource "aws_cloudwatch_log_group" "pre_sf1_dispatcher" {
@@ -24,16 +36,20 @@ resource "aws_cloudwatch_log_group" "pre_sf1_dispatcher" {
   retention_in_days = 30
 
   tags = {
-    Name = local.pre_sf1_dispatcher_name
+    Name = "${local.pre_sf1_dispatcher_name}-logs"
   }
 }
 
 # ---------------------------------------------------------
-# 2. IAM EXECUTION ROLE
+# 3. IAM EXECUTION ROLE
 # ---------------------------------------------------------
 
 resource "aws_iam_role" "pre_sf1_dispatcher" {
   name = "${local.pre_sf1_dispatcher_name}-role"
+
+  path = "/tenant_iac_bound/"
+
+  permissions_boundary = "arn:${data.aws_partition.current.partition}:iam::${data.aws_caller_identity.current.account_id}:policy/TenantIaCDeployerBoundaryPolicy"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -57,7 +73,16 @@ resource "aws_iam_role" "pre_sf1_dispatcher" {
 }
 
 # ---------------------------------------------------------
-# 3. IAM POLICY
+# 4. AWS MANAGED LAMBDA BASELINE POLICY ATTACHMENT
+# ---------------------------------------------------------
+
+resource "aws_iam_role_policy_attachment" "pre_sf1_dispatcher_baseline" {
+  role       = aws_iam_role.pre_sf1_dispatcher.name
+  policy_arn = local.lambda_baseline_policy_arn
+}
+
+# ---------------------------------------------------------
+# 5. LEAST-PRIVILEGE APPLICATION PERMISSIONS
 # ---------------------------------------------------------
 
 resource "aws_iam_role_policy" "pre_sf1_dispatcher" {
@@ -117,18 +142,7 @@ resource "aws_iam_role_policy" "pre_sf1_dispatcher" {
 }
 
 # ---------------------------------------------------------
-# 4. PACKAGE DISPATCHER PYTHON
-# ---------------------------------------------------------
-
-data "archive_file" "pre_sf1_dispatcher" {
-  type = "zip"
-
-  source_dir  = "${path.module}/lambda/pre-sf1-dispatcher"
-  output_path = "${path.module}/pre_sf1_dispatcher.zip"
-}
-
-# ---------------------------------------------------------
-# 5. PRE-SF1 DISPATCHER LAMBDA
+# 6. PRE-SF1 DISPATCHER LAMBDA
 # ---------------------------------------------------------
 
 resource "aws_lambda_function" "pre_sf1_dispatcher" {
@@ -145,6 +159,18 @@ resource "aws_lambda_function" "pre_sf1_dispatcher" {
   timeout     = 30
   memory_size = 256
 
+  # -------------------------------------------------------
+  # VPC CONFIGURATION - SAME PATTERN AS STAGE 180
+  # -------------------------------------------------------
+
+  vpc_config {
+    subnet_ids = var.existing_subnet_ids
+
+    security_group_ids = [
+      aws_security_group.lambda.id
+    ]
+  }
+
   environment {
     variables = {
       SF1_ARN = aws_sfn_state_machine.sf1.arn
@@ -152,8 +178,9 @@ resource "aws_lambda_function" "pre_sf1_dispatcher" {
   }
 
   depends_on = [
-    aws_iam_role_policy.pre_sf1_dispatcher,
-    aws_cloudwatch_log_group.pre_sf1_dispatcher
+    aws_cloudwatch_log_group.pre_sf1_dispatcher,
+    aws_iam_role_policy_attachment.pre_sf1_dispatcher_baseline,
+    aws_iam_role_policy.pre_sf1_dispatcher
   ]
 
   tags = {
@@ -162,7 +189,7 @@ resource "aws_lambda_function" "pre_sf1_dispatcher" {
 }
 
 # ---------------------------------------------------------
-# 6. SQS -> LAMBDA EVENT SOURCE MAPPING
+# 7. SQS -> LAMBDA EVENT SOURCE MAPPING
 # ---------------------------------------------------------
 
 resource "aws_lambda_event_source_mapping" "pre_sf1_dispatcher" {
@@ -185,7 +212,7 @@ resource "aws_lambda_event_source_mapping" "pre_sf1_dispatcher" {
 }
 
 # ---------------------------------------------------------
-# 7. OUTPUTS
+# 8. OUTPUTS
 # ---------------------------------------------------------
 
 output "pre_sf1_dispatcher_lambda_arn" {
@@ -202,3 +229,7 @@ output "pre_sf1_dispatcher_event_source_mapping_uuid" {
   description = "SQS event source mapping UUID"
   value       = aws_lambda_event_source_mapping.pre_sf1_dispatcher.uuid
 }
+
+# =========================================================
+# END OF 166 - PRE-SF1 DISPATCHER LAMBDA
+# =========================================================
