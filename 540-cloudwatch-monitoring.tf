@@ -1,13 +1,13 @@
 
 # ==========================================================
 # 540 - PSC CLOUDWATCH MONITORING
-# Region: us-east-2
+# Region: var.aws_region (Boeing deployment)
 # ==========================================================
 
 locals {
   psc_monitoring_prefix_540 = "${var.project_name}-${var.environment}"
 
-  # Active Lambda functions (V4 scope)
+  # Active Lambda functions: 160, 166, 180, 190, 210, 230, 395
   psc_lambdas_540 = {
     email_ingestion          = aws_lambda_function.email_ingestion.function_name
     attachment_processing    = aws_lambda_function.attachment_processing.function_name
@@ -16,17 +16,13 @@ locals {
     pre_sf1_dispatcher       = aws_lambda_function.pre_sf1_dispatcher.function_name
     sf2_dispatcher           = aws_lambda_function.sf2_dispatcher.function_name
     intake_agents            = aws_lambda_function.intake_agents.function_name
-    investigation_invocation = aws_lambda_function.investigation_invocation.function_name
-    s4hana_tool              = aws_lambda_function.s4hana_tool.function_name
-    spvr_tool                = aws_lambda_function.spvr_tool.function_name
-    payment_rules_tool       = aws_lambda_function.payment_rules_tool.function_name
-    root_cause_map_tool      = aws_lambda_function.root_cause_map_tool.function_name
-    draft_builder_tool       = aws_lambda_function.draft_builder_tool.function_name
+
   }
 
-  # Active SQS queues (V4 scope)
+  # Active SQS queues: 150, 165, 200, 290
   psc_queues_540 = {
     pre_sf1     = aws_sqs_queue.pre_sf1.name
+    scheduler_dlq = aws_sqs_queue.email_scheduler_dlq.name
     pre_sf1_dlq = aws_sqs_queue.pre_sf1_dlq.name
     sqs1        = aws_sqs_queue.sqs1.name
     sqs1_dlq    = aws_sqs_queue.sqs1_dlq.name
@@ -41,6 +37,7 @@ locals {
   }
 
   psc_dlqs_540 = {
+    scheduler_dlq = aws_sqs_queue.email_scheduler_dlq.name
     pre_sf1_dlq = aws_sqs_queue.pre_sf1_dlq.name
     sqs1_dlq    = aws_sqs_queue.sqs1_dlq.name
     sqs2_dlq    = aws_sqs_queue.sqs2_dlq.name
@@ -370,7 +367,7 @@ resource "aws_cloudwatch_dashboard" "psc_540" {
   dashboard_name = "${local.psc_monitoring_prefix_540}-monitoring"
 
   dashboard_body = jsonencode({
-    widgets = [
+    widgets = concat([
       {
         type   = "metric"
         x      = 0
@@ -465,7 +462,7 @@ resource "aws_cloudwatch_dashboard" "psc_540" {
       },
       {
         type   = "metric"
-        x      = 12
+        x      = 0
         y      = 12
         width  = 12
         height = 6
@@ -484,67 +481,13 @@ resource "aws_cloudwatch_dashboard" "psc_540" {
           ]
         }
       },
-      {
-        type   = "metric"
-        x      = 0
-        y      = 18
-        width  = 12
-        height = 6
-        properties = {
-          title  = "AgentCore Runtime CPU Usage (vCPU-hours)"
-          region = var.aws_region
-          period = 300
-          stat   = "Sum"
-          metrics = [
-            [
-              "AWS/Bedrock-AgentCore", "CPUUsed-vCPUHours",
-              "Service", "AgentCore.Runtime",
-              "Resource", aws_bedrockagentcore_agent_runtime.classification.agent_runtime_arn,
-              { label = "Classification Agent" }
-            ],
-            [
-              "AWS/Bedrock-AgentCore", "CPUUsed-vCPUHours",
-              "Service", "AgentCore.Runtime",
-              "Resource", aws_bedrockagentcore_agent_runtime.investigation.agent_runtime_arn,
-              { label = "Investigation Agent" }
-            ]
-          ]
-        }
-      },
-      {
-        type   = "metric"
-        x      = 12
-        y      = 18
-        width  = 12
-        height = 6
-        properties = {
-          title  = "AgentCore Runtime Memory Usage (GB-hours)"
-          region = var.aws_region
-          period = 300
-          stat   = "Sum"
-          metrics = [
-            [
-              "AWS/Bedrock-AgentCore", "MemoryUsed-GBHours",
-              "Service", "AgentCore.Runtime",
-              "Resource", aws_bedrockagentcore_agent_runtime.classification.agent_runtime_arn,
-              { label = "Classification Agent" }
-            ],
-            [
-              "AWS/Bedrock-AgentCore", "MemoryUsed-GBHours",
-              "Service", "AgentCore.Runtime",
-              "Resource", aws_bedrockagentcore_agent_runtime.investigation.agent_runtime_arn,
-              { label = "Investigation Agent" }
-            ]
-          ]
-        }
-      },
       # ------------------------------------------------------
       # Aurora / RDS Proxy - additional monitoring charts
       # ------------------------------------------------------
       {
         type   = "metric"
-        x      = 0
-        y      = 24
+        x      = 12
+        y      = 12
         width  = 12
         height = 6
         properties = {
@@ -566,8 +509,8 @@ resource "aws_cloudwatch_dashboard" "psc_540" {
       },
       {
         type   = "metric"
-        x      = 12
-        y      = 24
+        x      = 0
+        y      = 18
         width  = 12
         height = 6
         properties = {
@@ -586,8 +529,8 @@ resource "aws_cloudwatch_dashboard" "psc_540" {
       },
       {
         type   = "metric"
-        x      = 0
-        y      = 30
+        x      = 12
+        y      = 18
         width  = 12
         height = 6
         properties = {
@@ -608,8 +551,8 @@ resource "aws_cloudwatch_dashboard" "psc_540" {
       },
       {
         type   = "metric"
-        x      = 12
-        y      = 30
+        x      = 0
+        y      = 24
         width  = 12
         height = 6
         properties = {
@@ -626,8 +569,8 @@ resource "aws_cloudwatch_dashboard" "psc_540" {
       },
       {
         type   = "metric"
-        x      = 0
-        y      = 36
+        x      = 12
+        y      = 24
         width  = 12
         height = 6
         properties = {
@@ -647,8 +590,8 @@ resource "aws_cloudwatch_dashboard" "psc_540" {
       },
       {
         type   = "metric"
-        x      = 12
-        y      = 36
+        x      = 0
+        y      = 30
         width  = 12
         height = 6
         properties = {
@@ -666,14 +609,30 @@ resource "aws_cloudwatch_dashboard" "psc_540" {
           }
         }
       }
-    ]
+    ], [for index, key in keys(local.psc_additional_metrics_540) : {
+      type = "metric"
+      x = (index % 2) * 12
+      y = 36 + floor(index / 2) * 6
+      width = 12
+      height = 6
+      properties = {
+        title = key
+        region = var.aws_region
+        period = local.psc_additional_metrics_540[key].period
+        stat = local.psc_additional_metrics_540[key].stat
+        metrics = [concat(
+          [local.psc_additional_metrics_540[key].namespace, local.psc_additional_metrics_540[key].metric],
+          flatten([for dimension, value in local.psc_additional_metrics_540[key].dimensions : [dimension, value]])
+        )]
+      }
+    }])
   })
 }
 
 
 # ==========================================================
 # 540 - PSC AURORA MONITORING ADDITIONS
-# Region: us-east-2
+# Region: var.aws_region (Boeing deployment)
 #
 # Reuses existing resources from 540-cloudwatch-monitoring.tf:
 #   local.psc_monitoring_prefix_540
@@ -943,6 +902,247 @@ resource "aws_cloudwatch_metric_alarm" "rds_proxy_pool_utilization_540" {
 # END - RDS PROXY MONITORING REFINEMENTS
 # ==========================================================
 
+
+# ==========================================================
+# ==========================================================
+# Additional monitoring: 080, 110, 150, 240, 550
+# 070, 090, 100, 140 audit monitoring intentionally excluded.
+# ==========================================================
+locals {
+  psc_additional_metrics_540 = {
+    "080-secrets_manager-packet-drops" = {
+      namespace = "AWS/PrivateLinkEndpoints"
+      metric = "PacketsDropped"
+      dimensions = {
+        VpcEndpointId = aws_vpc_endpoint.secrets_manager.id
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 1
+      alarm = true
+    }
+    "080-secrets_manager-bytes" = {
+      namespace = "AWS/PrivateLinkEndpoints"
+      metric = "BytesProcessed"
+      dimensions = {
+        VpcEndpointId = aws_vpc_endpoint.secrets_manager.id
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 0
+      alarm = false
+    }
+    "080-kms-packet-drops" = {
+      namespace = "AWS/PrivateLinkEndpoints"
+      metric = "PacketsDropped"
+      dimensions = {
+        VpcEndpointId = aws_vpc_endpoint.kms.id
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 1
+      alarm = true
+    }
+    "080-kms-bytes" = {
+      namespace = "AWS/PrivateLinkEndpoints"
+      metric = "BytesProcessed"
+      dimensions = {
+        VpcEndpointId = aws_vpc_endpoint.kms.id
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 0
+      alarm = false
+    }
+    "080-step_functions-packet-drops" = {
+      namespace = "AWS/PrivateLinkEndpoints"
+      metric = "PacketsDropped"
+      dimensions = {
+        VpcEndpointId = aws_vpc_endpoint.step_functions.id
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 1
+      alarm = true
+    }
+    "080-step_functions-bytes" = {
+      namespace = "AWS/PrivateLinkEndpoints"
+      metric = "BytesProcessed"
+      dimensions = {
+        VpcEndpointId = aws_vpc_endpoint.step_functions.id
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 0
+      alarm = false
+    }
+    "110-s3-bucketsizebytes" = {
+      namespace = "AWS/S3"
+      metric = "BucketSizeBytes"
+      dimensions = {
+        BucketName = aws_s3_bucket.attachments.bucket
+        StorageType = "StandardStorage"
+      }
+      stat = "Average"
+      period = 86400
+      threshold = 0
+      alarm = false
+    }
+    "110-s3-numberofobjects" = {
+      namespace = "AWS/S3"
+      metric = "NumberOfObjects"
+      dimensions = {
+        BucketName = aws_s3_bucket.attachments.bucket
+        StorageType = "AllStorageTypes"
+      }
+      stat = "Average"
+      period = 86400
+      threshold = 0
+      alarm = false
+    }
+    "150-scheduler-targeterrorcount" = {
+      namespace = "AWS/Scheduler"
+      metric = "TargetErrorCount"
+      dimensions = {
+        ScheduleGroup = aws_scheduler_schedule.email_ingestion.group_name
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 1
+      alarm = true
+    }
+    "150-scheduler-invocationdroppedcount" = {
+      namespace = "AWS/Scheduler"
+      metric = "InvocationDroppedCount"
+      dimensions = {
+        ScheduleGroup = aws_scheduler_schedule.email_ingestion.group_name
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 1
+      alarm = true
+    }
+    "150-scheduler-targeterrorthrottledcount" = {
+      namespace = "AWS/Scheduler"
+      metric = "TargetErrorThrottledCount"
+      dimensions = {
+        ScheduleGroup = aws_scheduler_schedule.email_ingestion.group_name
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 1
+      alarm = true
+    }
+    "240-guardrail-invocations" = {
+      namespace = "AWS/Bedrock/Guardrails"
+      metric = "Invocations"
+      dimensions = {
+        GuardrailId = aws_bedrock_guardrail.classification.guardrail_id
+        GuardrailVersion = aws_bedrock_guardrail_version.classification.version
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 1
+      alarm = false
+    }
+    "240-guardrail-invocationsintervened" = {
+      namespace = "AWS/Bedrock/Guardrails"
+      metric = "InvocationsIntervened"
+      dimensions = {
+        GuardrailId = aws_bedrock_guardrail.classification.guardrail_id
+        GuardrailVersion = aws_bedrock_guardrail_version.classification.version
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 1
+      alarm = false
+    }
+    "240-guardrail-invocationclienterrors" = {
+      namespace = "AWS/Bedrock/Guardrails"
+      metric = "InvocationClientErrors"
+      dimensions = {
+        GuardrailId = aws_bedrock_guardrail.classification.guardrail_id
+        GuardrailVersion = aws_bedrock_guardrail_version.classification.version
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 1
+      alarm = true
+    }
+    "240-guardrail-invocationservererrors" = {
+      namespace = "AWS/Bedrock/Guardrails"
+      metric = "InvocationServerErrors"
+      dimensions = {
+        GuardrailId = aws_bedrock_guardrail.classification.guardrail_id
+        GuardrailVersion = aws_bedrock_guardrail_version.classification.version
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 1
+      alarm = true
+    }
+    "240-guardrail-invocationthrottles" = {
+      namespace = "AWS/Bedrock/Guardrails"
+      metric = "InvocationThrottles"
+      dimensions = {
+        GuardrailId = aws_bedrock_guardrail.classification.guardrail_id
+        GuardrailVersion = aws_bedrock_guardrail_version.classification.version
+      }
+      stat = "Sum"
+      period = 300
+      threshold = 1
+      alarm = true
+    }
+    "550-ec2-cpuutilization" = {
+      namespace = "AWS/EC2"
+      metric = "CPUUtilization"
+      dimensions = {
+        InstanceId = aws_instance.postgres_client.id
+      }
+      stat = "Average"
+      period = 300
+      threshold = 80
+      alarm = true
+    }
+    "550-ec2-statuscheckfailed_instance" = {
+      namespace = "AWS/EC2"
+      metric = "StatusCheckFailed_Instance"
+      dimensions = {
+        InstanceId = aws_instance.postgres_client.id
+      }
+      stat = "Maximum"
+      period = 300
+      threshold = 1
+      alarm = true
+    }
+    "550-ec2-statuscheckfailed_system" = {
+      namespace = "AWS/EC2"
+      metric = "StatusCheckFailed_System"
+      dimensions = {
+        InstanceId = aws_instance.postgres_client.id
+      }
+      stat = "Maximum"
+      period = 300
+      threshold = 1
+      alarm = true
+    }
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "additional_540" {
+  for_each = { for key, spec in local.psc_additional_metrics_540 : key => spec if spec.alarm }
+  alarm_name = "${local.psc_monitoring_prefix_540}-${each.key}"
+  namespace = each.value.namespace
+  metric_name = each.value.metric
+  dimensions = each.value.dimensions
+  statistic = each.value.stat
+  period = each.value.period
+  evaluation_periods = 1
+  threshold = each.value.threshold
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  treat_missing_data = "notBreaching"
+  alarm_actions = [aws_sns_topic.psc_monitoring_540.arn]
+}
 
 # ==========================================================
 # 20. OUTPUTS
