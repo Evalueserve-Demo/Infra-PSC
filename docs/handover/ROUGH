@@ -1,0 +1,3 @@
+fields @log
+| filter @message like /Started SF1|Sent case|guardrail completed|classified as|identifiers:|RuntimeError|EXPORT_SUCCESS|EXPORT_FAILED/
+| stats count(*) as n by @log
